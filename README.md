@@ -1,4 +1,4 @@
-# Asam PM Workflow
+# PM Workflow
 
 A structured system for Asam product managers to use Claude Code. This repo contains everything needed to transform Claude from a general-purpose assistant into a personalized product management partner.
 
