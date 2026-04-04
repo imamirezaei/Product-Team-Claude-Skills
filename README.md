@@ -135,21 +135,21 @@ Copy the file contents and paste into Claude (claude.ai or Claude Code). Answer 
 
 Place each file in the correct path in your product repo:
 
-| Output file | Destination path |
-|---|---|
-| `CLAUDE.md` | `./CLAUDE.md` (replace placeholder) |
-| `problem-framing/context.md` | `./.claude/skills/product/problem-framing/context.md` |
+| Output file                         | Destination path                                             |
+| ----------------------------------- | ------------------------------------------------------------ |
+| `CLAUDE.md`                         | `./CLAUDE.md` (replace placeholder)                          |
+| `problem-framing/context.md`        | `./.claude/skills/product/problem-framing/context.md`        |
 | `feature-prioritization/context.md` | `./.claude/skills/product/feature-prioritization/context.md` |
-| `decision-logger/context.md` | `./.claude/skills/product/decision-logger/context.md` |
-| `requirement-writer/context.md` | `./.claude/skills/product/requirement-writer/context.md` |
-| `feature-spec/context.md` | `./.claude/skills/product/feature-spec/context.md` |
-| `edge-case-finder/context.md` | `./.claude/skills/product/edge-case-finder/context.md` |
-| `scope-check/context.md` | `./.claude/skills/product/scope-check/context.md` |
-| `feature-dependency/context.md` | `./.claude/skills/product/feature-dependency/context.md` |
-| `design-system-check/context.md` | `./.claude/skills/product/design-system-check/context.md` |
-| `release-impact/context.md` | `./.claude/skills/product/release-impact/context.md` |
-| `qa-guide/context.md` | `./.claude/skills/product/qa-guide/context.md` |
-| `product-agent.md` | `./.claude/agents/product-agent.md` (replace placeholder) |
+| `decision-logger/context.md`        | `./.claude/skills/product/decision-logger/context.md`        |
+| `requirement-writer/context.md`     | `./.claude/skills/product/requirement-writer/context.md`     |
+| `feature-spec/context.md`           | `./.claude/skills/product/feature-spec/context.md`           |
+| `edge-case-finder/context.md`       | `./.claude/skills/product/edge-case-finder/context.md`       |
+| `scope-check/context.md`            | `./.claude/skills/product/scope-check/context.md`            |
+| `feature-dependency/context.md`     | `./.claude/skills/product/feature-dependency/context.md`     |
+| `design-system-check/context.md`    | `./.claude/skills/product/design-system-check/context.md`    |
+| `release-impact/context.md`         | `./.claude/skills/product/release-impact/context.md`         |
+| `qa-guide/context.md`               | `./.claude/skills/product/qa-guide/context.md`               |
+| `product-agent.md`                  | `./.claude/agents/product-agent.md` (replace placeholder)    |
 
 ### Step 5: Commit
 
@@ -199,26 +199,26 @@ Defined by the supervisor, applied to all PMs. **Do not edit manually.**
 
 ### Rules
 
-| File | Rule |
-|---|---|
-| `no-technical-decisions.md` | Claude never makes technical decisions — only flags them |
-| `no-scope-expansion.md` | Claude never expands scope without PM's explicit request |
-| `persian-output.md` | All output in Persian; technical terms stay in English |
-| `flag-authority-limits.md` | Any decision outside PM authority must be ⚠️ flagged |
-| `always-include-dod.md` | Every feature-related output must include a DOD |
-| `always-include-edge-cases.md` | No requirement is accepted without edge case coverage |
+| File                           | Rule                                                     |
+| ------------------------------ | -------------------------------------------------------- |
+| `no-technical-decisions.md`    | Claude never makes technical decisions — only flags them |
+| `no-scope-expansion.md`        | Claude never expands scope without PM's explicit request |
+| `persian-output.md`            | All output in Persian; technical terms stay in English   |
+| `flag-authority-limits.md`     | Any decision outside PM authority must be ⚠️ flagged     |
+| `always-include-dod.md`        | Every feature-related output must include a DOD          |
+| `always-include-edge-cases.md` | No requirement is accepted without edge case coverage    |
 
 ### Commands
 
-| Command | Purpose |
-|---|---|
+| Command                      | Purpose                                                                      |
+| ---------------------------- | ---------------------------------------------------------------------------- |
 | `/new-feature [description]` | Full process: problem framing → dependency check → edge cases → feature spec |
-| `/write-task [topic]` | Write a Linear task with the four-part structure |
-| `/find-edges [feature]` | Find edge cases for a feature |
-| `/prioritize [features]` | Compare and prioritize features against the roadmap |
-| `/log-decision [decision]` | Document a product decision before it gets lost |
-| `/release-check [feature]` | Analyze change impact before release |
-| `/qa-plan [feature]` | Generate a complete, prioritized test plan |
+| `/write-task [topic]`        | Write a Linear task with the four-part structure                             |
+| `/find-edges [feature]`      | Find edge cases for a feature                                                |
+| `/prioritize [features]`     | Compare and prioritize features against the roadmap                          |
+| `/log-decision [decision]`   | Document a product decision before it gets lost                              |
+| `/release-check [feature]`   | Analyze change impact before release                                         |
+| `/qa-plan [feature]`         | Generate a complete, prioritized test plan                                   |
 
 ### Output Style
 
@@ -245,18 +245,18 @@ Every substantive output follows this structure:
 
 ### Interview Sections and File Mapping
 
-| Section | Files it populates |
-|---|---|
-| Product & Business | CLAUDE.md, edge-case-finder/context.md, feature-dependency/context.md |
-| Team Structure | CLAUDE.md, feature-spec/context.md, requirement-writer/context.md |
-| Decision Architecture | CLAUDE.md, feature-prioritization/context.md, decision-logger/context.md |
-| Feature Workflow | CLAUDE.md, feature-spec/context.md, scope-check/context.md |
-| Requirements & Handoff | requirement-writer/context.md, feature-spec/context.md |
-| Prioritization & Roadmap | feature-prioritization/context.md, scope-check/context.md |
-| Documentation | decision-logger/context.md |
-| Technical Context | feature-dependency/context.md, design-system-check/context.md, release-impact/context.md, qa-guide/context.md |
-| Discovery & Signals | CLAUDE.md |
-| PM Profile | CLAUDE.md, all skills |
+| Section                  | Files it populates                                                                                            |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------- |
+| Product & Business       | CLAUDE.md, edge-case-finder/context.md, feature-dependency/context.md                                         |
+| Team Structure           | CLAUDE.md, feature-spec/context.md, requirement-writer/context.md                                             |
+| Decision Architecture    | CLAUDE.md, feature-prioritization/context.md, decision-logger/context.md                                      |
+| Feature Workflow         | CLAUDE.md, feature-spec/context.md, scope-check/context.md                                                    |
+| Requirements & Handoff   | requirement-writer/context.md, feature-spec/context.md                                                        |
+| Prioritization & Roadmap | feature-prioritization/context.md, scope-check/context.md                                                     |
+| Documentation            | decision-logger/context.md                                                                                    |
+| Technical Context        | feature-dependency/context.md, design-system-check/context.md, release-impact/context.md, qa-guide/context.md |
+| Discovery & Signals      | CLAUDE.md                                                                                                     |
+| PM Profile               | CLAUDE.md, all skills                                                                                         |
 
 ---
 
@@ -338,7 +338,7 @@ Captures product decisions before they disappear into Slack history. Handles fou
 
 ### Produce — artifact generation
 
-**`linear-task-writer`** *(shared)*
+**`linear-task-writer`** _(shared)_
 Linear task with the standard four-part Persian structure: task description, user scenario, implementation notes, DOD.
 
 **`requirement-writer`**
@@ -373,15 +373,15 @@ Generates a complete, prioritized test plan. Reads the change context from the r
 
 ## Slash Commands
 
-| Command | Skills executed |
-|---|---|
-| `/new-feature` | problem-framing → feature-dependency → edge-case-finder → feature-spec |
-| `/write-task` | linear-task-writer |
-| `/find-edges` | edge-case-finder |
-| `/prioritize` | feature-prioritization |
-| `/log-decision` | decision-logger |
-| `/release-check` | release-impact → qa-guide |
-| `/qa-plan` | qa-guide |
+| Command          | Skills executed                                                        |
+| ---------------- | ---------------------------------------------------------------------- |
+| `/new-feature`   | problem-framing → feature-dependency → edge-case-finder → feature-spec |
+| `/write-task`    | linear-task-writer                                                     |
+| `/find-edges`    | edge-case-finder                                                       |
+| `/prioritize`    | feature-prioritization                                                 |
+| `/log-decision`  | decision-logger                                                        |
+| `/release-check` | release-impact → qa-guide                                              |
+| `/qa-plan`       | qa-guide                                                               |
 
 ---
 
@@ -402,7 +402,3 @@ Generates a complete, prioritized test plan. Reads the change context from the r
 ### Anthropic Documentation
 
 - [Prompt Engineering Overview](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview) — principles and techniques for writing effective prompts for Claude
-# Product-Team-Claude-Skills
-# Product-Team-Claude-Skills
-# Product-Team-Claude-Skills
-# Product-Team-Claude-Skills
