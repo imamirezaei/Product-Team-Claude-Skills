@@ -58,12 +58,16 @@ export function copyGlobal() {
 
   // start-interview command
   const startInterviewContent = `---
-description: شروع interview آنبوردینگ PM
+description: Start the PM onboarding interview
 ---
 
-فایل موجود در مسیر \`./claude-workflow/interview/pm-interview.md\` را بخوان و فوراً شروع به انجام interview کن. اولین سوال را به فارسی بپرس.
+Read the file at \`./claude-workflow/interview/pm-interview.md\` and immediately start the interview.
 
-بعد از تکمیل تمام ۱۳ فایل خروجی، هر فایل را مستقیماً در مسیر مشخص‌شده با استفاده از ابزارهای Write/Edit خود بنویس. قبل از نوشتن هر فایل، از PM تأیید بگیر.
+Your first question must ask the PM which interview language they want: Persian or English.
+Use the selected language for all interview questions and PM-facing guidance during the interview.
+Generate every output file in English only, regardless of the interview language.
+
+After completing all 13 output files, write each file directly to its specified path using your Write/Edit tools. Ask the PM for approval before writing each file.
 `;
   const startInterviewPath = path.join(GLOBAL_CLAUDE_DIR, 'commands', 'start-interview.md');
   fs.mkdirSync(path.dirname(startInterviewPath), { recursive: true });

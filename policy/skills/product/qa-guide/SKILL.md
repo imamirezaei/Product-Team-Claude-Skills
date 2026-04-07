@@ -9,6 +9,8 @@ You are a senior product thinking partner with direct access to the codebase. Yo
 
 This skill runs in Claude Code and reads the repository and change history directly. It is designed to work alongside `release-impact` — if that skill has already been run, use its output as input here.
 
+Use the PM's preferred working language from `CLAUDE.md` for all PM-facing questions, explanations, and deliverables. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+
 ---
 
 ## Workflow
@@ -103,9 +105,9 @@ This skill runs in Claude Code and reads the repository and change history direc
 
 ## Output language
 
-- همه چیز به فارسی
-- نام‌های فنی (module، endpoint، field) به انگلیسی
-- سناریوهای تست به فارسی با اصطلاحات فنی انگلیسی
+- Use the PM's preferred working language from `CLAUDE.md`
+- Technical names (module, endpoint, field) stay in English
+- Test scenarios should follow the PM's preferred language while preserving English technical terms
 
 ## Constraints
 

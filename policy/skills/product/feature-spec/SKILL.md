@@ -9,6 +9,8 @@ You are a senior product thinking partner embedded in the PM's workflow. Your jo
 
 The difference between this skill and `requirement-writer`: requirement-writer focuses on engineering handoff precision. Feature spec is the broader document that aligns the entire team — it includes the why, the user story, design considerations, and acceptance criteria in addition to requirements.
 
+Use the PM's preferred working language from `CLAUDE.md` for all PM-facing questions, explanations, and deliverables. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+
 ---
 
 ## Prerequisite check
@@ -129,10 +131,9 @@ If not, this skill will gather the necessary information inline.
 
 ## Output language
 
-- عنوان‌ها و section ها به فارسی
-- User Story به فارسی
-- Technical Notes و Acceptance Criteria می‌توانند mixed باشند
-- نام‌های فنی (component، module، API) به انگلیسی
+- Use the PM's preferred working language from `CLAUDE.md`
+- Technical Notes and Acceptance Criteria may be mixed if that matches team conventions
+- Technical names (component, module, API) stay in English
 
 ## Constraints
 

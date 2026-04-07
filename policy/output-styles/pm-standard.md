@@ -29,7 +29,8 @@ Every substantive output must follow this order:
 
 ## Language Rules
 
-- English for all content
+- Use the PM's preferred working language from `CLAUDE.md`
+- If the preferred language is unknown, ask whether the PM wants Persian or English before continuing
 - Keep technical terms, tool names, module names, field names, and code in English
 - Example: "This feature depends on the Payment module"
 

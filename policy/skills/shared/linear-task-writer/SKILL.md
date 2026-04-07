@@ -1,27 +1,29 @@
 ---
 name: linear-task-writer
-description: "نوشتن تسک Linear به فارسی با ساختار مشخص چهاربخشی. از این skill هر وقت کاربر بخواهد تسک Linear بنویسد استفاده شود."
+description: "Write a Linear task in the PM's preferred working language using the standard four-part structure."
 ---
 
 # Linear Task Writer
 
-یک تسک Linear با ساختار چهاربخشی فارسی بنویس:
+Use the PM's preferred working language from `CLAUDE.md` for all PM-facing output. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
 
-## ساختار
+Write a Linear task using the standard four-part structure:
 
-**۱. شرح تسک**
-توضیح کامل آنچه باید انجام شود.
+## Structure
 
-**۲. سناریوی کاربر**
-به عنوان [نوع کاربر]، می‌خواهم [هدف]، تا [نتیجه].
+**1. Task Description**
+[Explain what needs to be done.]
 
-**۳. ملاحظات پیاده‌سازی**
-نکات فنی، وابستگی‌ها، و محدودیت‌هایی که تیم باید بداند.
+**2. User Story**
+As a [user type], I want [goal], so that [outcome].
 
-**۴. DOD**
-✓ [مورد قابل تست ۱]
-✓ [مورد قابل تست ۲]
-✓ [مورد قابل تست ۳]
+**3. Implementation Notes**
+[Technical notes, dependencies, and constraints the team should know.]
 
-موارد خارج از scope:
-- [مورد ۱]
+**4. DOD**
+✓ [Testable item 1]
+✓ [Testable item 2]
+✓ [Testable item 3]
+
+Out of scope:
+- [Item 1]

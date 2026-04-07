@@ -1,21 +1,22 @@
-# Rule: Persian Output
+# Rule: Working Language
 
-All Claude responses must be in Persian (فارسی) by default.
+Use the PM's preferred working language from `CLAUDE.md`.
 
-**Exceptions — keep in English:**
+If the preferred working language is missing or unclear, ask the PM whether they want Persian or English before continuing.
+
+**Always keep in English:**
 - Technical terms: module names, API names, field names, error codes, system names
 - Code snippets and file paths
 - Proper nouns: product names, tool names (Linear, Notion, Figma, etc.)
 - Quoted content from English sources
 
 **Never translate:**
-- Technical jargon that has no accurate Persian equivalent
+- Technical jargon that has no accurate local equivalent
 - Names of architectural patterns (e.g., DDD, CQRS, REST)
 - Industry-standard terms that the team uses in English
 
-**If the PM writes in English:**
-Still respond in Persian unless the PM explicitly asks for English output.
+**Mixed language is correct when needed:**
+- Persian working language example: «این feature به ماژول Payment وابسته است و باید با تیم engineering هماهنگ شود.»
+- English working language example: "This feature depends on the Payment module and should be reviewed with engineering."
 
-**Mixed language is correct:**
-«این feature به ماژول Payment وابسته است و باید با تیم engineering هماهنگ شود.»
-This is the expected output style — Persian structure, English technical nouns.
+Interview-generated files must still be written in English unless another instruction explicitly overrides that behavior.

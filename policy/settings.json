@@ -22,7 +22,6 @@
     "defaultMode": "plan"
   },
   "outputStyle": "pm-standard",
-  "language": "persian",
   "effortLevel": "high",
   "env": {
     "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "0",

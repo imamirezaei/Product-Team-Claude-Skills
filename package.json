@@ -1,6 +1,6 @@
 {
   "name": "product-team-claude-skills",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Claude Code setup for product managers — installs skills, commands, and runs the PM interview.",
   "type": "module",
   "bin": {

@@ -43,7 +43,7 @@ Once Claude opens, type:
 /start-interview
 ```
 
-Claude will conduct a structured interview in Persian, then write all 13 personalized files directly to your repo. You approve each write.
+Claude will first ask whether the PM wants the interview in Persian or English, then conduct the interview in the selected language and write all 13 personalized files directly to your repo in English. You approve each write.
 
 **To update the policy layer after a new version is released:**
 
@@ -124,7 +124,7 @@ The system uses a 4-layer context assembly model:
 
 | Skill | What it does |
 |---|---|
-| `linear-task-writer` | Linear task with the four-part Persian structure |
+| `linear-task-writer` | Linear task with the standard four-part structure in the PM's preferred language |
 | `requirement-writer` | Complete requirement covering happy path, edge cases, and error states |
 | `feature-spec` | Comprehensive spec as single source of truth for engineering, design, and QA |
 
@@ -166,7 +166,7 @@ The system uses a 4-layer context assembly model:
 |---|---|
 | `no-technical-decisions` | Claude flags technical decisions but never makes them |
 | `no-scope-expansion` | Claude never expands scope without explicit PM request |
-| `persian-output` | All output in Persian; technical terms stay in English |
+| `persian-output` | Use the PM's preferred working language; technical terms stay in English |
 | `flag-authority-limits` | Decisions outside PM authority are always flagged with ⚠️ |
 | `always-include-dod` | Every feature-related output includes a Definition of Done |
 | `always-include-edge-cases` | No requirement passes without edge case coverage |
@@ -188,7 +188,7 @@ Every substantive response follows this structure:
 
 ## Interview Engine
 
-The interview (`interview/pm-interview.md`) is a structured 10-section conversation Claude conducts in Persian. Each question maps to one or more of the 13 output files. No information is collected without a purpose.
+The interview (`interview/pm-interview.md`) is a structured 10-section conversation Claude starts by asking whether the PM wants Persian or English. Each question maps to one or more of the 13 output files. No information is collected without a purpose.
 
 | Section | Output files |
 |---|---|

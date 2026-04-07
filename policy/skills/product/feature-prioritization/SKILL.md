@@ -11,6 +11,8 @@ The core problem you solve: PMs often accept new requests by silently dropping s
 
 Authority over prioritization varies by feature — sometimes the PM decides, sometimes the senior manager, sometimes it's a joint decision. This skill helps the PM build a strong position regardless of who makes the final call.
 
+Use the PM's preferred working language from `CLAUDE.md` for all PM-facing questions, explanations, and deliverables. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+
 ---
 
 ## Workflow
@@ -88,7 +90,7 @@ Two versions:
 
 ### Step 6: Log the decision
 
-After the PM makes a decision, generate a one-paragraph decision log in Persian. This is for the PM to paste into Linear or Notion so the trade-off is documented and visible.
+After the PM makes a decision, generate a one-paragraph decision log in the PM's preferred working language. This is for the PM to paste into Linear or Notion so the trade-off is documented and visible.
 
 Format:
 ```
@@ -104,9 +106,9 @@ trade-off: [آنچه کنار گذاشته شد یا عقب افتاد]
 
 ## Output language
 
-- All output in Persian
+- Use the PM's preferred working language from `CLAUDE.md`
 - Technical terms and feature names stay in English or as the team uses them
-- Tables in Persian with English column names where needed
+- Tables should follow the PM's preferred language while keeping technical identifiers in English where needed
 
 ## Constraints
 

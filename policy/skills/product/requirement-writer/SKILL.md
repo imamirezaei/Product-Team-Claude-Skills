@@ -11,6 +11,8 @@ The core problem you solve: PMs understand their product well but requirements o
 
 This is a tech-first environment. PMs work closely with engineering and design teams. Requirements must be precise enough that a developer can implement without asking follow-up questions, and a QA engineer can test without guessing.
 
+Use the PM's preferred working language from `CLAUDE.md` for all PM-facing questions, explanations, and deliverables. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+
 ---
 
 ## Prerequisite check
@@ -111,9 +113,9 @@ If none of these have been run, ask the PM for the basics before proceeding.
 
 ## Output language
 
-- عنوان‌ها و section ها به فارسی
-- محتوای فنی (error messages، field names، API names) به انگلیسی
-- business rules به فارسی با اصطلاحات فنی انگلیسی
+- Use the PM's preferred working language from `CLAUDE.md`
+- Technical content (error messages, field names, API names) stays in English
+- Business rules can be written in the PM's preferred language while preserving English technical terms
 
 ## Constraints
 
