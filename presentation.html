@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Asam PM Workflow — CPO Presentation</title>
+<title>PM Workflow — Presentation</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   :root {
@@ -101,9 +101,9 @@
 <!-- SLIDE 1: TITLE -->
 <div class="slide" style="background: var(--blue-900); color: white; justify-content: space-between;">
   <div>
-    <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 48px;">Asam · Internal Systems · 2025</div>
+    <div style="font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(255,255,255,0.45); margin-bottom: 48px;">Product Team · 2025</div>
     <h1 style="color: white; font-size: 52px; max-width: 700px; line-height: 1.1;">PM Workflow<br>with Claude Code</h1>
-    <p style="color: rgba(255,255,255,0.55); font-size: 18px; margin-top: 20px; max-width: 560px;">A structured system that turns Claude Code into a personalized product management partner for every PM at Asam.</p>
+    <p style="color: rgba(255,255,255,0.55); font-size: 18px; margin-top: 20px; max-width: 560px;">A structured system that turns Claude Code into a personalized product management partner for every PM on your team.</p>
   </div>
   <div style="display: flex; gap: 32px; margin-top: 60px;">
     <div><div style="font-size: 32px; font-weight: 500; color: white;">12</div><div style="font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px;">specialized skills</div></div>
@@ -208,7 +208,7 @@
         <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── shared/ <span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 1 shared skill</span></div>
         <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── product/ <span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 11 SKILL.md schemas</span></div>
         <div style="margin-top: 12px;"><span class="hl-blue">interview/</span></div>
-        <div>&nbsp;&nbsp;└── <span class="hl-blue">asam-pm-interview.md</span></div>
+        <div>&nbsp;&nbsp;└── <span class="hl-blue">pm-interview.md</span></div>
       </div>
     </div>
     <div>
@@ -549,7 +549,7 @@
       <div class="step-body">
         <h3>Clone the workflow repo inside the product repo</h3>
         <p>One git command. The workflow repo lives as a subfolder and never interferes with product code.</p>
-        <code class="step-cmd">git clone https://github.com/[org]/asam-pm-workflow.git claude-workflow</code>
+        <code class="step-cmd">git clone https://github.com/imamirezaei/Product-Team-Claude-Skills.git claude-workflow</code>
       </div>
     </div>
     <div class="step-row">
@@ -564,7 +564,7 @@
       <div class="step-num">3</div>
       <div class="step-body">
         <h3>Run the interview</h3>
-        <p>Open <span class="mono">interview/asam-pm-interview.md</span>, paste it into Claude, answer the questions. Claude generates 13 files at the end.</p>
+        <p>Open <span class="mono">interview/pm-interview.md</span>, paste it into Claude, answer the questions. Claude generates 13 files at the end.</p>
       </div>
     </div>
     <div class="step-row">
@@ -609,7 +609,7 @@
     <div>
       <h3 style="margin-bottom: 16px;">When supervisor updates a skill or rule</h3>
       <div style="padding: 20px; background: var(--bg-sec); border-radius: var(--radius-lg);">
-        <p style="font-size: 13px; color: var(--text-sec); margin-bottom: 16px;">Supervisor pushes to <span class="mono">asam-pm-workflow</span> repo. PM runs:</p>
+        <p style="font-size: 13px; color: var(--text-sec); margin-bottom: 16px;">Supervisor pushes to <span class="mono">product-team-claude-skills</span> repo. PM runs:</p>
         <code style="font-family: monospace; font-size: 13px; background: var(--gray-800); color: #e8e6e0; padding: 12px 16px; border-radius: 6px; display: block;">cd claude-workflow && git pull && cd ..</code>
         <p style="font-size: 12px; color: var(--text-hint); margin-top: 12px;">That is the entire update process. Nothing else required.</p>
       </div>

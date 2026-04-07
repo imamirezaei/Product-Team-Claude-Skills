@@ -4,7 +4,7 @@
   "description": "Claude Code setup for product managers — installs skills, commands, and runs the PM interview.",
   "type": "module",
   "bin": {
-    "claude-pm": "./bin/cli.js"
+    "claude-pm": "bin/cli.js"
   },
   "files": [
     "bin/",
