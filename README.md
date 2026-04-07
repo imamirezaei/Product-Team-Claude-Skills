@@ -1,14 +1,14 @@
-# PM Workflow
+# PM Workflow for Claude Code
 
-A structured system for Asam product managers to use Claude Code. This repo contains everything needed to transform Claude from a general-purpose assistant into a personalized product management partner.
+A structured system for product managers to use Claude Code. This package transforms Claude from a general-purpose assistant into a personalized product management partner.
 
 ---
 
 ## Table of Contents
 
+- [Quick Start](#quick-start)
 - [Architecture Overview](#architecture-overview)
 - [Repository Structure](#repository-structure)
-- [Initial Setup — Onboarding](#initial-setup--onboarding)
 - [Receiving Updates](#receiving-updates)
 - [Layer 1: Policy Layer](#layer-1-policy-layer)
 - [Layer 2: Interview Engine](#layer-2-interview-engine)
@@ -20,15 +20,44 @@ A structured system for Asam product managers to use Claude Code. This repo cont
 
 ---
 
+## Quick Start
+
+**Prerequisites:** Node.js ≥ 18, [Claude Code](https://claude.ai/code) installed.
+
+```bash
+# 1. Install the package globally
+npm install -g product-team-claude-skills
+
+# 2. Go to your product repo
+cd /path/to/your-product-repo
+
+# 3. Run init (must be inside a git repo)
+claude-pm init
+
+# 4. When Claude opens, type:
+# /start-interview
+```
+
+That's it. Claude will conduct a structured interview and generate all 13 personalized files automatically.
+
+**To update the policy layer after a new version is published:**
+
+```bash
+npm update -g product-team-claude-skills
+claude-pm update
+```
+
+---
+
 ## Architecture Overview
 
 ```
 ┌─────────────────────────────────────────────┐
 │             Policy Layer (fixed)            │
-│  policy/rules + commands + skills/schema    │  ← supervisor updates
+│  policy/rules + commands + skills/schema    │  ← maintainer updates
 ├─────────────────────────────────────────────┤
 │             Interview Engine                │
-│       interview/asam-pm-interview.md        │  ← run once
+│         interview/pm-interview.md           │  ← run once per PM
 ├─────────────────────────────────────────────┤
 │          Dynamic Layer (per PM)             │
 │     CLAUDE.md + context files + agent       │  ← output of interview
@@ -38,24 +67,25 @@ A structured system for Asam product managers to use Claude Code. This repo cont
 └─────────────────────────────────────────────┘
 ```
 
-**Policy Layer** is identical for all PMs. The supervisor updates it and team members receive changes with `git pull`.
+**Policy Layer** is identical for all PMs. The maintainer updates it and team members receive changes with `claude-pm update`.
 
-**Dynamic Layer** is unique per PM, generated from the interview. Supervisor updates never touch this layer.
+**Dynamic Layer** is unique per PM, generated from the interview. Policy updates never touch this layer.
 
-`claude_code_full_context_assembly_expert.html` is a standalone visual reference that shows how Claude Code assembles runtime context from the fixed policy layer, the interview output, and PM-specific files. It is documentation only, not part of the onboarding flow.
+`claude_code_full_context_assembly_expert.html` is a standalone visual reference that shows how Claude Code assembles runtime context from the fixed policy layer, the interview output, and PM-specific files.
 
 ---
 
 ## Repository Structure
 
 ```
-asam-pm-workflow/
+product-team-claude-skills/
 │
 ├── README.md
-├── claude_code_full_context_assembly_expert.html  ← visual context assembly reference
-├── .gitignore
+├── package.json
+├── bin/cli.js                         ← CLI entry point (claude-pm command)
+├── src/                               ← CLI implementation
 │
-├── policy/                            ← supervisor updates only
+├── policy/                            ← maintainer updates only
 │   ├── settings.json
 │   ├── rules/                         ← 6 hard rules
 │   ├── commands/                      ← 7 slash commands
@@ -68,137 +98,54 @@ asam-pm-workflow/
 │           ├── feature-prioritization/SKILL.md
 │           └── ...
 │
-├── pm-template/                       ← copied once to product repo
-│   ├── CLAUDE.md                      ← placeholder
+├── pm-template/                       ← placeholder files copied to product repo
+│   ├── CLAUDE.md
 │   ├── .gitignore
 │   └── .claude/
 │       ├── settings.json
 │       ├── agents/
-│       │   └── product-agent.md       ← placeholder
+│       │   └── product-agent.md
 │       └── skills/product/            ← 11 context.md placeholders
 │
 └── interview/
-    └── asam-pm-interview.md
+    └── pm-interview.md
 ```
 
 ---
 
-## Initial Setup — Onboarding
+## What `claude-pm init` Does
 
-**Done only once per PM.**
+When you run `claude-pm init` inside a product repo, it:
 
-### Step 1: Clone this repo
+1. Copies skills, commands, and output styles to `~/.claude/` (global)
+2. Copies the full policy layer to `./claude-workflow/policy/`
+3. Copies placeholder files to `./.claude/`
+4. Updates `.gitignore` to protect private files
+5. Opens Claude Code automatically
 
-Inside your product repo, run:
-
-```bash
-git clone https://github.com/[org]/asam-pm-workflow.git claude-workflow
-```
-
-Your product repo now looks like:
-
-```
-my-product-repo/
-├── src/
-├── package.json
-└── claude-workflow/
-```
-
-### Step 2: Copy pm-template to your repo root
-
-```bash
-cp claude-workflow/pm-template/CLAUDE.md ./CLAUDE.md
-cp -r claude-workflow/pm-template/.claude ./.claude
-cp claude-workflow/pm-template/.gitignore ./.gitignore
-```
-
-Your product repo now looks like:
-
-```
-my-product-repo/
-├── CLAUDE.md                 ← placeholder
-├── .gitignore
-├── .claude/
-│   ├── settings.json
-│   ├── agents/
-│   └── skills/product/       ← context placeholders
-├── src/
-└── claude-workflow/
-```
-
-### Step 3: Run the Interview
-
-```bash
-cat claude-workflow/interview/asam-pm-interview.md
-```
-
-Copy the file contents and paste into Claude (claude.ai or Claude Code). Answer all interview questions. Claude will generate **13 files** at the end.
-
-### Step 4: Place the interview output
-
-Place each file in the correct path in your product repo:
-
-| Output file                         | Destination path                                             |
-| ----------------------------------- | ------------------------------------------------------------ |
-| `CLAUDE.md`                         | `./CLAUDE.md` (replace placeholder)                          |
-| `problem-framing/context.md`        | `./.claude/skills/product/problem-framing/context.md`        |
-| `feature-prioritization/context.md` | `./.claude/skills/product/feature-prioritization/context.md` |
-| `decision-logger/context.md`        | `./.claude/skills/product/decision-logger/context.md`        |
-| `requirement-writer/context.md`     | `./.claude/skills/product/requirement-writer/context.md`     |
-| `feature-spec/context.md`           | `./.claude/skills/product/feature-spec/context.md`           |
-| `edge-case-finder/context.md`       | `./.claude/skills/product/edge-case-finder/context.md`       |
-| `scope-check/context.md`            | `./.claude/skills/product/scope-check/context.md`            |
-| `feature-dependency/context.md`     | `./.claude/skills/product/feature-dependency/context.md`     |
-| `design-system-check/context.md`    | `./.claude/skills/product/design-system-check/context.md`    |
-| `release-impact/context.md`         | `./.claude/skills/product/release-impact/context.md`         |
-| `qa-guide/context.md`               | `./.claude/skills/product/qa-guide/context.md`               |
-| `product-agent.md`                  | `./.claude/agents/product-agent.md` (replace placeholder)    |
-
-### Step 5: Commit
-
-```bash
-git add CLAUDE.md .claude/ .gitignore
-git commit -m "feat: add Claude PM workflow context"
-git push
-```
-
-`CLAUDE.local.md` and `.claude/settings.local.json` are automatically gitignored — do not commit them.
-
-### Step 6: Send to supervisor
-
-Send your output package to Amir for review before you start using the workflow.
-
-### Step 7: Start working
-
-Open Claude Code at your repo root and start using slash commands:
-
-```bash
-/new-feature add biometric authentication to checkout flow
-```
+After Claude opens, type `/start-interview`. Claude will:
+- Ask questions about your product, team, and workflow (in Persian)
+- Generate 13 personalized files
+- Write each file directly to the correct path (you approve each write)
 
 ---
 
 ## Receiving Updates
 
-When the supervisor pushes an update to a skill or rule, one command is all you need:
+When a new version of the package is published:
 
 ```bash
-cd claude-workflow && git pull && cd ..
+npm update -g product-team-claude-skills
+claude-pm update
 ```
 
-**Your CLAUDE.md and context files stay untouched.** They live in your repo root, not inside `claude-workflow/`. There are no merge conflicts.
-
-To verify you have the latest version:
-
-```bash
-cd claude-workflow && git log --oneline -5 && cd ..
-```
+`claude-pm update` re-copies the policy layer to both `~/.claude/` and `./claude-workflow/policy/`. It never touches `CLAUDE.md`, `context.md` files, `product-agent.md`, or `settings.json`.
 
 ---
 
 ## Layer 1: Policy Layer
 
-Defined by the supervisor, applied to all PMs. **Do not edit manually.**
+Defined by the maintainer, applied to all PMs. **Do not edit manually.**
 
 ### Rules
 
@@ -238,13 +185,13 @@ Every substantive output follows this structure:
 
 - `defaultMode: plan` — Claude writes a plan before any change and waits for approval
 - `effortLevel: high` — Claude reasons with maximum precision
-- `additionalDirectories: ["./claude-workflow"]` — Claude reads policy files from this repo
+- `additionalDirectories: ["./claude-workflow"]` — Claude reads policy files from this directory
 
 ---
 
 ## Layer 2: Interview Engine
 
-`interview/asam-pm-interview.md` runs a structured interview and generates 13 files. Each question maps to one or more output files — no information is collected without a purpose.
+`interview/pm-interview.md` runs a structured interview and generates 13 files. Each question maps to one or more output files — no information is collected without a purpose.
 
 ### Interview Sections and File Mapping
 
@@ -280,7 +227,7 @@ The most critical file. Claude reads it at the start of every session. Contains:
 Each skill has a `context.md` that personalizes its behavior for this specific PM and product:
 
 ```
-SKILL.md (fixed logic — from supervisor)
+SKILL.md (fixed logic — from maintainer)
     +
 context.md (this PM's product context — from interview)
     +
@@ -307,7 +254,7 @@ Private notes loaded alongside `CLAUDE.md`. Useful for things you don't want to 
 # Personal notes
 
 - Focused on payment sprint this week
-- Always sync with Ali in engineering before any financial spec
+- Always sync with the lead engineer before any financial spec
 - Upcoming demo on March 15 — prioritize polish over new features
 ```
 

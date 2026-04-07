@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(chmod +x /Users/macbook/Downloads/Product-Team-Claude-Skills/bin/cli.js)"
+    ]
+  }
+}

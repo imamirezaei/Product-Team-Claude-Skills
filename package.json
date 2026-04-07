@@ -1,0 +1,33 @@
+{
+  "name": "product-team-claude-skills",
+  "version": "1.0.0",
+  "description": "Claude Code setup for product managers — installs skills, commands, and runs the PM interview.",
+  "type": "module",
+  "bin": {
+    "claude-pm": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "policy/",
+    "pm-template/",
+    "interview/"
+  ],
+  "scripts": {
+    "test": "node bin/cli.js --help"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "product-management"
+  ],
+  "author": "Amir",
+  "license": "UNLICENSED"
+}

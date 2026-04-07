@@ -4,7 +4,7 @@ name: pm-standard
 
 # PM Standard Output Style
 
-Apply this output style to all responses in the Asam PM workflow.
+Apply this output style to all responses in the PM workflow.
 
 ## Structure Rules
 
