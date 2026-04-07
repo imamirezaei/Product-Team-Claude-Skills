@@ -1,2 +1,2 @@
 # Context: scope-check — [Product Name]
-> این فایل را با خروجی interview engine جایگزین کن.
+> Replace this file with the interview engine output.

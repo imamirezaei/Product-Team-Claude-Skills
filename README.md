@@ -42,6 +42,8 @@ A structured system for Asam product managers to use Claude Code. This repo cont
 
 **Dynamic Layer** is unique per PM, generated from the interview. Supervisor updates never touch this layer.
 
+`claude_code_full_context_assembly_expert.html` is a standalone visual reference that shows how Claude Code assembles runtime context from the fixed policy layer, the interview output, and PM-specific files. It is documentation only, not part of the onboarding flow.
+
 ---
 
 ## Repository Structure
@@ -50,6 +52,7 @@ A structured system for Asam product managers to use Claude Code. This repo cont
 asam-pm-workflow/
 │
 ├── README.md
+├── claude_code_full_context_assembly_expert.html  ← visual context assembly reference
 ├── .gitignore
 │
 ├── policy/                            ← supervisor updates only
@@ -386,6 +389,10 @@ Generates a complete, prioritized test plan. Reads the change context from the r
 ---
 
 ## References
+
+### Repository Artifacts
+
+- `claude_code_full_context_assembly_expert.html` — visual explanation of the full context assembly pipeline across policy, interview output, and PM-specific runtime files
 
 ### Official Claude Code Documentation
 

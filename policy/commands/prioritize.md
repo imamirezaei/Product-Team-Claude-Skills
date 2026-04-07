@@ -2,10 +2,10 @@
 description: Compare and prioritize features against the current roadmap
 ---
 
-این feature ها را با هم مقایسه و prioritize کن.
+Compare and prioritize these features.
 
-skill `feature-prioritization` را اجرا کن.
+Run the `feature-prioritization` skill.
 
-Feature های مورد مقایسه: $ARGUMENTS
+Features to compare: $ARGUMENTS
 
-اگر $ARGUMENTS خالی است، از PM بخواه feature ها یا تصمیم prioritization را توصیف کند.
+If $ARGUMENTS is empty, ask the PM to describe the features or the prioritization decision.

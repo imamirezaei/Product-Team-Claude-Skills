@@ -2,10 +2,10 @@
 description: Generate a complete, prioritized test plan for a feature
 ---
 
-یک test plan کامل و prioritize‌شده برای این feature تولید کن.
+Generate a complete, prioritized test plan for this feature.
 
-skill `qa-guide` را اجرا کن.
+Run the `qa-guide` skill.
 
-Feature یا تغییر: $ARGUMENTS
+Feature or change: $ARGUMENTS
 
-اگر $ARGUMENTS خالی است، از git diff آخرین تغییرات استفاده کن.
+If $ARGUMENTS is empty, use the `git diff` of the latest changes.

@@ -2,10 +2,10 @@
 description: Document a product decision before it gets lost
 ---
 
-این تصمیم را مستند کن.
+Document this decision.
 
-skill `decision-logger` را اجرا کن.
+Run the `decision-logger` skill.
 
-تصمیم: $ARGUMENTS
+Decision: $ARGUMENTS
 
-اگر $ARGUMENTS خالی است، از PM بخواه تصمیم را توصیف کند.
+If $ARGUMENTS is empty, ask the PM to describe the decision.

@@ -2,10 +2,10 @@
 description: Find edge cases for a feature or requirement
 ---
 
-edge case های این feature را پیدا کن.
+Find the edge cases for this feature.
 
-skill `edge-case-finder` را اجرا کن.
+Run the `edge-case-finder` skill.
 
-Feature یا requirement: $ARGUMENTS
+Feature or requirement: $ARGUMENTS
 
-اگر $ARGUMENTS خالی است، از PM بخواه feature را توصیف کند.
+If $ARGUMENTS is empty, ask the PM to describe the feature.

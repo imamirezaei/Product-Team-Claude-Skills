@@ -2,10 +2,10 @@
 description: Analyze the impact of a change before release
 ---
 
-تأثیر این تغییر را قبل از release تحلیل کن.
+Analyze the impact of this change before release.
 
-ابتدا skill `release-impact` را اجرا کن، سپس skill `qa-guide` را با output آن اجرا کن.
+First, run the `release-impact` skill, then run the `qa-guide` skill with its output.
 
-Feature یا branch: $ARGUMENTS
+Feature or branch: $ARGUMENTS
 
-اگر $ARGUMENTS خالی است، از git diff آخرین تغییرات استفاده کن.
+If $ARGUMENTS is empty, use the `git diff` of the latest changes.

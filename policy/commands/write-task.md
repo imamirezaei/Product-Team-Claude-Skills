@@ -2,10 +2,10 @@
 description: Write a Linear task with the standard four-part Persian structure
 ---
 
-یک تسک Linear با ساختار چهاربخشی فارسی بنویس.
+Write a Linear task using the standard four-part Persian structure.
 
-skill `linear-task-writer` را اجرا کن.
+Run the `linear-task-writer` skill.
 
-موضوع تسک: $ARGUMENTS
+Task topic: $ARGUMENTS
 
-اگر $ARGUMENTS خالی است، از PM بخواه موضوع تسک را توصیف کند.
+If $ARGUMENTS is empty, ask the PM to describe the task topic.

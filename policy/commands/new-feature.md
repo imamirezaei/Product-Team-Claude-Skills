@@ -2,14 +2,14 @@
 description: Start a complete feature development process from problem framing to DOD
 ---
 
-یک فرایند کامل تعریف feature جدید را شروع کن.
+Start a complete process for defining a new feature.
 
-مراحل به ترتیب:
-1. ابتدا skill `problem-framing` را اجرا کن
-2. بعد از تأیید PM، skill `feature-dependency` را اجرا کن
-3. بعد از تأیید PM، skill `edge-case-finder` را اجرا کن
-4. در نهایت skill `feature-spec` را با تمام context جمع‌آوری‌شده اجرا کن
+Steps in order:
+1. First, run the `problem-framing` skill
+2. After PM approval, run the `feature-dependency` skill
+3. After PM approval, run the `edge-case-finder` skill
+4. Finally, run the `feature-spec` skill with all collected context
 
-Feature مورد نظر: $ARGUMENTS
+Target feature: $ARGUMENTS
 
-اگر $ARGUMENTS خالی است، از PM بخواه feature را توصیف کند.
+If $ARGUMENTS is empty, ask the PM to describe the feature.

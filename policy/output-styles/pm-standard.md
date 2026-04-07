@@ -10,11 +10,11 @@ Apply this output style to all responses in the Asam PM workflow.
 
 Every substantive output must follow this order:
 
-1. **خلاصه** — One sentence. What is this output and what does the PM need to do with it.
-2. **محتوای اصلی** — The main deliverable (spec, DOD, analysis, etc.)
-3. **موارد خارج از scope** — Explicit list of what is NOT included. Required for all feature-related outputs.
-4. **سوالات باز** — Open questions that require a decision before proceeding. Required if any exist.
-5. **نیاز به تأیید** — Sign-off flags. Required if any decision is outside the PM's authority.
+1. **Summary** — One sentence. What is this output and what does the PM need to do with it.
+2. **Main Content** — The main deliverable (spec, DOD, analysis, etc.)
+3. **Out of Scope** — Explicit list of what is NOT included. Required for all feature-related outputs.
+4. **Open Questions** — Open questions that require a decision before proceeding. Required if any exist.
+5. **Needs Approval** — Sign-off flags. Required if any decision is outside the PM's authority.
 6. **DOD** — Definition of Done. Required for all feature-related outputs.
 
 ## Formatting Rules
@@ -29,14 +29,14 @@ Every substantive output must follow this order:
 
 ## Language Rules
 
-- Persian for all content
-- English for: technical terms, tool names, module names, field names, code
-- Mixed is correct: «این feature به ماژول Payment وابسته است»
+- English for all content
+- Keep technical terms, tool names, module names, field names, and code in English
+- Example: "This feature depends on the Payment module"
 
 ## Tone Rules
 
 - Direct and concise — no filler phrases
-- Never say «امیدوارم این کمک کند» or similar
+- Never say "I hope this helps" or similar
 - Never add unsolicited opinions on business decisions
 - If something is uncertain, say so explicitly rather than hedging
 

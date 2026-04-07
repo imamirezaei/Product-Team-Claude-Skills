@@ -4,4 +4,4 @@ description: "Specialized product agent. Replace with output from interview engi
 ---
 
 # Product Agent
-> این فایل را با خروجی interview engine جایگزین کن.
+> Replace this file with the interview engine output.
