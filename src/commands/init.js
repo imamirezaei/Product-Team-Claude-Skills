@@ -28,16 +28,16 @@ export async function runInit({ force = false } = {}) {
 
   // ── Guard: must be inside a git repo ──────────────────────────────────────
   if (!detectGitRepo(cwd)) {
-    console.error(chalk.red('\n✗ این پوشه یک git repository نیست.'));
-    console.error(chalk.dim('  ابتدا با git init یا git clone یک repo ایجاد کنید.\n'));
+    console.error(chalk.red('\n✗ This directory is not a git repository.'));
+    console.error(chalk.dim('  Create one first with git init or git clone.\n'));
     process.exit(1);
   }
 
   // ── Guard: existing setup ─────────────────────────────────────────────────
   const alreadySetup = fs.existsSync(path.join(cwd, 'claude-workflow'));
   if (alreadySetup && !force) {
-    console.log(chalk.yellow('\n⚠  پوشه claude-workflow قبلاً وجود دارد.'));
-    console.log(chalk.dim('   برای به‌روزرسانی policy layer از دستور زیر استفاده کنید:'));
+    console.log(chalk.yellow('\n⚠  The claude-workflow directory already exists.'));
+    console.log(chalk.dim('   To update the policy layer, run:'));
     console.log(chalk.cyan('   claude-pm update\n'));
     process.exit(0);
   }
@@ -45,7 +45,7 @@ export async function runInit({ force = false } = {}) {
   console.log('');
 
   // ── Step 1: Global files ──────────────────────────────────────────────────
-  console.log(chalk.bold('نصب فایل‌های global...'));
+  console.log(chalk.bold('Installing global files...'));
   const globalInstalled = copyGlobal();
   for (const p of globalInstalled) {
     printStep(chalk.green('✓'), p);
@@ -54,7 +54,7 @@ export async function runInit({ force = false } = {}) {
   console.log('');
 
   // ── Step 2: Project scaffold ──────────────────────────────────────────────
-  console.log(chalk.bold('ساختن فایل‌های پروژه...'));
+  console.log(chalk.bold('Scaffolding project files...'));
   const version = readPackageVersion();
   const projectInstalled = copyProject(cwd, version);
   for (const p of projectInstalled) {
@@ -79,11 +79,11 @@ export async function runInit({ force = false } = {}) {
 
   if (claudeVersion) {
     console.log('');
-    console.log(chalk.bold('آماده شروع interview...'));
+    console.log(chalk.bold('Ready to start the interview...'));
     console.log(chalk.dim(`  Claude Code: ${claudeVersion}`));
     console.log('');
-    console.log(chalk.cyan('  Claude Code در حال باز شدن است.'));
-    console.log(chalk.cyan('  بعد از باز شدن، تایپ کنید: /start-interview'));
+    console.log(chalk.cyan('  Launching Claude Code.'));
+    console.log(chalk.cyan('  Once it opens, type: /start-interview'));
     console.log('');
 
     // Small pause so PM can read the message before Claude takes over the terminal
@@ -91,23 +91,23 @@ export async function runInit({ force = false } = {}) {
 
     const result = spawnSync('claude', [], { stdio: 'inherit', cwd });
     if (result.error) {
-      console.log(chalk.yellow('\n⚠  Claude Code راه‌اندازی نشد.'));
-      console.log(chalk.dim('  دستی اجرا کنید: claude'));
+      console.log(chalk.yellow('\n⚠  Claude Code could not be launched.'));
+      console.log(chalk.dim('  Run it manually with: claude'));
     }
   } else {
     console.log('');
-    console.log(chalk.yellow('⚠  Claude Code در PATH یافت نشد.'));
+    console.log(chalk.yellow('⚠  Claude Code was not found in PATH.'));
     console.log('');
-    console.log('  برای نصب Claude Code:');
+    console.log('  To install Claude Code:');
     console.log(chalk.cyan('  npm install -g @anthropic-ai/claude-code'));
     console.log('');
-    console.log('  بعد از نصب، از این پوشه اجرا کنید:');
+    console.log('  After installing, run this from the current directory:');
     console.log(chalk.cyan('  claude'));
-    console.log('  سپس تایپ کنید: /start-interview');
+    console.log('  Then type: /start-interview');
   }
 
   console.log('');
-  console.log(chalk.green('✓ Setup کامل شد.'));
-  console.log(chalk.dim('  برای به‌روزرسانی: claude-pm update'));
+  console.log(chalk.green('✓ Setup complete.'));
+  console.log(chalk.dim('  To update later: claude-pm update'));
   console.log('');
 }

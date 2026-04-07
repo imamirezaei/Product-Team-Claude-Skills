@@ -43,14 +43,14 @@ export function runUpdate() {
   const cwd = process.cwd();
 
   console.log('');
-  console.log(chalk.bold('Claude PM — به‌روزرسانی policy'));
+  console.log(chalk.bold('Claude PM - Policy Update'));
   console.log(chalk.dim('─'.repeat(40)));
 
   // ── Guard: must have been initialized ─────────────────────────────────────
   const versionFile = path.join(cwd, 'claude-workflow', '.claude-pm-version');
   if (!fs.existsSync(versionFile)) {
-    console.error(chalk.red('\n✗ این پروژه هنوز initialize نشده.'));
-    console.error(chalk.dim('  ابتدا اجرا کنید: claude-pm init\n'));
+    console.error(chalk.red('\n✗ This project has not been initialized yet.'));
+    console.error(chalk.dim('  Run this first: claude-pm init\n'));
     process.exit(1);
   }
 
@@ -58,12 +58,12 @@ export function runUpdate() {
   const newVersion = readPackageVersion();
 
   console.log('');
-  console.log(chalk.dim(`  نسخه قبلی: ${prevVersion}`));
-  console.log(chalk.dim(`  نسخه جدید: ${newVersion}`));
+  console.log(chalk.dim(`  Previous version: ${prevVersion}`));
+  console.log(chalk.dim(`  New version: ${newVersion}`));
   console.log('');
 
   // ── Update policy layer in ./claude-workflow/policy/ ──────────────────────
-  console.log(chalk.bold('به‌روزرسانی policy در پروژه...'));
+  console.log(chalk.bold('Updating project policy files...'));
   const policySrc = path.join(PACKAGE_ROOT, 'policy');
   const policyDest = path.join(cwd, 'claude-workflow', 'policy');
   copyDirRecursive(policySrc, policyDest);
@@ -85,7 +85,7 @@ export function runUpdate() {
 
   // ── Update global ~/.claude/ ──────────────────────────────────────────────
   console.log('');
-  console.log(chalk.bold('به‌روزرسانی فایل‌های global...'));
+  console.log(chalk.bold('Updating global files...'));
   const globalInstalled = copyGlobal();
   for (const p of globalInstalled) {
     console.log(`  ${chalk.green('✓')} ${p}`);
@@ -93,7 +93,7 @@ export function runUpdate() {
 
   // ── Confirm protected files untouched ─────────────────────────────────────
   console.log('');
-  console.log(chalk.dim('فایل‌های شخصی دست نخورده ماندند:'));
+  console.log(chalk.dim('Protected personal files were left untouched:'));
   for (const p of PROTECTED) {
     console.log(chalk.dim(`  – ${p}`));
   }
@@ -102,9 +102,9 @@ export function runUpdate() {
   fs.writeFileSync(versionFile, newVersion, 'utf8');
 
   console.log('');
-  console.log(chalk.green(`✓ Policy به نسخه ${newVersion} به‌روز شد.`));
+  console.log(chalk.green(`✓ Policy updated to version ${newVersion}.`));
   console.log('');
-  console.log(chalk.dim('  پیشنهاد: تغییرات را commit کنید:'));
+  console.log(chalk.dim('  Suggested next step: commit the changes:'));
   console.log(chalk.cyan(`  git add claude-workflow/ && git commit -m "Update PM policy to v${newVersion}"`));
   console.log('');
 }

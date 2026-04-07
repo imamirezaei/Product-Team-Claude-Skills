@@ -37,6 +37,8 @@ claude-pm init
 2. Scaffold all required files into your product repo
 3. Open Claude Code automatically
 
+The CLI setup logs are in English. The interview itself starts by asking whether the PM wants Persian or English, then continues in the selected language.
+
 Once Claude opens, type:
 
 ```
@@ -51,6 +53,8 @@ Claude will first ask whether the PM wants the interview in Persian or English, 
 npm update -g product-team-claude-skills
 claude-pm update
 ```
+
+`claude-pm update` also uses English CLI output while keeping the PM-facing workflow language-aware.
 
 ---
 
