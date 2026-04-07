@@ -1,5 +1,7 @@
 # Product Team Claude Skills
 
+[![npm version](https://img.shields.io/npm/v/product-team-claude-skills)](https://www.npmjs.com/package/product-team-claude-skills)
+
 A structured system for product managers to use [Claude Code](https://claude.ai/code). This package transforms Claude from a general-purpose assistant into a personalized product management partner — with 12 specialized skills, 7 slash commands, and a one-time interview that personalizes everything to your product and team.
 
 ---
@@ -8,6 +10,12 @@ A structured system for product managers to use [Claude Code](https://claude.ai/
 
 ```bash
 npm install -g product-team-claude-skills
+```
+
+Or run without installing:
+
+```bash
+npx product-team-claude-skills init
 ```
 
 **Requirements:** Node.js ≥ 18, [Claude Code](https://claude.ai/code) installed.
