@@ -1,6 +1,6 @@
 ---
 name: feature-dependency
-description: "Use this skill when the PM is planning a new feature and needs to understand what technical dependencies exist before engineering starts. Triggers: 'می‌خوام این feature رو بسازیم، چه چیزی باید در نظر بگیریم', 'تیم فنی گفتن dependency داره ولی نمی‌دونم چی', 'قبل از شروع باید بدونم چه ماژول‌هایی تأثیر می‌گیرن', or any situation where a PM needs technical dependency analysis before committing to a feature."
+description: "Use this skill when the PM is planning a new feature and needs to understand what technical dependencies exist before engineering starts. Triggers: 'we want to build this feature, what do we need to consider', 'engineering said it has dependencies but I don't know what', 'before we start I need to know which modules are affected', or any situation where a PM needs technical dependency analysis before committing to a feature."
 ---
 
 # Feature Dependency Analyzer
@@ -9,87 +9,96 @@ You are a senior product thinking partner with direct access to the codebase. Yo
 
 This skill runs in Claude Code and has direct access to the repository. You will READ the codebase, not ask the PM to explain it.
 
+Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, file paths, module names, and code in English regardless of working language.
+
+---
+
+## Chain position
+
+This skill runs as step 2 in the `/new-feature` command chain, after `problem-framing`. Its output feeds into `edge-case-finder` (step 3) — dependencies found here inform which system states need edge case coverage.
+
 ---
 
 ## Workflow
 
 ### Step 1: Receive feature description
 
-PM توضیح feature را می‌دهد. کافی است بداند:
-- این feature چه کاری می‌کند
-- از کجا شروع می‌شود (entry point)
-- چه داده‌ای می‌خواند یا می‌نویسد
+The PM describes the feature. Minimum needed:
+- What this feature does
+- Where it starts (entry point)
+- What data it reads or writes
 
 ### Step 2: Explore the repository
 
-با ابزارهای Claude Code repo را بررسی کن:
+Use Claude Code tools to read the repo:
 
-```
-۱. ساختار کلی پروژه را بخوان
-۲. ماژول‌های مرتبط با feature را شناسایی کن
-۳. فایل‌های کلیدی را بخوان
-۴. dependency های بین ماژول‌ها را trace کن
-۵. سرویس‌های خارجی را شناسایی کن
-```
+1. Read the overall project structure
+2. Identify modules related to this feature
+3. Read key files
+4. Trace dependencies between modules
+5. Identify external services
 
-**نکته:** فقط چیزهایی را بپرس که از repo نمی‌توانی استخراج کنی. اگر intent feature مبهم است، یک سوال بپرس. بقیه را از کد بخوان.
+Only ask the PM for things you cannot extract from the repo. If the feature intent is ambiguous, ask one question. Read everything else from the code.
 
 ### Step 3: Generate dependency report
 
 ```
-# گزارش وابستگی‌های فنی — [نام Feature]
+# Technical Dependency Report — [Feature name]
 
-## ماژول‌های تأثیرگرفته
-| ماژول | نوع تأثیر | فایل‌های کلیدی |
+## Affected modules
+| Module | Impact type | Key files |
 |---|---|---|
-| [ماژول ۱] | [اصلی/جانبی/read-only] | [path] |
-| [ماژول ۲] | [اصلی/جانبی/read-only] | [path] |
+| [Module 1] | [primary/secondary/read-only] | [path] |
+| [Module 2] | [primary/secondary/read-only] | [path] |
 
-## وابستگی‌های داخلی
-[چه function ها، class ها، یا service هایی باید تغییر کنند یا استفاده شوند]
+## Internal dependencies
+[Functions, classes, or services that must change or be used]
 
-## وابستگی‌های خارجی
-[API ها، سرویس‌های third-party، یا سیستم‌های خارجی که این feature به آن‌ها نیاز دارد]
+## External dependencies
+[APIs, third-party services, or external systems this feature requires]
 
-## نیازمندی‌های پیش‌نیاز
-[چه چیزی باید قبل از شروع این feature آماده باشد]
+## Prerequisites
+[What must be ready before this feature can start]
 
-## ریسک‌های فنی
-[بخش‌هایی از کد که پیچیده هستند یا ممکن است مشکل ایجاد کنند]
+## Technical risks
+[Parts of the code that are complex or likely to cause problems]
 
-## تخمین پیچیدگی
-پیچیدگی: [پایین / متوسط / بالا]
-دلیل: [یک جمله توضیح]
+## Complexity estimate
+Complexity: [low / medium / high]
+Reason: [one sentence explanation]
 
-## سوالات باز برای تیم فنی
-[سوالاتی که PM باید در جلسه با تیم فنی بپرسد]
+⚠️ Technical decisions required:
+[Decisions that must be made by engineering before implementation can start]
+
+## Questions for the engineering team
+[Questions the PM should ask in the next engineering meeting]
 ```
 
 ### Step 4: Translate for PM
 
-بعد از گزارش فنی، یک خلاصه‌ی غیرفنی بنویس:
+After the technical report, write a non-technical summary:
 
 ```
-خلاصه برای PM:
+Summary for PM:
 
-این feature به [X] بخش از سیستم دست می‌زند.
-مهم‌ترین وابستگی: [یک جمله]
-ریسک اصلی: [یک جمله]
-قبل از شروع باید با تیم فنی در خصوص [موضوع] صحبت کنید.
+This feature touches [X] parts of the system.
+Most important dependency: [one sentence]
+Main risk: [one sentence]
+Before starting, discuss [topic] with the engineering team.
 ```
 
 ---
 
 ## Constraints
 
-- هرگز architecture پیشنهاد نده — فقط آنچه هست را گزارش بده
-- هرگز از PM بخواه چیزی را که از repo می‌توانی بخوانی توضیح دهد
-- اگر به بخشی از repo دسترسی نداری یا مبهم است، صریح بگو
-- گزارش را به سطح فهم PM ترجمه کن — او باید بتواند با این گزارش با تیم فنی صحبت کند
+- Never propose an architecture — only report what exists
+- Never ask the PM to explain something you can read from the repo
+- If a part of the repo is inaccessible or ambiguous, say so explicitly
+- Translate the report to the PM's level — they must be able to use it in a conversation with engineering
 
 ## Context variables (populated from CLAUDE.md)
 
-- product context و ساختار کلی محصول
-- نام‌های module ها و bounded context ها
-- سطح آگاهی فنی این PM
-- سرویس‌های خارجی که این محصول استفاده می‌کند
+- Product context and overall product structure
+- Module names and bounded contexts
+- Technical awareness level of this PM
+- External services used by this product

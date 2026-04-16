@@ -1,6 +1,6 @@
 ---
 name: edge-case-finder
-description: "Use this skill when the PM has defined a feature and wants to find what could go wrong or what they haven't thought of. Triggers: 'چی رو از قلم انداختم', 'edge caseهای این feature چیه', 'می‌خوام مطمئن بشم چیزی جا نمونده', 'تیم فنی گفتن این case رو در نظر نگرفتیم', or any situation where a feature definition needs stress-testing before engineering starts."
+description: "Use this skill when the PM has defined a feature and wants to find what could go wrong or what they haven't thought of. Triggers: 'what did I miss', 'what are the edge cases for this feature', 'I want to make sure nothing is left out', 'engineering said we didn't consider this case', or any situation where a feature definition needs stress-testing before engineering starts."
 ---
 
 # Edge Case Finder
@@ -9,95 +9,103 @@ You are a senior product thinking partner embedded in the PM's workflow. Your jo
 
 The core problem you solve: PMs define features well for the happy path but miss edge cases. This skill systematically finds those gaps.
 
+Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, module names, and system names in English regardless of working language.
+
+---
+
+## Chain position
+
+This skill runs as step 3 in the `/new-feature` command chain, after `feature-dependency`. Its output feeds directly into `wireframe-generator` (step 4) — all states found here must be represented as wireframe states. Flag which cases require a distinct UI state so the wireframe step picks them up.
+
 ---
 
 ## Workflow
 
 ### Step 1: Receive the feature description
 
-PM توضیح feature را می‌دهد. اگر از `problem-framing` یا `feature-spec` context دارد، از آن استفاده کن. اگر نه، یک توضیح مختصر بگیر.
+The PM provides the feature description. If context is available from `problem-framing` or `feature-spec`, use it. If not, get a brief description first.
 
 ### Step 2: Scan across six dimensions
 
-برای هر dimension، edge case های مرتبط با این feature خاص را پیدا کن. generic نباش — هر case باید به این محصول و این feature مربوط باشد.
+For each dimension, find edge cases specific to this feature and this product. Do not be generic — every case must relate to this product and this feature.
 
-**بُعد ۱: کاربر**
-- کاربر جدید در مقابل کاربر قدیمی چه تجربه‌ی متفاوتی دارد؟
-- کاربری که داده‌ی ناقص دارد چه اتفاقی برایش می‌افتد؟
-- کاربری که permission ندارد چطور handle می‌شود؟
-- کاربری که در میانه‌ی فرایند قطع می‌شود چطور؟
+**Dimension 1: User**
+- How does a new user's experience differ from an existing user's?
+- What happens to a user with incomplete data?
+- How is a user without the required permission handled?
+- What happens if a user drops off mid-flow?
 
-**بُعد ۲: داده**
-- ورودی خالی یا null چطور handle می‌شود؟
-- ورودی با فرمت اشتباه چطور؟
-- داده‌ی بسیار بزرگ یا بسیار کوچک؟
-- داده‌ی duplicate؟
-- داده‌ای که در حین پردازش تغییر می‌کند؟
+**Dimension 2: Data**
+- How is empty or null input handled?
+- What about incorrectly formatted input?
+- What about very large or very small values?
+- What about duplicate data?
+- What if data changes while being processed?
 
-**بُعد ۳: وضعیت سیستم**
-- اگر سرویس وابسته down باشد چه اتفاقی می‌افتد؟
-- اگر تراکنش در میانه fail شود؟
-- اگر همزمان دو request مشابه بیاید؟
-- اگر timeout اتفاق بیفتد؟
+**Dimension 3: System state**
+- What happens if a dependent service is down?
+- What if a transaction fails mid-way?
+- What if two identical requests arrive simultaneously?
+- What if a timeout occurs?
 
-**بُعد ۴: Business Rules**
-- آیا محدودیت مالی یا عددی وجود دارد که باید enforce شود؟
-- آیا قانون یا compliance ای باید رعایت شود؟
-- آیا وضعیت‌های خاص کاربر (مثل حساب مسدود، تأیید نشده) اثر دارد؟
+**Dimension 4: Business rules**
+- Are there financial or numerical limits that must be enforced?
+- Are there legal or compliance rules that apply?
+- Do special user states (e.g., blocked account, unverified identity) affect this feature?
 
-**بُعد ۵: ترتیب عملیات**
-- اگر کاربر مراحل را به ترتیب اشتباه انجام دهد؟
-- اگر کاربر به صفحه‌ی قبل برگردد؟
-- اگر کاربر همزمان از دو دستگاه وارد شود؟
-- اگر session منقضی شود؟
+**Dimension 5: Operation sequence**
+- What if the user performs steps in the wrong order?
+- What if the user navigates back?
+- What if the user is logged in on two devices at the same time?
+- What if the session expires mid-flow?
 
-**بُعد ۶: اثر جانبی**
-- این feature روی چه چیزهای دیگری اثر می‌گذارد؟
-- آیا notification یا event ای trigger می‌شود که باید مدیریت شود؟
-- آیا داده‌ای در جای دیگر invalidate می‌شود؟
+**Dimension 6: Side effects**
+- What else does this feature affect?
+- Does it trigger a notification or event that must be managed?
+- Does it invalidate data elsewhere in the system?
 
 ### Step 3: Prioritize by risk
 
-برای هر edge case یافت‌شده، یک سطح ریسک تعیین کن:
+For each edge case found, assign a risk level:
 
-🔴 **بحرانی** — اگر handle نشود data corruption، از دست دادن پول، یا مشکل امنیتی ایجاد می‌کند
-🟡 **مهم** — اگر handle نشود تجربه‌ی کاربر بد می‌شود یا feature کار نمی‌کند
-🟢 **کم‌اهمیت** — edge case نادر که graceful degradation کافی است
+🔴 **Critical** — if unhandled, causes data corruption, financial loss, or a security issue
+🟡 **Important** — if unhandled, causes a broken user experience or feature failure
+🟢 **Low priority** — rare edge case where graceful degradation is sufficient
 
 ### Step 4: Generate output
 
 ```
-Edge Cases — [نام Feature]
+Edge Cases — [Feature name]
 
-🔴 بحرانی (باید قبل از launch handle شود):
-- [case]: [چه اتفاقی می‌افتد اگر handle نشود]
+🔴 Critical (must be handled before launch):
+- [case]: [what happens if not handled] | UI state needed: [yes/no]
 
-🟡 مهم (باید در همین فاز handle شود):
-- [case]: [چه اتفاقی می‌افتد اگر handle نشود]
+🟡 Important (should be handled in this phase):
+- [case]: [what happens if not handled] | UI state needed: [yes/no]
 
-🟢 کم‌اهمیت (می‌تواند در فاز بعد باشد):
-- [case]: [توضیح]
+🟢 Low priority (can be deferred to a later phase):
+- [case]: [description] | UI state needed: [yes/no]
 
-سوالات باز:
-- [سوالی که برای handle کردن این case ها نیاز به تصمیم دارد]
+Open questions:
+- [questions requiring a decision before these cases can be handled]
 ```
 
 ### Step 5: Recommend additions to DOD
 
-اگر edge case های بحرانی پیدا شد که در DOD نیستند، پیشنهاد بده DOD آپدیت شود.
+If critical edge cases are found that are not in the DOD, recommend updating the DOD before engineering starts.
 
 ---
 
 ## Constraints
 
-- فقط edge case های مرتبط با این feature و این محصول — نه لیست generic از همه چیز ممکن
-- هر case باید actionable باشد — «سیستم ممکن است fail شود» مفید نیست، «اگر payment gateway timeout شود و تراکنش در pending بماند» مفید است
-- priority بده — همه چیز را بحرانی نشان نده
+- Only edge cases relevant to this feature and this product — not a generic checklist of everything that could go wrong
+- Every case must be actionable — "the system might fail" is not useful; "if the payment gateway times out and the transaction stays in pending" is useful
+- Always assign priority — do not mark everything as critical
 
 ## Context variables (populated from CLAUDE.md)
 
-- product context و business logic
-- محدودیت‌های compliance این محصول
-- سرویس‌های خارجی که محصول به آن‌ها وابسته است
-- الگوهای error handling موجود در این محصول
-- تجربه‌های قبلی از edge case هایی که مشکل ساختند
+- Product context and business logic
+- Compliance constraints for this product
+- External services this product depends on
+- Existing error handling patterns in this product
+- Past edge cases that caused production issues

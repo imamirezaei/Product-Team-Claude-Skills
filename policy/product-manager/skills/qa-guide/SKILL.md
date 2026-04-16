@@ -1,6 +1,6 @@
 ---
 name: qa-guide
-description: "Use this skill when a feature is ready for testing and the PM or QA engineer needs a complete, prioritized test plan. Triggers: 'باید تست کنیم، چی رو چک کنیم', 'test plan این feature چیه', 'QA گفتن چی رو تست کنن', 'ماژول مالی رو تغییر دادیم باید مطمئن بشیم چیزی خراب نشده', or any situation where a structured testing guide is needed before or after a release."
+description: "Use this skill when a feature is ready for testing and the PM or QA engineer needs a complete, prioritized test plan. Triggers: 'we need to test this, what do we check', 'what is the test plan for this feature', 'what should QA test', 'we changed the payment module and need to make sure nothing broke', or any situation where a structured testing guide is needed before or after a release."
 ---
 
 # QA Guide
@@ -9,7 +9,7 @@ You are a senior product thinking partner with direct access to the codebase. Yo
 
 This skill runs in Claude Code and reads the repository and change history directly. It is designed to work alongside `release-impact` — if that skill has already been run, use its output as input here.
 
-Use the PM's preferred working language from `CLAUDE.md` for all PM-facing questions, explanations, and deliverables. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, tool names, module names, field names, and code in English regardless of working language.
 
 ---
 
@@ -17,109 +17,101 @@ Use the PM's preferred working language from `CLAUDE.md` for all PM-facing quest
 
 ### Step 1: Establish what needs testing
 
-یکی از این حالت‌ها:
-- **حالت الف:** `release-impact` قبلاً اجرا شده → از output آن استفاده کن
-- **حالت ب:** PM تغییر یا feature را توضیح می‌دهد → ابتدا repo را بخوان، بعد ادامه بده
-- **حالت ج:** PM یک ماژول خاص را نام می‌برد (مثل «ماژول مالی») → آن ماژول و وابستگی‌هایش را scan کن
+One of three modes:
+- **Mode A:** `release-impact` has already been run → use its output directly
+- **Mode B:** The PM describes the change or feature → read the repo first, then continue
+- **Mode C:** The PM names a specific module (e.g., "the payment module") → scan that module and its dependencies
 
 ### Step 2: Read the change context
 
-با ابزارهای Claude Code:
-```
-- فایل‌های تغییرکرده را بخوان
-- business logic مرتبط را trace کن
-- test های موجود را بررسی کن (coverage فعلی چیست؟)
-- integration point ها را شناسایی کن
-```
+Use Claude Code tools:
+- Read the changed files
+- Trace the related business logic
+- Review existing tests (what is the current coverage?)
+- Identify integration points
 
 ### Step 3: Generate test plan
 
 ```
-# Test Plan — [نام Feature/Change]
-تاریخ: [تاریخ] | نسخه: [شماره نسخه یا branch]
+# Test Plan — [Feature/Change name]
+Date: [date] | Version: [version number or branch]
 
 ---
 
-## خلاصه‌ی ریسک
-[یک پاراگراف — مهم‌ترین چیزی که باید تست شود و چرا]
+## Risk summary
+[One paragraph — the most important thing to test and why]
 
 ---
 
-## 🔴 تست‌های بحرانی (باید قبل از release pass شوند)
+## 🔴 Critical tests (must pass before release)
 
-### [حوزه ۱ — مثلاً: جریان پرداخت]
-| # | سناریو | ورودی | نتیجه‌ی انتظاری | اولویت |
+### [Area 1 — e.g.: payment flow]
+| # | Scenario | Input | Expected result | Priority |
 |---|---|---|---|---|
-| 1 | [سناریو] | [ورودی] | [نتیجه] | بحرانی |
+| 1 | [scenario] | [input] | [result] | Critical |
 
-### [حوزه ۲ — مثلاً: احراز هویت]
-| # | سناریو | ورودی | نتیجه‌ی انتظاری | اولویت |
-|---|---|---|---|---|
-
----
-
-## 🟡 تست‌های مهم (باید در همین sprint تست شوند)
-
-### [حوزه ۳]
-| # | سناریو | ورودی | نتیجه‌ی انتظاری | اولویت |
+### [Area 2 — e.g.: authentication]
+| # | Scenario | Input | Expected result | Priority |
 |---|---|---|---|---|
 
 ---
 
-## 🟢 تست‌های regression (ماژول‌های تأثیرگرفته‌ی غیرمستقیم)
+## 🟡 Important tests (should be tested in this sprint)
 
-این بخش‌ها تغییر نکرده‌اند ولی باید مطمئن شوید هنوز کار می‌کنند:
-- [ ] [ماژول/flow ۱]: [چه چیزی را چک کنید]
-- [ ] [ماژول/flow ۲]: [چه چیزی را چک کنید]
-
----
-
-## Edge Cases بحرانی
-[edge case هایی که اگر fail شوند data corruption یا مشکل مالی ایجاد می‌کنند]
-- [ ] [case ۱]
-- [ ] [case ۲]
+### [Area 3]
+| # | Scenario | Input | Expected result | Priority |
+|---|---|---|---|---|
 
 ---
 
-## محیط‌های تست
-- [ ] Staging: [چه چیزی باید در staging تست شود]
-- [ ] Production smoke test: [حداقل چک بعد از deploy]
+## 🟢 Regression tests (indirectly affected modules)
+
+These parts did not change but must be verified they still work:
+- [ ] [Module/flow 1]: [what to check]
+- [ ] [Module/flow 2]: [what to check]
 
 ---
 
-## چه چیزی در این release تست نمی‌شود
-[scope خارج از این test plan — برای شفافیت]
+## Critical edge cases
+[Edge cases that if they fail cause data corruption or financial issues]
+- [ ] [Case 1]
+- [ ] [Case 2]
+
+---
+
+## Test environments
+- [ ] Staging: [what to test in staging]
+- [ ] Production smoke test: [minimum checks after deploy]
+
+---
+
+## What is NOT tested in this release
+[Scope outside this test plan — for clarity]
 ```
 
 ### Step 4: Coverage gap alert
 
-اگر بخشی از کد تغییرکرده test coverage ندارد، flag بزن:
+If any changed code has no test coverage, flag it:
 
 ```
 ⚠️ Coverage Gap:
-[فایل/ماژول] تغییر کرده ولی automated test ندارد.
-توصیه: قبل از release حداقل این سناریوها را manual تست کنید: [لیست]
+[File/module] has changed but has no automated tests.
+Recommendation: manually test at minimum these scenarios before release: [list]
 ```
 
 ---
 
-## Output language
-
-- Use the PM's preferred working language from `CLAUDE.md`
-- Technical names (module, endpoint, field) stay in English
-- Test scenarios should follow the PM's preferred language while preserving English technical terms
-
 ## Constraints
 
-- هرگز «همه چیز را تست کنید» بگو — prioritize کن
-- بحرانی را فقط برای چیزهایی که واقعاً بحرانی است استفاده کن
-- اگر automated test موجود است، manual test را کم کن
-- همیشه regression test برای ماژول‌های تأثیرگرفته‌ی غیرمستقیم داشته باش
+- Never say "test everything" — prioritize
+- Only use critical for things that are genuinely critical
+- If automated tests exist, reduce the manual test surface
+- Always include regression tests for indirectly affected modules
 
 ## Context variables (populated from CLAUDE.md)
 
-- ساختار module های این محصول
-- shared service های حیاتی (payment، auth، notification)
-- محیط‌های تست موجود
-- الگوهای QA این تیم
-- تاریخچه‌ی bug های مهم این محصول
+- Module structure of this product
+- Critical shared services (payment, auth, notification)
+- Available test environments
+- QA patterns for this team
+- History of important bugs in this product

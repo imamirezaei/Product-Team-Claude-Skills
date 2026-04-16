@@ -1,6 +1,6 @@
 ---
 name: feature-prioritization
-description: "Use this skill when the PM needs to prioritize features, compare options against the roadmap, or build a defensible argument for or against a feature request. Triggers: 'کدوم رو اول بسازیم', 'این با roadmap ما conflict داره', 'مدیر این feature رو می‌خواد ولی فکر نمی‌کنم اولویت داشته باشه', 'چطور توجیه کنم که این کار رو نکنیم', 'اگه این رو اضافه کنیم چی رو باید بذاریم کنار', or any situation where the PM needs to make a prioritization decision or defend one."
+description: "Use this skill when the PM needs to prioritize features, compare options against the roadmap, or build a defensible argument for or against a feature request. Triggers: 'which one should we build first', 'this conflicts with our roadmap', 'management wants this feature but I don't think it's a priority', 'how do I justify not doing this', 'if we add this what do we drop', or any situation where the PM needs to make a prioritization decision or defend one."
 ---
 
 # Feature Prioritization
@@ -11,7 +11,7 @@ The core problem you solve: PMs often accept new requests by silently dropping s
 
 Authority over prioritization varies by feature — sometimes the PM decides, sometimes the senior manager, sometimes it's a joint decision. This skill helps the PM build a strong position regardless of who makes the final call.
 
-Use the PM's preferred working language from `CLAUDE.md` for all PM-facing questions, explanations, and deliverables. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, tool names, feature names, and code in English regardless of working language.
 
 ---
 
@@ -28,27 +28,26 @@ Identify which mode you're in. If unclear, ask ONE question to clarify.
 
 ### Step 2: Map the current situation
 
-Before any scoring or comparison, establish:
+Before any scoring or comparison, establish context from `CLAUDE.md` first. If the roadmap, capacity, or strategic goals are already documented there, use them directly — do not ask the PM to repeat what is already available.
 
-**الف. وضعیت roadmap فعلی:**
-Ask the PM to briefly describe what is currently on the roadmap. If they have a Linear project or list, ask them to paste it. You need to know what exists before you can prioritize against it.
+Only ask if the information is missing or outdated:
 
-**ب. capacity تیم:**
-Ask for a rough sense of engineering capacity. Not in story points — in plain terms: «تیم الان چقدر bandwidth داره؟ یک sprint؟ یک ماه؟»
+**Roadmap state:** What is currently committed for this sprint or quarter?
 
-**ج. فشار یا deadline خارجی:**
-Is there an external pressure driving this request? A manager, a client, a competitor, a deadline? This affects how the trade-off conversation needs to be framed.
+**Team capacity:** Rough sense of engineering bandwidth — not in story points, in plain terms: one sprint? one month?
+
+**External pressure:** Is there a manager, client, competitor, or deadline driving this request? This affects how the trade-off conversation needs to be framed.
 
 ### Step 3: Score the feature(s)
 
-For each feature being considered, evaluate across four dimensions. Score each 1-3 (low/medium/high). Keep scoring fast and honest — this is not a formal framework, it is a thinking tool.
+For each feature being considered, evaluate across four dimensions. Score each 1-3 (low/medium/high). Keep scoring fast and honest — this is a thinking tool, not a formal framework.
 
-| بُعد | سوال | امتیاز |
+| Dimension | Question | Score |
 |---|---|---|
-| **تأثیر کاربر** | چند کاربر این مشکل را دارند و چقدر درد می‌کشند؟ | 1-3 |
-| **تأثیر کسب‌وکار** | این به revenue، retention، یا strategic goal مستقیم وصل است؟ | 1-3 |
-| **هزینه‌ی فنی** | چقدر طول می‌کشد و چقدر پیچیدگی دارد؟ (معکوس) | 1-3 |
-| **هزینه‌ی تأخیر** | اگر این را ۳ ماه دیرتر بسازیم چه اتفاقی می‌افتد؟ | 1-3 |
+| **User Impact** | How many users have this problem and how much pain does it cause? | 1-3 |
+| **Business Impact** | Does this directly connect to revenue, retention, or a strategic goal? | 1-3 |
+| **Technical Cost** | How long and how complex is the build? (inverted — lower cost = higher score) | 1-3 |
+| **Cost of Delay** | What happens if we build this 3 months later? | 1-3 |
 
 Present scores in a simple table. Do not over-explain the scoring. The PM knows their product better than you — your job is to make the comparison visible, not to score for them.
 
@@ -58,13 +57,12 @@ This is the most important step. If adding this feature means something else mus
 
 Format:
 ```
-اگر [فیچر جدید] اضافه شود:
+If [new feature] is added:
 
-✓ این اتفاق می‌افتد: [چه چیزی به roadmap اضافه می‌شود]
+✓ This happens: [what gets added to the roadmap]
+✗ This must be dropped or delayed: [what gets removed or pushed]
 
-✗ این باید کنار برود یا عقب بیفتد: [چه چیزی از roadmap حذف یا delay می‌شود]
-
-دلیل: [یک جمله توضیح چرا این trade-off منطقی است یا نیست]
+Reason: [one sentence explaining why this trade-off makes sense or doesn't]
 ```
 
 If there is no trade-off (capacity exists), say that explicitly too.
@@ -75,52 +73,35 @@ Based on the scores and trade-off, generate a short, clear argument the PM can u
 
 Two versions:
 
-**نسخه‌ی موافق** (اگر PM می‌خواهد این feature را defend کند):
+**For (if the PM wants to defend building this feature):**
 ```
-پیشنهاد می‌کنم [فیچر X] را در [بازه‌ی زمانی] بسازیم چون [دلیل تأثیر].
-این به معنی [trade-off صریح] است.
-```
-
-**نسخه‌ی مخالف** (اگر PM می‌خواهد در برابر یک request موضع بگیرد):
-```
-در حال حاضر [فیچر X] را prioritize نمی‌کنیم چون [دلیل].
-اگر بخواهیم آن را اضافه کنیم، باید [چیزی را از دست بدهیم].
-پیشنهاد می‌کنم در [بازه‌ی زمانی آینده] دوباره بررسی کنیم.
+I recommend building [feature X] in [timeframe] because [impact reason].
+This means [explicit trade-off].
 ```
 
-### Step 6: Log the decision
-
-After the PM makes a decision, generate a one-paragraph decision log in the PM's preferred working language. This is for the PM to paste into Linear or Notion so the trade-off is documented and visible.
-
-Format:
+**Against (if the PM wants to push back on a request):**
 ```
-تصمیم prioritization — [تاریخ]
-
-[فیچر X] با اولویت [بالا/متوسط/پایین] در roadmap قرار گرفت.
-دلیل: [یک جمله]
-trade-off: [آنچه کنار گذاشته شد یا عقب افتاد]
-تصمیم‌گیرنده: [PM / مدیر ارشد / جلسه‌ی مشترک]
+We are not prioritizing [feature X] right now because [reason].
+Adding it would require [what we'd lose].
+I recommend revisiting in [future timeframe].
 ```
+
+### Step 6: Document the decision
+
+After the PM decides, prompt them to run `/log-decision` to document the trade-off. Do not write the decision log here — that is `decision-logger`'s job.
 
 ---
-
-## Output language
-
-- Use the PM's preferred working language from `CLAUDE.md`
-- Technical terms and feature names stay in English or as the team uses them
-- Tables should follow the PM's preferred language while keeping technical identifiers in English where needed
 
 ## Constraints
 
 - Never make the prioritization decision for the PM — present the analysis, not the verdict
 - Never ignore the trade-off — if something must be dropped, say it explicitly, never silently
 - Never use complex frameworks (RICE, ICE, WSJF) unless the PM asks — keep it fast and practical
-- Always generate the decision log at the end — undocumented trade-offs are the root cause of roadmap drift
+- Always end with a prompt to run `/log-decision` — undocumented trade-offs are the root cause of roadmap drift
 
 ## Context variables (populated from CLAUDE.md)
 
-The following will be available from this PM's CLAUDE.md:
-- Current roadmap state (if documented)
+- Current roadmap state
 - Team capacity norms
 - Decision authority for this PM
 - OKRs or strategic goals for the current period

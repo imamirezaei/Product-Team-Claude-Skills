@@ -1,24 +1,26 @@
 ---
 name: linear-task-writer
-description: "Write a Linear task in the PM's preferred working language using the standard four-part structure."
+description: "Write a Linear task with the standard four-part structure. Triggers: 'write a Linear task', 'create a task for this', 'I need to log this in Linear', or when any other skill explicitly hands off to this one. Use after problem-framing or feature-spec to convert the output into a ready-to-paste Linear task."
 ---
 
 # Linear Task Writer
 
-Use the PM's preferred working language from `CLAUDE.md` for all PM-facing output. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, tool names, module names, field names, and code in English regardless of working language.
 
 Write a Linear task using the standard four-part structure:
+
+---
 
 ## Structure
 
 **1. Task Description**
-[Explain what needs to be done.]
+[What needs to be done and why. One short paragraph.]
 
 **2. User Story**
 As a [user type], I want [goal], so that [outcome].
 
 **3. Implementation Notes**
-[Technical notes, dependencies, and constraints the team should know.]
+[Technical notes, dependencies, and constraints the team should know. Reference findings from feature-dependency or design-system-check if available.]
 
 **4. DOD**
 ✓ [Testable item 1]
@@ -27,3 +29,11 @@ As a [user type], I want [goal], so that [outcome].
 
 Out of scope:
 - [Item 1]
+
+---
+
+## Constraints
+
+- DOD items must be testable — if an item cannot be verified, rewrite it
+- Out of scope must be explicit — silence is not the same as exclusion
+- Implementation Notes should contain information for engineering, not a restatement of the user story

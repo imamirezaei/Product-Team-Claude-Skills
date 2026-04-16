@@ -1,7 +1,7 @@
 {
   "name": "product-team-claude-skills",
   "version": "1.0.2",
-  "description": "Claude Code setup for product managers — installs skills, commands, and runs the PM interview.",
+  "description": "Claude Code setup for product teams — skills, commands, and onboarding interviews for PMs and Designers.",
   "type": "module",
   "bin": {
     "claude-pm": "bin/cli.js"
@@ -11,6 +11,7 @@
     "src/",
     "policy/",
     "pm-template/",
+    "designer-template/",
     "interview/"
   ],
   "scripts": {
@@ -26,7 +27,9 @@
   "keywords": [
     "claude",
     "claude-code",
-    "product-management"
+    "product-management",
+    "product-design",
+    "vuetify"
   ],
   "author": "Amir",
   "license": "UNLICENSED"

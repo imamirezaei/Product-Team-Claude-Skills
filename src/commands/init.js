@@ -19,11 +19,22 @@ function printStep(icon, msg) {
   console.log(`  ${icon} ${msg}`);
 }
 
-export async function runInit({ force = false } = {}) {
+const ROLE_LABELS = {
+  pm: 'Product Manager',
+  designer: 'Product Designer',
+};
+
+const INTERVIEW_COMMANDS = {
+  pm: '/start-interview',
+  designer: '/start-designer-interview',
+};
+
+export async function runInit({ force = false, role = 'pm' } = {}) {
   const cwd = process.cwd();
+  const roleLabel = ROLE_LABELS[role] ?? role;
 
   console.log('');
-  console.log(chalk.bold('Claude PM Setup'));
+  console.log(chalk.bold(`Claude ${roleLabel} Setup`));
   console.log(chalk.dim('─'.repeat(40)));
 
   // ── Guard: must be inside a git repo ──────────────────────────────────────
@@ -56,7 +67,7 @@ export async function runInit({ force = false } = {}) {
   // ── Step 2: Project scaffold ──────────────────────────────────────────────
   console.log(chalk.bold('Scaffolding project files...'));
   const version = readPackageVersion();
-  const projectInstalled = copyProject(cwd, version);
+  const projectInstalled = copyProject(cwd, version, role);
   for (const p of projectInstalled) {
     printStep(chalk.green('✓'), p);
   }
@@ -76,6 +87,7 @@ export async function runInit({ force = false } = {}) {
 
   // ── Step 4: Launch interview ──────────────────────────────────────────────
   const claudeVersion = detectClaude();
+  const interviewCommand = INTERVIEW_COMMANDS[role];
 
   if (claudeVersion) {
     console.log('');
@@ -83,10 +95,10 @@ export async function runInit({ force = false } = {}) {
     console.log(chalk.dim(`  Claude Code: ${claudeVersion}`));
     console.log('');
     console.log(chalk.cyan('  Launching Claude Code.'));
-    console.log(chalk.cyan('  Once it opens, type: /start-interview'));
+    console.log(chalk.cyan(`  Once it opens, type: ${interviewCommand}`));
     console.log('');
 
-    // Small pause so PM can read the message before Claude takes over the terminal
+    // Small pause so user can read the message before Claude takes over the terminal
     await new Promise(r => setTimeout(r, 2000));
 
     const result = spawnSync('claude', [], { stdio: 'inherit', cwd });
@@ -103,7 +115,7 @@ export async function runInit({ force = false } = {}) {
     console.log('');
     console.log('  After installing, run this from the current directory:');
     console.log(chalk.cyan('  claude'));
-    console.log('  Then type: /start-interview');
+    console.log(`  Then type: ${interviewCommand}`);
   }
 
   console.log('');

@@ -1,8 +1,8 @@
 ---
-description: Write a Linear task with the standard four-part structure in the PM's preferred language
+description: Write a Linear task with the standard four-part structure
 ---
 
-Write a Linear task using the standard four-part structure in the PM's preferred working language.
+Write a Linear task using the standard four-part structure.
 
 Run the `linear-task-writer` skill.
 

@@ -14,16 +14,22 @@ const program = new Command();
 
 program
   .name('claude-pm')
-  .description('Claude Code setup for product managers')
+  .description('Claude Code setup for product teams (PMs and Designers)')
   .version(pkg.version);
 
 program
   .command('init')
-  .description('Initialize PM setup in the current product repo')
+  .description('Initialize setup in the current product repo')
+  .option('--role <role>', 'Team role: pm or designer (default: pm)', 'pm')
   .option('--force', 'Re-run even if claude-workflow/ already exists')
   .action(async (options) => {
+    const role = options.role.toLowerCase();
+    if (role !== 'pm' && role !== 'designer') {
+      console.error(`\n✗ Unknown role: "${options.role}". Use --role pm or --role designer.\n`);
+      process.exit(1);
+    }
     const { runInit } = await import('../src/commands/init.js');
-    await runInit({ force: options.force });
+    await runInit({ force: options.force, role });
   });
 
 program

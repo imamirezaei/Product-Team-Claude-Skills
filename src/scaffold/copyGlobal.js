@@ -26,53 +26,100 @@ function copyDirRecursive(src, dest, { protectedRelPaths = [], baseForRelative =
 }
 
 /**
+ * Copies skills from a policy subdirectory into ~/.claude/skills/<subdir>.
+ * Skips the directory silently if it does not exist.
+ */
+function copySkillsFrom(policySub, destSubdir) {
+  const src = path.join(PACKAGE_ROOT, 'policy', policySub, 'skills');
+  if (!fs.existsSync(src)) return;
+  const dest = path.join(GLOBAL_CLAUDE_DIR, 'skills', destSubdir);
+  copyDirRecursive(src, dest);
+}
+
+/**
+ * Copies commands from a policy subdirectory into ~/.claude/commands/<subdir>.
+ * Skips the directory silently if it does not exist.
+ */
+function copyCommandsFrom(policySub, destSubdir) {
+  const src = path.join(PACKAGE_ROOT, 'policy', policySub, 'commands');
+  if (!fs.existsSync(src)) return;
+  const dest = path.join(GLOBAL_CLAUDE_DIR, 'commands', destSubdir);
+  copyDirRecursive(src, dest);
+}
+
+/**
  * Installs global Claude Code files to ~/.claude/:
- *   - skills/ (SKILL.md files only, not context.md)
- *   - commands/ (slash commands)
- *   - output-styles/
- *
- * Also writes the /start-interview command.
+ *   - skills/shared/, skills/product-manager/, skills/product-designer/
+ *   - commands/product-manager/, commands/product-designer/
+ *   - output-styles/pm-standard.md, output-styles/design-standard.md
+ *   - commands/start-interview.md, commands/start-designer-interview.md
  *
  * Returns array of installed paths for display.
  */
 export function copyGlobal() {
   const installed = [];
 
-  // Skills
-  const skillsSrc = path.join(PACKAGE_ROOT, 'policy', 'skills');
-  const skillsDest = path.join(GLOBAL_CLAUDE_DIR, 'skills');
-  copyDirRecursive(skillsSrc, skillsDest);
+  // ── Skills ─────────────────────────────────────────────────────────────────
+  copySkillsFrom('shared', 'shared');
+  copySkillsFrom('product-manager', 'product-manager');
+  copySkillsFrom('product-designer', 'product-designer');
   installed.push('~/.claude/skills/');
 
-  // Commands (policy slash commands)
-  const commandsSrc = path.join(PACKAGE_ROOT, 'policy', 'commands');
-  const commandsDest = path.join(GLOBAL_CLAUDE_DIR, 'commands');
-  copyDirRecursive(commandsSrc, commandsDest);
+  // ── Commands ───────────────────────────────────────────────────────────────
+  copyCommandsFrom('product-manager', 'product-manager');
+  copyCommandsFrom('product-designer', 'product-designer');
   installed.push('~/.claude/commands/');
 
-  // Output styles
-  const stylesSrc = path.join(PACKAGE_ROOT, 'policy', 'output-styles');
+  // ── Output styles ──────────────────────────────────────────────────────────
+  const stylesSrc = path.join(PACKAGE_ROOT, 'policy');
   const stylesDest = path.join(GLOBAL_CLAUDE_DIR, 'output-styles');
-  copyDirRecursive(stylesSrc, stylesDest);
-  installed.push('~/.claude/output-styles/pm-standard.md');
+  fs.mkdirSync(stylesDest, { recursive: true });
 
-  // start-interview command
+  const pmStyle = path.join(stylesSrc, 'product-manager', 'output-styles', 'pm-standard.md');
+  if (fs.existsSync(pmStyle)) {
+    fs.copyFileSync(pmStyle, path.join(stylesDest, 'pm-standard.md'));
+  }
+
+  const designStyle = path.join(stylesSrc, 'product-designer', 'output-styles', 'design-standard.md');
+  if (fs.existsSync(designStyle)) {
+    fs.copyFileSync(designStyle, path.join(stylesDest, 'design-standard.md'));
+  }
+  installed.push('~/.claude/output-styles/');
+
+  // ── /start-interview (PM) ──────────────────────────────────────────────────
   const startInterviewContent = `---
 description: Start the PM onboarding interview
 ---
 
 Read the file at \`./claude-workflow/interview/pm-interview.md\` and immediately start the interview.
 
-Your first question must ask the PM which interview language they want: Persian or English.
+Your first question must ask which language the PM wants: Persian or English.
 Use the selected language for all interview questions and PM-facing guidance during the interview.
 Generate every output file in English only, regardless of the interview language.
 
-After completing all 13 output files, write each file directly to its specified path using your Write/Edit tools. Ask the PM for approval before writing each file.
+After completing all 14 output files, write each file directly to its specified path using your Write/Edit tools. Ask the PM for approval before writing each file.
 `;
   const startInterviewPath = path.join(GLOBAL_CLAUDE_DIR, 'commands', 'start-interview.md');
   fs.mkdirSync(path.dirname(startInterviewPath), { recursive: true });
   fs.writeFileSync(startInterviewPath, startInterviewContent, 'utf8');
   installed.push('~/.claude/commands/start-interview.md');
+
+  // ── /start-designer-interview ─────────────────────────────────────────────
+  const startDesignerInterviewContent = `---
+description: Start the Designer onboarding interview
+---
+
+Read the file at \`./claude-workflow/interview/designer-interview.md\` and immediately start the interview.
+
+Your first question must ask which language the designer wants: Persian or English.
+Use the selected language for all interview questions and designer-facing guidance during the interview.
+Generate every output file in English only, regardless of the interview language.
+
+After completing all 8 output files, write each file directly to its specified path using your Write/Edit tools. Ask the designer for approval before writing each file.
+`;
+  const startDesignerInterviewPath = path.join(GLOBAL_CLAUDE_DIR, 'commands', 'start-designer-interview.md');
+  fs.writeFileSync(startDesignerInterviewPath, startDesignerInterviewContent, 'utf8');
+  installed.push('~/.claude/commands/start-designer-interview.md');
 
   return installed;
 }

@@ -1,41 +1,50 @@
-# Rule: No Scope Expansion
+# Rule: Always Include Edge Cases
 
-Claude never expands the scope of a feature beyond what the PM has explicitly described.
+Every requirement, spec, or user story Claude produces must include edge cases.
+Edge cases are not optional — a requirement without edge cases is incomplete.
 
-If Claude notices something that could be added, it may mention it once as a note — never as part of the deliverable.
+## What counts as an edge case
 
-**Forbidden patterns:**
+- Empty or missing input (empty list, null value, missing required field)
+- Boundary values (maximum quantity, minimum amount, character limits)
+- Concurrent actions (two users acting at the same time on the same record)
+- Expired or invalid states (expired token, cancelled order, deleted user)
+- Permission and role conflicts (user without access tries an action)
+- Network or system failures (timeout, partial save, third-party service down)
+- Data conflicts (duplicate entry, version mismatch, conflicting status)
+- Sequence violations (action taken out of expected order)
 
-- Adding features the PM did not ask for to a spec or requirement
-- Expanding a DOD beyond the agreed scope
-- Suggesting «while we're at it» additions without being asked
-- Writing acceptance criteria for things outside the defined scope
+## What does NOT count as an edge case
 
-**Allowed:**
+- A completely separate feature the PM did not describe — that is scope expansion (see `no-scope-expansion` rule)
+- General product improvements unrelated to the stated feature
+- Performance optimizations not tied to a specific failure scenario
 
-- Noting «این مورد خارج از scope فعلی است ولی ممکن است در فاز بعد مرتبط باشد» — once per skill execution, at the end of the output, as a separate section titled `خارج از scope`
-- Asking «آیا می‌خواهید این مورد هم در scope باشد؟» if something seems like an obvious gap
+## How to include edge cases
 
-**When scope is ambiguous:**
-Ask one clarifying question before writing anything. Never assume scope is larger than stated.
+Edge cases appear as a dedicated section in every output, not mixed into the happy-path requirements.
 
-## Scope notes in command chains
+Minimum structure per edge case:
 
-When a command runs multiple skills in sequence (e.g. `/new-feature` runs 5 skills), the "once" rule applies per skill execution, not per chain. Each skill may flag one out-of-scope note at the end of its own output. The final skill in the chain (e.g. `feature-spec`) may consolidate all scope notes into a single `خارج از scope` section.
+```
+**Edge case:** [description of the condition]
+**Expected behavior:** [what the system should do]
+**Decision needed:** [yes/no — flag if the behavior is unresolved]
+```
 
-## Edge cases vs scope expansion
+If a skill runs as part of a command chain and a dedicated `edge-case-finder` step follows, that skill may note "edge cases to be expanded in next step" rather than enumerating all cases — but it must not omit the section entirely.
 
-Edge cases found by `edge-case-finder` are NOT scope expansion, even if they reference functionality outside the stated feature — as long as they describe what happens to **this feature** when those external conditions occur. The distinction:
+## Minimum coverage
 
-- **Edge case (allowed):** «اگر کد تخفیف با یک کمپین فعال conflict داشته باشد، سیستم چه رفتاری باید داشته باشد؟» — this is about the behavior of the current feature under external conditions
-- **Scope expansion (forbidden):** «باید یک سیستم مدیریت conflict بین کد تخفیف و کمپین ساخته شود» — this is proposing a new feature
+Every output must cover at minimum:
 
-When an edge case reveals a gap that requires a separate feature to solve, Claude should flag it as: `⚠️ این edge case نیاز به تصمیم‌گیری دارد — آیا در scope فعلی handle شود یا به عنوان تسک جداگانه ثبت شود؟`
+1. The happy path (not an edge case, but must be present as baseline)
+2. At least one empty/missing input scenario
+3. At least one invalid or expired state scenario
+4. At least one permission or access scenario (if the feature has any access control)
 
-## Relationship with always-include-edge-cases rule
+If a scenario is genuinely not applicable, state why — do not silently omit it.
 
-The `always-include-edge-cases` rule requires every requirement to cover edge cases. This rule (`no-scope-expansion`) limits the **response** to those edge cases. Together they mean:
+## Relationship with no-scope-expansion rule
 
-- **Always identify** edge cases, even if they touch external systems — this is the job of `edge-case-finder`
-- **Never build solutions** for those edge cases that fall outside the defined scope — this is the constraint of `no-scope-expansion`
-- When an edge case needs a solution that is outside scope, Claude lists it in the output with a decision flag, not as part of the DOD
+Identifying an edge case is never scope expansion. Proposing a solution for that edge case that requires building a new feature IS scope expansion. Identify all edge cases; flag the ones whose solutions fall outside the current scope for PM decision.

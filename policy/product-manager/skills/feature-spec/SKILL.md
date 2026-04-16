@@ -1,6 +1,6 @@
 ---
 name: feature-spec
-description: "Use this skill when the PM needs a complete feature spec that covers the full picture: user story, acceptance criteria, design notes, and scope boundaries. Triggers: 'باید spec این feature رو بنویسم', 'می‌خوام یه سند کامل داشته باشم', 'برای جلسه‌ی تیم باید feature رو کامل توضیح بدم', 'قبل از شروع sprint باید spec آماده باشه', or any situation where a feature needs a single comprehensive reference document."
+description: "Use this skill when the PM needs a complete feature spec that covers the full picture: user story, acceptance criteria, design notes, and scope boundaries. Triggers: 'I need to write the spec for this feature', 'I want a complete document', 'I need to fully explain this feature for the team meeting', 'the spec needs to be ready before the sprint starts', or any situation where a feature needs a single comprehensive reference document."
 ---
 
 # Feature Spec
@@ -9,7 +9,13 @@ You are a senior product thinking partner embedded in the PM's workflow. Your jo
 
 The difference between this skill and `requirement-writer`: requirement-writer focuses on engineering handoff precision. Feature spec is the broader document that aligns the entire team — it includes the why, the user story, design considerations, and acceptance criteria in addition to requirements.
 
-Use the PM's preferred working language from `CLAUDE.md` for all PM-facing questions, explanations, and deliverables. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, tool names, module names, field names, and code in English regardless of working language.
+
+---
+
+## Chain position
+
+This skill is the final step in the `/new-feature` command chain. When running as part of that chain, consolidate all out-of-scope notes flagged by previous skills (problem-framing, feature-dependency, edge-case-finder, wireframe-generator) into a single `Out of Scope` section. Do not repeat individual skill scope notes — merge them.
 
 ---
 
@@ -29,122 +35,121 @@ If not, this skill will gather the necessary information inline.
 
 ### Step 1: Gather the basics
 
-اگر از skill های قبلی context ندارد، این اطلاعات را جمع کن:
-- نام feature
-- مشکلی که حل می‌کند
-- کاربر هدف
-- بازه‌ی زمانی مورد نظر
+If no context is available from previous skills, collect:
+- Feature name
+- The problem it solves
+- Target user
+- Target timeline
 
 ### Step 2: Generate the spec
 
 ```
-# Feature Spec: [نام Feature]
-نسخه: 1.0 | تاریخ: [تاریخ] | PM: [نام] | وضعیت: Draft
+# Feature Spec: [Feature name]
+Version: 1.0 | Date: [date] | PM: [name] | Status: Draft
 
 ---
 
 ## TL;DR
-[دو جمله — این feature چیست و چرا مهم است]
+[Two sentences — what this feature is and why it matters]
 
 ---
 
 ## Problem Statement
-[یک پاراگراف — مشکلی که این feature حل می‌کند، برای چه کسی، با چه شدتی]
+[One paragraph — the problem this feature solves, for whom, and with what severity]
 
 ## User Story
-به عنوان [نوع کاربر]،
-می‌خواهم [هدف]،
-تا [دلیل / نتیجه‌ی مورد نظر].
+As a [type of user],
+I want to [goal],
+so that [reason / desired outcome].
+
+## Job Story (optional — use when context and motivation matter more than role)
+When [situation / context],
+I want to [motivation / goal],
+so I can [expected outcome].
+
+## Acceptance Criteria
+Each criterion must be testable using given / when / then or a clear verifiable statement.
+
+- [ ] [Criterion 1]
+- [ ] [Criterion 2]
+- [ ] [Criterion 3]
 
 ## Scope
 
-### در scope این فاز:
-- [مورد ۱]
-- [مورد ۲]
+### In scope for this phase:
+- [Item 1]
+- [Item 2]
 
-### خارج از scope این فاز:
-- [مورد ۱ — چرا]
-- [مورد ۲ — چرا]
+### Out of scope for this phase:
+- [Item 1 — why]
+- [Item 2 — why]
 
 ---
 
 ## User Flow
-[گام‌به‌گام آنچه user تجربه می‌کند — از entry point تا completion]
+[Step-by-step description of what the user experiences — from entry point to completion]
 
 ## Design Considerations
-### Components موجود در Design System:
-[از design-system-check skill]
+### Available design system components:
+[From design-system-check skill]
 
-### نکات UX:
-[هر constraint یا decision مهم درباره‌ی تجربه‌ی کاربر]
+### UX notes:
+[Any important UX constraints or decisions]
 
 ### States:
-- Empty state: [چه نمایش داده می‌شود]
-- Loading state: [چه نمایش داده می‌شود]
-- Error state: [چه نمایش داده می‌شود]
-- Success state: [چه نمایش داده می‌شود]
+- Empty state: [what is shown]
+- Loading state: [what is shown]
+- Error state: [what is shown]
+- Success state: [what is shown]
 
 ---
 
 ## Technical Notes
 ### Dependencies:
-[از feature-dependency skill]
+[From feature-dependency skill]
 
-### Considerations:
-[هر نکته‌ی فنی که PM باید آگاه باشد — نه architecture، بلکه constraint ها]
+### Constraints:
+[Technical constraints the PM should be aware of — not architecture, but limitations]
 
 ---
 
-## Acceptance Criteria
-هر criterion باید با «given / when / then» یا یک statement قابل تست باشد.
-
-- [ ] [criterion ۱]
-- [ ] [criterion ۲]
-- [ ] [criterion ۳]
-
 ## DOD
-[از problem-framing skill یا تعریف اینجا]
+[From problem-framing skill or defined here]
 
 ---
 
 ## Open Questions
-| سوال | مسئول پاسخ | deadline |
+| Question | Owner | Deadline |
 |---|---|---|
-| [سوال ۱] | [نام/نقش] | [تاریخ] |
+| [Question 1] | [name/role] | [date] |
 
 ## Decision Log
-[تصمیم‌های مهمی که در طول spec نویسی گرفته شد]
+[Key decisions made during spec writing — brief list. For full decision documentation, run /log-decision.]
 ```
 
 ### Step 3: Readiness check
 
-قبل از تحویل به تیم، این سوالات را بررسی کن:
+Before handing off to the team, verify:
 
-- [ ] آیا یک developer می‌تواند این spec را بخواند و بداند چه بسازد؟
-- [ ] آیا یک designer می‌تواند این spec را بخواند و بداند چه طراحی کند؟
-- [ ] آیا یک QA می‌تواند این spec را بخواند و test case بنویسد؟
-- [ ] آیا هیچ open question ای engineering را بلاک می‌کند؟
+- [ ] Can a developer read this spec and know what to build?
+- [ ] Can a designer read this spec and know what to design?
+- [ ] Can a QA engineer read this spec and write test cases?
+- [ ] Are there any open questions that would block engineering?
 
-اگر جواب هر کدام «نه» است، قبل از share کردن آن را کامل کن.
+If the answer to any of these is no, complete it before sharing.
 
 ---
 
-## Output language
-
-- Use the PM's preferred working language from `CLAUDE.md`
-- Technical Notes and Acceptance Criteria may be mixed if that matches team conventions
-- Technical names (component, module, API) stay in English
-
 ## Constraints
 
-- هرگز technical solution پیشنهاد نده
-- هرگز spec را بدون readiness check تحویل نده
-- اگر scope مبهم است قبل از نوشتن روشن کن — spec با scope مبهم بی‌ارزش است
+- Never propose a technical solution
+- Never deliver the spec without the readiness check
+- If scope is ambiguous, clarify before writing — a spec with ambiguous scope is worthless
 
 ## Context variables (populated from CLAUDE.md)
 
-- product context و business logic
-- design system conventions
-- team structure و نقش‌ها
-- feature workflow این تیم
-- الگوهای موجود spec نویسی
+- Product context and business logic
+- Design system conventions
+- Team structure and roles
+- Feature workflow conventions
+- Existing spec patterns for this team

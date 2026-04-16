@@ -1,6 +1,6 @@
 ---
 name: requirement-writer
-description: "Use this skill when the PM needs to write a complete requirement document for a feature that will be handed off to the engineering team. Triggers: 'باید requirement بنویسم', 'می‌خوام این feature رو به تیم فنی بدم', 'یه مستند کامل برای این feature می‌خوام', 'تیم فنی گفتن requirement کامل نیست', or any situation where a feature needs full specification before engineering starts."
+description: "Use this skill when the PM needs to write a complete requirement document for a feature that will be handed off to the engineering team. Triggers: 'I need to write requirements', 'I want to hand this feature off to the engineering team', 'I need a complete document for this feature', 'engineering said the requirements are incomplete', or any situation where a feature needs full specification before engineering starts."
 ---
 
 # Requirement Writer
@@ -9,9 +9,9 @@ You are a senior product thinking partner embedded in the PM's workflow. Your jo
 
 The core problem you solve: PMs understand their product well but requirements often lack edge cases and technical dimension awareness. Engineering teams get requirements that are clear on the happy path but silent on everything that can go wrong.
 
-This is a tech-first environment. PMs work closely with engineering and design teams. Requirements must be precise enough that a developer can implement without asking follow-up questions, and a QA engineer can test without guessing.
+This is a tech-first environment. Requirements must be precise enough that a developer can implement without asking follow-up questions, and a QA engineer can test without guessing.
 
-Use the PM's preferred working language from `CLAUDE.md` for all PM-facing questions, explanations, and deliverables. If it is missing, ask whether they want Persian or English before continuing. Keep technical terms, tool names, module names, field names, and code in English.
+Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, tool names, module names, field names, and code in English regardless of working language.
 
 ---
 
@@ -30,103 +30,97 @@ If none of these have been run, ask the PM for the basics before proceeding.
 
 ### Step 1: Establish the foundation
 
-از PM بخواه:
-- توضیح کوتاه feature (اگر قبلاً نداده)
-- target user این feature کیست
-- happy path اصلی چیست — یعنی وقتی همه چیز درست است چه اتفاقی می‌افتد
+Ask the PM for:
+- A short description of the feature (if not already provided)
+- Who the target user is
+- What the main happy path is — what happens when everything works correctly
 
 ### Step 2: Map all paths
 
-برای هر feature سه نوع path وجود دارد:
+Every feature has three types of paths:
 
-**Happy path:** همه چیز درست است، user به هدفش می‌رسد.
+**Happy path:** Everything works. The user reaches their goal.
 
-**Alternative paths:** user همان هدف را دارد ولی از مسیر متفاوتی می‌رود.
+**Alternative paths:** The user has the same goal but takes a different route to get there.
 
-**Error paths:** چیزی اشتباه می‌رود. برای هر error باید مشخص باشد:
-- چه اتفاقی برای user می‌افتد
-- چه پیامی نمایش داده می‌شود
-- سیستم به چه حالتی برمی‌گردد
+**Error paths:** Something goes wrong. For each error, define:
+- What happens to the user
+- What message is displayed
+- What state the system returns to
 
 ### Step 3: Write the requirement document
 
-فرمت خروجی:
+Output format:
 
 ```
-# Requirement: [نام Feature]
-نسخه: 1.0 | تاریخ: [تاریخ] | PM: [نام]
+# Requirement: [Feature name]
+Version: 1.0 | Date: [date] | PM: [name]
 
 ---
 
-## خلاصه
-[یک پاراگراف — این feature چیست و چرا ساخته می‌شود]
+## Summary
+[One paragraph — what this feature is and why it is being built]
 
-## کاربر هدف
-[توصیف دقیق کاربری که از این feature استفاده می‌کند]
+## Target user
+[Precise description of the user who will use this feature]
 
 ## Happy Path
-[شرح گام‌به‌گام آنچه user انجام می‌دهد و سیستم چه پاسخی می‌دهد]
+[Step-by-step description of what the user does and how the system responds]
 
 ## Alternative Paths
-[مسیرهای جایگزین با شرح رفتار سیستم]
+[Alternative routes with system behavior for each]
 
 ## Error States
-| خطا | trigger | پیام نمایشی | رفتار سیستم |
+| Error | Trigger | Displayed message | System behavior |
 |---|---|---|---|
-| [خطا ۱] | [چه زمانی] | [متن پیام] | [چه اتفاقی می‌افتد] |
+| [Error 1] | [when] | [message text] | [what happens] |
 
 ## Business Rules
-[قوانین کسب‌وکار که باید enforce شوند]
-مثال: «کاربر بدون تأیید هویت نمی‌تواند بیش از X ریال تراکنش داشته باشد»
+[Business rules that must be enforced]
+Example: "A user without identity verification cannot transact above X amount"
 
 ## Validation Rules
-[قوانین validation برای هر input]
-مثال: «شماره موبایل باید ۱۱ رقم و با ۰۹ شروع شود»
+[Validation rules for each input]
+Example: "Mobile number must be 11 digits and start with 09"
 
 ## Dependencies
-[وابستگی‌های فنی و feature-level — از feature-dependency skill]
+[Technical and feature-level dependencies — from feature-dependency skill]
 
 ## Out of Scope
-[چه چیزهایی در این فاز ساخته نمی‌شوند]
+[What will not be built in this phase]
 
 ## DOD
-[از problem-framing skill یا تعریف اینجا]
+[From problem-framing skill or defined here]
 
 ## Open Questions
-[سوالاتی که قبل از شروع engineering باید پاسخ داده شوند]
+[Questions that must be answered before engineering starts]
 ```
 
 ### Step 4: Completeness check
 
-قبل از تحویل، این چک‌لیست را مرور کن:
+Before delivering, review this checklist:
 
-- [ ] آیا هر error state پیام مشخص دارد؟
-- [ ] آیا هر business rule قابل تست است؟
-- [ ] آیا out of scope صریح است؟
-- [ ] آیا dependency ها لیست شده‌اند؟
-- [ ] آیا DOD verifiable است؟
-- [ ] آیا open question ای هست که engineering را بلاک می‌کند؟
+- [ ] Does every error state have a specific message?
+- [ ] Is every business rule testable?
+- [ ] Is out of scope stated explicitly?
+- [ ] Are all dependencies listed?
+- [ ] Is the DOD verifiable?
+- [ ] Are there any open questions that would block engineering?
 
-اگر هر کدام ناقص بود، قبل از تحویل از PM بپرس.
+If any item is incomplete, ask the PM before delivering.
 
 ---
 
-## Output language
-
-- Use the PM's preferred working language from `CLAUDE.md`
-- Technical content (error messages, field names, API names) stays in English
-- Business rules can be written in the PM's preferred language while preserving English technical terms
-
 ## Constraints
 
-- هرگز architecture یا technical solution پیشنهاد نده — requirement چیست را بنویس، چگونه را ننویس
-- اگر business rule ای مبهم است، flag بزن نه assume کن
-- همیشه completeness check را انجام بده — requirement ناقص بدتر از نداشتن requirement است
+- Never propose an architecture or technical solution — write what the feature does, not how to build it
+- If a business rule is ambiguous, flag it — do not assume
+- Always run the completeness check — an incomplete requirement is worse than no requirement
 
 ## Context variables (populated from CLAUDE.md)
 
-- product context و business logic
-- team conventions برای requirement نویسی
-- technical stack awareness این PM
-- الگوهای error handling این محصول
-- نام‌های module ها و سیستم‌های مرتبط
+- Product context and business logic
+- Team conventions for writing requirements
+- Technical stack awareness of this PM
+- Error handling patterns for this product
+- Module and system names

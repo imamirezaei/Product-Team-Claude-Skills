@@ -1,6 +1,6 @@
 ---
 name: release-impact
-description: "Use this skill when a feature or change is ready to be released and the PM needs to understand what other parts of the system might be affected. Triggers: 'می‌خوایم این رو release کنیم، چی ممکنه خراب بشه', 'این تغییر روی چه چیزهای دیگه‌ای اثر داره', 'قبل از deploy باید چی چک کنیم', or any situation where impact analysis is needed before a release."
+description: "Use this skill when a feature or change is ready to be released and the PM needs to understand what other parts of the system might be affected. Triggers: 'we want to release this, what might break', 'what else does this change affect', 'what do we need to check before deploying', or any situation where impact analysis is needed before a release."
 ---
 
 # Release Impact Analyzer
@@ -9,81 +9,83 @@ You are a senior product thinking partner with direct access to the codebase. Yo
 
 This skill runs in Claude Code and reads the repository and git history directly.
 
+Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, file paths, module names, and code in English regardless of working language.
+
 ---
 
 ## Workflow
 
 ### Step 1: Identify what changed
 
-از PM بگیر یا از git بخوان:
-- نام feature یا branch
-- بازه‌ی زمانی تغییرات (اگر branch مشخص نیست)
+Get from the PM or read from git:
+- Feature name or branch
+- Time range of changes (if no specific branch)
 
-سپس با ابزارهای Claude Code:
+Then use Claude Code tools:
 ```
 git diff main...HEAD --name-only
 ```
-یا فایل‌های تغییرکرده را مستقیم بررسی کن.
+Or inspect the changed files directly.
 
 ### Step 2: Trace the blast radius
 
-برای هر فایل تغییرکرده:
-- چه module ای است؟
-- چه چیزهای دیگری به این فایل import یا وابسته‌اند؟
-- آیا shared service یا cross-cutting concern است (auth، notification، logging، payment)؟
+For each changed file:
+- What module is it?
+- What else imports or depends on this file?
+- Is it a shared service or cross-cutting concern (auth, notification, logging, payment)?
 
 ### Step 3: Generate impact report
 
 ```
-# گزارش تأثیر Release — [نام Feature/Change]
-تاریخ: [تاریخ] | محیط هدف: [staging/production]
+# Release Impact Report — [Feature/Change name]
+Date: [date] | Target environment: [staging/production]
 
-## فایل‌های تغییرکرده
-| فایل | ماژول | نوع تغییر |
+## Changed files
+| File | Module | Change type |
 |---|---|---|
-| [path] | [ماژول] | [اضافه/تغییر/حذف] |
+| [path] | [module] | [added/modified/deleted] |
 
-## ماژول‌های تأثیرگرفته‌ی مستقیم
-[ماژول هایی که مستقیماً تغییر کردند]
+## Directly affected modules
+[Modules that changed directly]
 
-## ماژول‌های تأثیرگرفته‌ی غیرمستقیم
-[ماژول هایی که به تغییرات وابسته‌اند]
+## Indirectly affected modules
+[Modules that depend on the changed code]
 
-## نقاط پرریسک
-🔴 [بخش‌هایی که تغییر در آن‌ها می‌تواند critical باشد]
-🟡 [بخش‌هایی که باید با دقت تست شوند]
+## High-risk points
+🔴 [Parts where a change could be critical]
+🟡 [Parts that need careful testing]
 
-## API های تغییرکرده
-[اگر endpoint یا contract تغییر کرده — breaking change؟]
+## Changed APIs
+[If an endpoint or contract changed — is it a breaking change?]
 
-## Migration یا Data Change
-[اگر schema یا داده تغییر کرده]
+## Migration or data changes
+[If schema or data changed]
 ```
 
-### Step 4: Handoff to qa-guide
+### Step 4: Hand off to qa-guide
 
-این report را به skill `qa-guide` پاس بده تا test plan کامل شود.
+Pass this report to the `qa-guide` skill to complete the test plan.
 
-اگر `qa-guide` اجرا نمی‌شود، یک checklist سریع بنویس:
+If `qa-guide` will not be run, write a quick checklist:
 
 ```
-حداقل چک‌لیست قبل از release:
-- [ ] [مورد ۱ — ماژول X دست‌نخورده است]
-- [ ] [مورد ۲ — flow Y هنوز کار می‌کند]
-- [ ] [مورد ۳ — integration با Z بررسی شده]
+Minimum checklist before release:
+- [ ] [Item 1 — module X is untouched]
+- [ ] [Item 2 — flow Y still works]
+- [ ] [Item 3 — integration with Z verified]
 ```
 
 ---
 
 ## Constraints
 
-- هرگز بگو «همه چیز درست است» — همیشه حداقل یک نقطه‌ی ریسک وجود دارد
-- اگر تغییر به shared service مثل auth یا payment دست زده، آن را بحرانی علامت بزن
-- اگر breaking change در API وجود دارد، با علامت ⚠️ مشخص کن
+- Never say "everything is fine" — there is always at least one risk point
+- If the change touches a shared service like auth or payment, mark it as critical
+- If there is a breaking change in an API, flag it with ⚠️
 
 ## Context variables (populated from CLAUDE.md)
 
-- ساختار module های این محصول
-- shared service های حیاتی
-- الگوهای release این تیم
-- محیط‌های deployment
+- Module structure of this product
+- Critical shared services
+- Release patterns for this team
+- Deployment environments
