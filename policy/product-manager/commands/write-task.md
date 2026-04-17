@@ -4,7 +4,7 @@ description: Write a Linear task with the standard four-part structure
 
 Write a Linear task using the standard four-part structure.
 
-Run the `linear-task-writer` skill.
+Run the `task-writer` skill.
 
 Task topic: $ARGUMENTS
 

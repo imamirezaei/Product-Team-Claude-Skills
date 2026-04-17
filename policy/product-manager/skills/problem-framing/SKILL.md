@@ -18,6 +18,7 @@ Read the `working-language` field from `CLAUDE.md` and deliver all output in tha
 ### Step 1: Receive the input
 
 The PM will describe one of the following:
+
 - A feature request from a manager or stakeholder
 - A technical problem reported by the engineering team
 - A user or support team feedback
@@ -29,6 +30,7 @@ Read carefully. Do NOT ask clarifying questions yet. Proceed to Step 2.
 ### Step 2: Reflect back what you understood
 
 In 2-3 sentences, state:
+
 - What the core ask is
 - Who it affects
 - What the implied outcome is
@@ -36,11 +38,13 @@ In 2-3 sentences, state:
 Then ask ONE focused question if something critical is missing for writing a DOD. If nothing critical is missing, skip this step.
 
 **Ask only if:**
+
 - The scope is genuinely ambiguous (could be 3 days or 3 months of work)
 - The target user is unclear and it changes the DOD significantly
 - There are two fundamentally different interpretations
 
 **Do NOT ask about:**
+
 - Why this is important (PM already knows)
 - Business justification (not your role here)
 - Priority relative to other work (different skill handles this)
@@ -63,12 +67,14 @@ State 2-3 things that are explicitly NOT included in this feature to prevent sco
 ### Step 4: Generate the DOD
 
 Write a precise DOD. The DOD must be:
+
 - **Verifiable:** Each item must be testable. If it cannot be tested, it is not a DOD item.
 - **Scoped:** Cover the feature as described, not a future version of it.
 - **Engineering-readable:** A developer must be able to read this and know exactly when they are done.
 - **Exhaustive for the agreed scope:** No ambiguity about what "done" means.
 
 DOD format:
+
 ```
 DOD — [Feature name]
 
@@ -96,7 +102,7 @@ Open decisions:
 
 ## Constraints
 
-- Never write the full Linear task — that is the `linear-task-writer` skill's job
+- Never write the full Linear task — that is the `task-writer` skill's job
 - Never make technical architecture decisions — flag them as open questions
 - Never expand scope beyond what the PM described — if scope seems too narrow, flag it as a note
 - Never skip Step 3 — edge cases and dependencies are the most valuable part of this skill

@@ -39,8 +39,8 @@ Every deliverable output must follow this order:
 3. **Out of Scope** — Explicit list of what is NOT included. Required for all feature-related outputs.
 4. **Open Questions** — Decisions needed before proceeding. Required if any exist. Omit section entirely if none.
 5. **Flags** — Two types, each with its own marker:
-   - `⚠️ نیاز به تأیید` — decisions outside the PM's authority
-   - `⚠️ تصمیم فنی` — technical decisions that need engineering input. Always followed by a `📖 برای آشنایی بیشتر` block with 2-4 concepts the PM can read about to prepare for the technical conversation.
+   - `⚠️ Needs Approval` — decisions outside the PM's authority
+   - `⚠️ Technical Decision` — technical decisions that need engineering input. Always followed by a `📖 Further Reading` block with 2-4 concepts the PM can read about to prepare for the technical conversation.
 6. **DOD** — Definition of Done. Required for all feature-related outputs.
 
 If a section has no content, omit it entirely. Never output an empty section header.
@@ -52,17 +52,17 @@ If a section has no content, omit it entirely. Never output an empty section hea
 ### Authority flag
 
 ```
-⚠️ نیاز به تأیید — [who needs to approve]
+⚠️ Needs Approval — [who needs to approve]
 [what the decision is]
 ```
 
 ### Technical decision flag
 
 ```
-⚠️ تصمیم فنی — نیاز به بررسی با تیم engineering
+⚠️ Technical Decision — Needs review with engineering team
 [plain language explanation of the decision and options]
 
-📖 برای آشنایی بیشتر:
+📖 Further Reading:
 - [concept 1 — one line why it's relevant]
 - [concept 2 — one line why it's relevant]
 ```
@@ -75,7 +75,7 @@ If a section has no content, omit it entirely. Never output an empty section hea
 - Use headers to separate sections in full structure outputs
 - Use ✓ for DOD items
 - Use ⚠️ for authority limits and technical decision flags
-- Use 📖 for learning pointers attached to technical flags
+- Use 📖 for further reading pointers attached to technical flags
 - Use 🔴 🟡 🟢 for priority levels in edge cases and test plans
 - Never use more than two levels of nesting in bullet points
 - Prefer short paragraphs over long bullet lists for explanations
@@ -87,7 +87,7 @@ Follow the `working-language` rule. This output style does not override language
 ## Tone Rules
 
 - Direct and concise — no filler phrases
-- Never say "I hope this helps", "خوشحال می‌شم کمک کنم", or similar
+- Never say "I hope this helps", "Happy to help", or similar
 - Never add unsolicited opinions on business decisions
 - If something is uncertain, say so explicitly rather than hedging
 - When flagging a technical decision, be informative not apologetic — the PM needs to understand the decision, not be reassured

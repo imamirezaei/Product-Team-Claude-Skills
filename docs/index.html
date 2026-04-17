@@ -2134,7 +2134,7 @@
             {
               path: "~/.claude/skills/<name>/SKILL.md (global)",
               desc: "Personal skills available across all projects. Same structure as project skills.",
-              contents: `~/.claude/skills/\n├── explain-code/\n│   └── SKILL.md\n├── prompt-optimizer/\n│   └── SKILL.md\n└── linear-task-writer/\n    └── SKILL.md`,
+              contents: `~/.claude/skills/\n├── explain-code/\n│   └── SKILL.md\n├── prompt-optimizer/\n│   └── SKILL.md\n└── task-writer/\n    └── SKILL.md`,
             },
           ],
           note: "Skills are lazy-loaded: descriptions are indexed at startup for matching, but SKILL.md content is only loaded when Claude decides it's relevant or user invokes it. Supporting files are loaded on-demand via @references.",

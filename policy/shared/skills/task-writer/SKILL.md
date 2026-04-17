@@ -1,5 +1,5 @@
 ---
-name: linear-task-writer
+name: task-writer
 description: "Write a Linear task with the standard four-part structure. Triggers: 'write a Linear task', 'create a task for this', 'I need to log this in Linear', or when any other skill explicitly hands off to this one. Use after problem-framing or feature-spec to convert the output into a ready-to-paste Linear task."
 ---
 
@@ -13,21 +13,22 @@ Write a Linear task using the standard four-part structure:
 
 ## Structure
 
-**1. Task Description**
+**🧢 Task Description**
 [What needs to be done and why. One short paragraph.]
 
-**2. User Story**
+**🦣 User Story**
 As a [user type], I want [goal], so that [outcome].
 
-**3. Implementation Notes**
+**🧱 Implementation Notes**
 [Technical notes, dependencies, and constraints the team should know. Reference findings from feature-dependency or design-system-check if available.]
 
-**4. DOD**
+**✅ DOD**
 ✓ [Testable item 1]
 ✓ [Testable item 2]
 ✓ [Testable item 3]
 
-Out of scope:
+❌ Out of scope:
+
 - [Item 1]
 
 ---

@@ -21,9 +21,9 @@ Every output that defines, specifies, or refines a feature must include a DOD se
 ```
 ## DOD
 
-✓ [مورد قابل تست ۱]
-✓ [مورد قابل تست ۲]
-✓ [مورد قابل تست ۳]
+✓ [testable item 1]
+✓ [testable item 2]
+✓ [testable item 3]
 ```
 
 ## DOD quality rules
@@ -33,17 +33,17 @@ Every item must be **testable**. If you cannot write a test case for it, it is n
 **Bad example:**
 
 ```
-✓ سیستم درست کار کند
-✓ UX مناسب باشد
-✓ performance خوب باشد
+✓ The system works correctly
+✓ UX is appropriate
+✓ performance is good
 ```
 
 **Good example:**
 
 ```
-✓ ادمین بتواند کد تخفیف درصدی با تاریخ انقضا و محدودیت تعداد استفاده ایجاد کند
-✓ کد تخفیف منقضی‌شده در زمان اعمال در سبد خرید، پیام خطای مشخص نمایش دهد
-✓ ادمین بتواند لیست تمام کدهای تخفیف را با وضعیت (فعال/منقضی/مصرف‌شده) مشاهده کند
+✓ Admin can create a percentage discount code with an expiry date and usage limit
+✓ An expired discount code shows a specific error message when applied at checkout
+✓ Admin can view a list of all discount codes with status (active/expired/used)
 ```
 
 The test for a good DOD item: can someone who has never seen this feature read this item and verify whether it works or not?

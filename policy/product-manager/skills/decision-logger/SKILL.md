@@ -119,6 +119,5 @@ Based on the documentation tools listed in `CLAUDE.md`, suggest the appropriate 
 
 ## Context variables (populated from CLAUDE.md)
 
-- Team documentation tools (task tracker, wiki, communication channels)
 - Team roles and names
 - Decision-making patterns for this product

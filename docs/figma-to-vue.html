@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Figma → Vue / Vuetify 3 · Translation Guide</title>
+<style>
+  :root {
+    --pm:       #EEEDFE; --pm-b: #534AB7; --pm-t: #3C3489;
+    --design:   #E1F5EE; --design-b: #0F6E56; --design-t: #085041;
+    --tech:     #E6F1FB; --tech-b: #185FA5; --tech-t: #0C447C;
+    --warn:     #FAECE7; --warn-b: #993C1D; --warn-t: #7A2E10;
+    --note:     #FFF9EC; --note-b: #C49A00; --note-t: #7A5500;
+    --tip:      #E6F1FB; --tip-b: #185FA5; --tip-t: #0C447C;
+    --surface:  #F5F4ED;
+    --border:   rgba(31,30,29,0.11);
+    --text:     #1F1E1D;
+    --text-2:   #3D3D3A;
+    --text-3:   #73726C;
+    --nav-w:    248px;
+    --radius:   8px;
+    --mono:     'Menlo','Monaco','Consolas','Courier New',monospace;
+    --sans:     system-ui,-apple-system,'Segoe UI',Tahoma,sans-serif;
+  }
+
+  [data-lang="fa"] { font-family: Tahoma, 'Segoe UI', var(--sans); }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: #FAFAF8;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  /* ───────────────── LAYOUT ───────────────── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ───────────────── NAV (FIXED) ───────────────── */
+  nav {
+    width: var(--nav-w);
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    right: 0;
+    background: #fff;
+    border-left: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 100;
+  }
+
+  .nav-header {
+    padding: 18px 18px 14px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .nav-header h1 { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
+  .nav-header p  { font-size: 11px; color: var(--text-3); margin-top: 3px; }
+
+  /* Language Switch */
+  .lang-switch {
+    display: flex;
+    gap: 4px;
+    margin-top: 12px;
+  }
+  .lang-btn {
+    flex: 1;
+    padding: 5px 0;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-3);
+    cursor: pointer;
+    transition: all 0.15s;
+    text-align: center;
+  }
+  .lang-btn.active {
+    background: var(--pm-b);
+    border-color: var(--pm-b);
+    color: #fff;
+  }
+  .lang-btn:not(.active):hover {
+    background: var(--pm);
+    color: var(--pm-t);
+    border-color: var(--pm-b);
+  }
+
+  /* Nav scroll area */
+  .nav-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 10px 0 20px;
+  }
+
+  .nav-group {
+    padding: 10px 18px 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-3);
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+  }
+
+  nav a {
+    display: block;
+    padding: 5px 18px;
+    font-size: 12px;
+    color: var(--text-2);
+    text-decoration: none;
+    border-right: 2px solid transparent;
+    border-left: 2px solid transparent;
+    transition: all 0.12s;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  nav a:hover { background: var(--surface); color: var(--text); }
+
+  nav a.active {
+    color: var(--pm-b);
+    background: var(--pm);
+    font-weight: 600;
+    border-right-color: var(--pm-b);
+  }
+
+  [data-lang="fa"] nav a.active { border-right-color: transparent; border-left-color: var(--pm-b); }
+
+  /* ───────────────── MAIN ───────────────── */
+  main {
+    margin-right: var(--nav-w);
+    flex: 1;
+    padding: 44px 52px 80px;
+    max-width: calc(860px + var(--nav-w));
+    min-width: 0;
+  }
+
+  /* ───────────────── PAGE HEADER ───────────────── */
+  .page-header {
+    margin-bottom: 44px;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-header h1 { font-size: 26px; font-weight: 800; color: var(--text); }
+  .page-header .sub { font-size: 14px; color: var(--text-2); margin-top: 8px; max-width: 560px; }
+
+  .badges { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 11px; border-radius: 20px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.01em;
+  }
+  .badge-pm     { background: var(--pm);    color: var(--pm-t);     border: 1px solid var(--pm-b); }
+  .badge-design { background: var(--design); color: var(--design-t); border: 1px solid var(--design-b); }
+  .badge-tech   { background: var(--tech);  color: var(--tech-t);   border: 1px solid var(--tech-b); }
+
+  /* ───────────────── SECTION ───────────────── */
+  section {
+    margin-bottom: 60px;
+    scroll-margin-top: 24px;
+  }
+
+  section > h2 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-icon {
+    width: 30px; height: 30px;
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+
+  section > .desc { font-size: 13px; color: var(--text-2); margin-bottom: 20px; line-height: 1.6; }
+
+  /* ───────────────── SUBSECTION ───────────────── */
+  .sub { margin-bottom: 28px; }
+
+  .sub h3 {
+    font-size: 13px; font-weight: 600; color: var(--text-2);
+    margin-bottom: 10px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 7px;
+  }
+
+  .chip {
+    font-size: 10px; font-weight: 500;
+    padding: 1px 7px; border-radius: 10px;
+    background: var(--surface); color: var(--text-3);
+    font-family: var(--mono);
+  }
+
+  /* ───────────────── TABLE ───────────────── */
+  .tbl-wrap { overflow-x: auto; border-radius: var(--radius); border: 1px solid var(--border); margin-bottom: 12px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+
+  thead tr { background: var(--surface); }
+  thead th {
+    padding: 9px 14px; text-align: left;
+    font-weight: 600; font-size: 11px;
+    color: var(--text-3); white-space: nowrap;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+  }
+
+  [data-lang="fa"] thead th { text-align: right; }
+
+  tbody tr { border-bottom: 1px solid var(--border); }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: #F7F7F4; }
+  tbody td { padding: 8px 14px; vertical-align: top; }
+
+  .fv { font-weight: 600; color: var(--design-t); }
+  .cv { font-family: var(--mono); font-size: 12px; color: #B44000; }
+  .vv { font-family: var(--mono); font-size: 12px; color: var(--tech-t); }
+  td.note-cell { font-size: 12px; color: var(--text-3); }
+
+  /* ───────────────── CODE ───────────────── */
+  .code-block {
+    background: #1A1A1A;
+    border-radius: var(--radius);
+    padding: 14px 18px 16px;
+    margin: 10px 0;
+    overflow-x: auto;
+  }
+  .code-block .lang-label {
+    font-size: 10px; font-weight: 700;
+    color: #666; margin-bottom: 10px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .code-block pre {
+    margin: 0; font-family: var(--mono);
+    font-size: 12.5px; line-height: 1.7;
+    color: #CDD3DE; white-space: pre;
+  }
+  .kw  { color: #569CD6; }
+  .str { color: #CE9178; }
+  .cmt { color: #6A9955; }
+  .tag { color: #4EC9B0; }
+  .atr { color: #9CDCFE; }
+  .val { color: #CE9178; }
+  .num { color: #B5CEA8; }
+  .cls { color: #DCDCAA; }
+
+  /* ───────────────── CALLOUTS ───────────────── */
+  .callout {
+    border-radius: var(--radius);
+    padding: 11px 15px;
+    margin: 12px 0;
+    font-size: 13px;
+    display: flex; gap: 10px;
+    align-items: flex-start;
+    line-height: 1.55;
+  }
+  .callout .ico { font-size: 15px; margin-top: 0; flex-shrink: 0; }
+  .callout.warn { background: var(--warn); border: 1px solid var(--warn-b); color: var(--warn-t); }
+  .callout.note { background: var(--note); border: 1px solid var(--note-b); color: var(--note-t); }
+  .callout.tip  { background: var(--tip);  border: 1px solid var(--tip-b);  color: var(--tip-t); }
+
+  /* ───────────────── VISUAL DEMOS ───────────────── */
+  .scale-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 8px; margin: 12px 0;
+  }
+
+  .scale-item {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+  .scale-item .si-label { font-weight: 700; color: var(--text); font-family: var(--mono); font-size: 11px; }
+  .scale-item .si-value { color: var(--text-3); margin-top: 1px; font-size: 11px; }
+  .si-bar { margin-top: 8px; background: var(--pm-b); height: 5px; border-radius: 2px; }
+
+  .elevation-demo { display: flex; flex-wrap: wrap; gap: 14px; margin: 14px 0; }
+  .el-box {
+    width: 86px; height: 64px;
+    background: #fff; border-radius: 10px;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    font-size: 11px; color: var(--text-3); gap: 3px;
+  }
+  .el-label { font-weight: 700; font-size: 12px; color: var(--text); font-family: var(--mono); }
+
+  .state-demo { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .state-btn {
+    padding: 8px 18px; border-radius: 7px;
+    font-size: 12px; font-weight: 600;
+    border: 1px solid transparent;
+    font-family: var(--sans); cursor: default; outline: none;
+  }
+  .s-default  { background: var(--pm-b); color: #fff; }
+  .s-hover    { background: #6259C8; color: #fff; }
+  .s-active   { background: #3D3489; color: #fff; }
+  .s-focus    { background: var(--pm-b); color: #fff; box-shadow: 0 0 0 3px rgba(83,74,183,0.3); }
+  .s-disabled { background: rgba(0,0,0,0.1); color: rgba(0,0,0,0.38); }
+  .s-error    { background: #FEE8E8; color: #B00020; border-color: #B00020; }
+  .s-label    { font-size: 10px; color: var(--text-3); text-align: center; margin-top: 4px; }
+
+  .type-table { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff; }
+  .type-row { display: flex; align-items: baseline; gap: 12px; padding: 9px 16px; border-bottom: 1px solid var(--border); }
+  .type-row:last-child { border-bottom: none; }
+  .type-row:first-child { background: var(--surface); }
+  .tc { font-family: var(--mono); font-size: 11px; color: var(--tech-t); min-width: 140px; flex-shrink: 0; }
+  .ts { font-size: 11px; color: var(--text-3); min-width: 110px; flex-shrink: 0; }
+
+  .checklist { list-style: none; }
+  .checklist li {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 8px 14px; border-radius: 7px;
+    font-size: 13px; margin-bottom: 5px;
+    background: #fff; border: 1px solid var(--border);
+  }
+  .ck { color: var(--design-b); font-size: 16px; line-height: 1; margin-top: 1px; flex-shrink: 0; }
+
+  /* ───────────────── LANGUAGE DISPLAY ───────────────── */
+  [data-lang="en"] .fa { display: none; }
+  [data-lang="fa"] .en { display: none; }
+  [data-lang="fa"] { direction: rtl; }
+  [data-lang="fa"] main { margin-right: 0; margin-left: var(--nav-w); }
+  [data-lang="fa"] nav  { right: auto; left: 0; border-left: none; border-right: 1px solid var(--border); }
+  [data-lang="fa"] nav a { border-right: 2px solid transparent; border-left: 2px solid transparent; }
+
+  /* ───────────────── SCROLLBAR ───────────────── */
+  .nav-body::-webkit-scrollbar { width: 4px; }
+  .nav-body::-webkit-scrollbar-track { background: transparent; }
+  .nav-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  @media (max-width: 800px) {
+    nav { display: none; }
+    main { margin-right: 0; margin-left: 0; padding: 24px 20px; }
+    [data-lang="fa"] main { margin-left: 0; }
+  }
+</style>
+</head>
+
+<body>
+<div class="layout" data-lang="en" id="root">
+
+<!-- ══════════════ NAV (FIXED) ══════════════ -->
+<nav>
+  <div class="nav-header">
+    <h1>Figma → Vue / Vuetify 3</h1>
+    <p class="en">Design ↔ Tech Reference</p>
+    <p class="fa">مرجع ترجمه دیزاین ↔ تک</p>
+    <div class="lang-switch">
+      <button class="lang-btn active" id="btn-en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" id="btn-fa" onclick="setLang('fa')">FA</button>
+    </div>
+  </div>
+
+  <div class="nav-body">
+    <div class="nav-group en">Layout</div>
+    <div class="nav-group fa">چیدمان</div>
+    <a href="#sizing"><span class="en">1. Sizing Modes</span><span class="fa">۱. اندازه‌گذاری</span></a>
+    <a href="#autolayout"><span class="en">2. Auto Layout</span><span class="fa">۲. Auto Layout</span></a>
+    <a href="#grid"><span class="en">3. Grid Layout</span><span class="fa">۳. شبکه ستونی</span></a>
+
+    <div class="nav-group en">Visual</div>
+    <div class="nav-group fa">بصری</div>
+    <a href="#stroke"><span class="en">4. Stroke → Border</span><span class="fa">۴. Stroke → Border</span></a>
+    <a href="#radius"><span class="en">5. Border Radius</span><span class="fa">۵. Border Radius</span></a>
+    <a href="#fill"><span class="en">6. Fill → Background</span><span class="fa">۶. Fill → پس‌زمینه</span></a>
+    <a href="#effects"><span class="en">7. Effects → Shadow</span><span class="fa">۷. سایه و افکت</span></a>
+    <a href="#opacity"><span class="en">8. Opacity</span><span class="fa">۸. Opacity</span></a>
+    <a href="#blend"><span class="en">9. Blend Modes</span><span class="fa">۹. Blend Modes</span></a>
+
+    <div class="nav-group en">Typography</div>
+    <div class="nav-group fa">تایپوگرافی</div>
+    <a href="#typography"><span class="en">10. Typography</span><span class="fa">۱۰. تایپوگرافی</span></a>
+
+    <div class="nav-group en">Structure</div>
+    <div class="nav-group fa">ساختار</div>
+    <a href="#spacing"><span class="en">11. Spacing System</span><span class="fa">۱۱. سیستم فاصله</span></a>
+    <a href="#constraints"><span class="en">12. Constraints</span><span class="fa">۱۲. Constraints</span></a>
+    <a href="#components"><span class="en">13. Components</span><span class="fa">۱۳. کامپوننت‌ها</span></a>
+    <a href="#states"><span class="en">14. States</span><span class="fa">۱۴. States</span></a>
+    <a href="#responsive"><span class="en">15. Responsive</span><span class="fa">۱۵. Responsive</span></a>
+    <a href="#clip"><span class="en">16. Clip & Z-index</span><span class="fa">۱۶. Clip و Z-index</span></a>
+    <a href="#images"><span class="en">17. Images & Icons</span><span class="fa">۱۷. تصویر و آیکون</span></a>
+    <a href="#color"><span class="en">18. Color System</span><span class="fa">۱۸. سیستم رنگ</span></a>
+
+    <div class="nav-group en">Reference</div>
+    <div class="nav-group fa">مرجع</div>
+    <a href="#special"><span class="en">19. Special Cases</span><span class="fa">۱۹. موارد خاص</span></a>
+    <a href="#checklist"><span class="en">✓ Handoff Checklist</span><span class="fa">✓ چک‌لیست</span></a>
+  </div>
+</nav>
+
+<!-- ══════════════ MAIN ══════════════ -->
+<main>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <h1>Figma → Vue / Vuetify 3</h1>
+    <p class="sub en">A complete translation reference for every Figma property and its exact CSS / Vue / Vuetify 3 equivalent. Both Design and Tech teams use this as the single source of truth during handoff.</p>
+    <p class="sub fa">راهنمای جامع ترجمه تمام property‌های فیگما به معادل دقیق CSS / Vue / Vuetify 3. هر دو تیم Design و Tech از این سند به عنوان منبع اصلی در handoff استفاده می‌کنند.</p>
+    <div class="badges">
+      <span class="badge badge-design">🎨 <span class="en">Design Team</span><span class="fa">تیم Design</span></span>
+      <span class="badge badge-tech">⚙️ <span class="en">Tech Team</span><span class="fa">تیم Tech</span></span>
+      <span class="badge badge-pm">📋 <span class="en">Shared Reference</span><span class="fa">سند مشترک</span></span>
+    </div>
+  </div>
+
+  <!-- ══ 1. SIZING ══ -->
+  <section id="sizing">
+    <h2><span class="section-icon" style="background:var(--design);color:var(--design-t)">📐</span>
+      <span class="en">1. Sizing Modes</span><span class="fa">۱. Sizing Modes — اندازه‌گذاری</span>
+    </h2>
+    <p class="desc en">Figma offers three dimension modes for width and height. Each maps to a different CSS pattern.</p>
+    <p class="desc fa">فیگما سه حالت برای عرض و ارتفاع دارد. هر کدام به یک الگوی CSS متفاوت تبدیل می‌شوند.</p>
+
+    <div class="tbl-wrap"><table>
+      <thead><tr>
+        <th>Figma</th>
+        <th>CSS</th>
+        <th>Vuetify 3</th>
+        <th><span class="en">Note</span><span class="fa">نکته</span></th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="fv">Fixed</span></td>
+          <td><code class="cv">width: 120px</code></td>
+          <td><code class="vv">style="width: 120px"</code></td>
+          <td class="note-cell"><span class="en">Explicit pixel value</span><span class="fa">مقدار ثابت</span></td>
+        </tr>
+        <tr>
+          <td><span class="fv">Fill</span></td>
+          <td><code class="cv">flex: 1 1 0</code> <span style="color:var(--text-3)">or</span> <code class="cv">width: 100%</code></td>
+          <td><code class="vv">class="flex-grow-1"</code> <span style="color:var(--text-3)">or</span> <code class="vv">class="w-100"</code></td>
+          <td class="note-cell"><span class="en">Use <code>flex: 1</code> in flex containers</span><span class="fa">در flex container از <code>flex: 1</code> استفاده کنید</span></td>
+        </tr>
+        <tr>
+          <td><span class="fv">Hug</span></td>
+          <td><code class="cv">width: fit-content</code></td>
+          <td><span class="en">Omit width — default</span><span class="fa">حذف width — رفتار پیش‌فرض</span></td>
+          <td class="note-cell"><span class="en">Wraps its content</span><span class="fa">به اندازه محتوا</span></td>
+        </tr>
+        <tr>
+          <td><span class="fv">Min Width</span></td>
+          <td><code class="cv">min-width: {n}px</code></td>
+          <td><code class="vv">style="min-width: {n}px"</code></td>
+          <td class="note-cell">—</td>
+        </tr>
+        <tr>
+          <td><span class="fv">Max Width</span></td>
+          <td><code class="cv">max-width: {n}px</code></td>
+          <td><code class="vv">style="max-width: {n}px"</code></td>
+          <td class="note-cell">—</td>
+        </tr>
+      </tbody>
+    </table></div>
+
+    <div class="callout warn">
+      <span class="ico">⚠️</span>
+      <div>
+        <span class="en"><strong>Fill in code:</strong> if the parent is a <em>flex container</em>, use <code>flex: 1</code>. If the parent is a <em>block element</em>, use <code>width: 100%</code>. These produce different results.</span>
+        <span class="fa"><strong>Fill در کد:</strong> اگر parent یک <em>flex container</em> است از <code>flex: 1</code> استفاده کنید. اگر block است از <code>width: 100%</code>. این دو رفتار متفاوت دارند.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 2. AUTO LAYOUT ══ -->
+  <section id="autolayout">
+    <h2><span class="section-icon" style="background:var(--design);color:var(--design-t)">⬡</span>
+      <span class="en">2. Auto Layout</span><span class="fa">۲. Auto Layout — چیدمان خودکار</span>
+    </h2>
+    <p class="desc en">Auto Layout in Figma is Flexbox in CSS. Direction, gap, padding, and alignment map 1-to-1.</p>
+    <p class="desc fa">Auto Layout در فیگما معادل Flexbox در CSS است. direction، gap، padding و alignment به صورت مستقیم ترجمه می‌شوند.</p>
+
+    <div class="sub">
+      <h3><span class="en">Direction & Wrap</span><span class="fa">Direction و Wrap</span> <span class="chip">flex-direction</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th><th>Vuetify 3</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Horizontal</span></td><td><code class="cv">display:flex; flex-direction:row</code></td><td><code class="vv">class="d-flex flex-row"</code></td></tr>
+          <tr><td><span class="fv">Vertical</span></td><td><code class="cv">display:flex; flex-direction:column</code></td><td><code class="vv">class="d-flex flex-column"</code></td></tr>
+          <tr><td><span class="fv">Wrap</span></td><td><code class="cv">flex-wrap: wrap</code></td><td><code class="vv">class="flex-wrap"</code></td></tr>
+          <tr><td><span class="fv">No Wrap</span></td><td><code class="cv">flex-wrap: nowrap</code></td><td><code class="vv">class="flex-nowrap"</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3>Gap <span class="chip">gap</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th><th>Vuetify 3</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Gap (all)</span></td><td><code class="cv">gap: {n}px</code></td><td><code class="vv">class="ga-{n}"</code></td></tr>
+          <tr><td><span class="fv">Horizontal gap</span></td><td><code class="cv">column-gap: {n}px</code></td><td><code class="vv">class="ga-x-{n}"</code></td></tr>
+          <tr><td><span class="fv">Vertical gap</span></td><td><code class="cv">row-gap: {n}px</code></td><td><code class="vv">class="ga-y-{n}"</code></td></tr>
+          <tr><td><span class="fv">Space Between</span></td><td><code class="cv">justify-content: space-between</code></td><td><code class="vv">class="justify-space-between"</code></td></tr>
+          <tr><td><span class="fv">Space Around</span></td><td><code class="cv">justify-content: space-around</code></td><td><code class="vv">class="justify-space-around"</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3>Padding <span class="chip">padding</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th><th>Vuetify 3</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv"><span class="en">All sides</span><span class="fa">همه طرف</span></span></td><td><code class="cv">padding: {n}px</code></td><td><code class="vv">class="pa-{n}"</code></td></tr>
+          <tr><td><span class="fv">H (L+R)</span></td><td><code class="cv">padding-inline: {n}px</code></td><td><code class="vv">class="px-{n}"</code></td></tr>
+          <tr><td><span class="fv">V (T+B)</span></td><td><code class="cv">padding-block: {n}px</code></td><td><code class="vv">class="py-{n}"</code></td></tr>
+          <tr><td><span class="fv">Top</span></td><td><code class="cv">padding-top: {n}px</code></td><td><code class="vv">class="pt-{n}"</code></td></tr>
+          <tr><td><span class="fv">Right</span></td><td><code class="cv">padding-right: {n}px</code></td><td><code class="vv">class="pr-{n}"</code></td></tr>
+          <tr><td><span class="fv">Bottom</span></td><td><code class="cv">padding-bottom: {n}px</code></td><td><code class="vv">class="pb-{n}"</code></td></tr>
+          <tr><td><span class="fv">Left</span></td><td><code class="cv">padding-left: {n}px</code></td><td><code class="vv">class="pl-{n}"</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Alignment — Primary Axis</span><span class="fa">Alignment — محور اصلی</span> <span class="chip">justify-content</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th><th>Vuetify 3</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Start</span></td><td><code class="cv">justify-content: flex-start</code></td><td><code class="vv">class="justify-start"</code></td></tr>
+          <tr><td><span class="fv">Center</span></td><td><code class="cv">justify-content: center</code></td><td><code class="vv">class="justify-center"</code></td></tr>
+          <tr><td><span class="fv">End</span></td><td><code class="cv">justify-content: flex-end</code></td><td><code class="vv">class="justify-end"</code></td></tr>
+          <tr><td><span class="fv">Space Between</span></td><td><code class="cv">justify-content: space-between</code></td><td><code class="vv">class="justify-space-between"</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Alignment — Cross Axis</span><span class="fa">Alignment — محور عرضی</span> <span class="chip">align-items</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th><th>Vuetify 3</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Top / Start</span></td><td><code class="cv">align-items: flex-start</code></td><td><code class="vv">class="align-start"</code></td></tr>
+          <tr><td><span class="fv">Center</span></td><td><code class="cv">align-items: center</code></td><td><code class="vv">class="align-center"</code></td></tr>
+          <tr><td><span class="fv">Bottom / End</span></td><td><code class="cv">align-items: flex-end</code></td><td><code class="vv">class="align-end"</code></td></tr>
+          <tr><td><span class="fv">Baseline</span></td><td><code class="cv">align-items: baseline</code></td><td><code class="vv">class="align-baseline"</code></td></tr>
+          <tr><td><span class="fv">Stretch</span></td><td><code class="cv">align-items: stretch</code></td><td><code class="vv">class="align-stretch"</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Absolute Position inside Auto Layout</span><span class="fa">Absolute Position درون Auto Layout</span></h3>
+      <div class="code-block"><div class="lang-label">Vue</div><pre><span class="cmt en">&lt;!-- Figma: Auto Layout parent + child with "Absolute position" --&gt;</span><span class="cmt fa">&lt;!-- فیگما: parent با Auto Layout + فرزند Absolute --&gt;</span>
+<span class="tag">&lt;div</span> <span class="atr">class</span>=<span class="val">"position-relative d-flex flex-column ga-4"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div&gt;</span>item 1<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div&gt;</span>item 2<span class="tag">&lt;/div&gt;</span>
+  <span class="cmt en">&lt;!-- absolute child --&gt;</span><span class="cmt fa">&lt;!-- فرزند absolute --&gt;</span>
+  <span class="tag">&lt;div</span> <span class="atr">class</span>=<span class="val">"position-absolute"</span> <span class="atr">style</span>=<span class="val">"top:8px;right:8px"</span><span class="tag">&gt;</span>badge<span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+    </div>
+  </section>
+
+  <!-- ══ 3. GRID ══ -->
+  <section id="grid">
+    <h2><span class="section-icon" style="background:var(--tech);color:var(--tech-t)">⊞</span>
+      <span class="en">3. Grid Layout</span><span class="fa">۳. Grid Layout — شبکه ستونی</span>
+    </h2>
+    <div class="code-block"><div class="lang-label">Vue</div><pre><span class="cmt en">&lt;!-- Mobile: 12col | Tablet: 6col | Desktop: 4col --&gt;</span><span class="cmt fa">&lt;!-- موبایل: کامل | تبلت: نصف | دسکتاپ: یک‌سوم --&gt;</span>
+<span class="tag">&lt;v-container&gt;</span>
+  <span class="tag">&lt;v-row&gt;</span>
+    <span class="tag">&lt;v-col</span> <span class="atr">cols</span>=<span class="val">"12"</span> <span class="atr">sm</span>=<span class="val">"6"</span> <span class="atr">md</span>=<span class="val">"4"</span><span class="tag">&gt;</span>content<span class="tag">&lt;/v-col&gt;</span>
+  <span class="tag">&lt;/v-row&gt;</span>
+<span class="tag">&lt;/v-container&gt;</span>
+
+<span class="tag">&lt;v-row</span> <span class="atr">no-gutters</span><span class="tag">&gt;</span>  <span class="cmt en">&lt;!-- no gutter --&gt;</span><span class="cmt fa">&lt;!-- بدون gutter --&gt;</span>
+<span class="tag">&lt;v-row</span> <span class="atr">class</span>=<span class="val">"ga-4"</span><span class="tag">&gt;</span>    <span class="cmt en">&lt;!-- custom gap --&gt;</span><span class="cmt fa">&lt;!-- gap سفارشی --&gt;</span></pre></div>
+  </section>
+
+  <!-- ══ 4. STROKE ══ -->
+  <section id="stroke">
+    <h2><span class="section-icon" style="background:var(--pm);color:var(--pm-t)">□</span>
+      <span class="en">4. Stroke → Border</span><span class="fa">۴. Stroke → Border</span>
+    </h2>
+    <p class="desc en">Figma strokes have three positions, each with a different CSS approach.</p>
+    <p class="desc fa">Stroke در فیگما سه position دارد که هر کدام رویکرد CSS متفاوتی دارند.</p>
+
+    <div class="sub">
+      <h3><span class="en">Stroke Position</span><span class="fa">موقعیت Stroke</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th><th><span class="en">Note</span><span class="fa">نکته</span></th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="fv">Inside</span></td>
+            <td><code class="cv">border: 2px solid #color;<br>box-sizing: border-box</code></td>
+            <td class="note-cell"><span class="en">Element size unchanged</span><span class="fa">اندازه element تغییر نمی‌کند</span></td>
+          </tr>
+          <tr>
+            <td><span class="fv">Outside</span></td>
+            <td><code class="cv">outline: 2px solid #color;<br>outline-offset: 0</code></td>
+            <td class="note-cell"><span class="en">Outside layout flow</span><span class="fa">خارج از layout</span></td>
+          </tr>
+          <tr>
+            <td><span class="fv">Center</span></td>
+            <td><code class="cv">box-shadow: 0 0 0 1px #color</code></td>
+            <td class="note-cell"><span class="en">Approximation only</span><span class="fa">تقریب — دقیق نیست</span></td>
+          </tr>
+        </tbody>
+      </table></div>
+      <div class="callout warn"><span class="ico">⚠️</span>
+        <div>
+          <span class="en"><strong>Center stroke</strong> has no direct CSS equivalent. <code>box-shadow</code> is the closest approximation but does not perfectly replicate rounded corners.</span>
+          <span class="fa"><strong>Center stroke</strong> معادل مستقیم در CSS ندارد. <code>box-shadow</code> نزدیک‌ترین تقریب است اما گوشه‌های گرد را دقیق نمی‌گیرد.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Stroke Style</span><span class="fa">استایل Stroke</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Solid</span></td><td><code class="cv">border-style: solid</code></td></tr>
+          <tr><td><span class="fv">Dashed</span></td><td><code class="cv">border-style: dashed</code></td></tr>
+          <tr><td><span class="fv">Dotted</span></td><td><code class="cv">border-style: dotted</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Per-Side Stroke</span><span class="fa">Stroke تک‌ضلعی</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Top only</span></td><td><code class="cv">border-top: 1px solid #color</code></td></tr>
+          <tr><td><span class="fv">Right only</span></td><td><code class="cv">border-right: 1px solid #color</code></td></tr>
+          <tr><td><span class="fv">Bottom only</span></td><td><code class="cv">border-bottom: 1px solid #color</code></td></tr>
+          <tr><td><span class="fv">Left only</span></td><td><code class="cv">border-left: 1px solid #color</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ══ 5. BORDER RADIUS ══ -->
+  <section id="radius">
+    <h2><span class="section-icon" style="background:var(--pm);color:var(--pm-t)">◌</span>
+      <span class="en">5. Border Radius</span><span class="fa">۵. Border Radius — گوشه‌های گرد</span>
+    </h2>
+    <p class="desc en">Vuetify 3 provides a predefined rounded scale. All Figma border-radius values should map to one of these.</p>
+    <p class="desc fa">Vuetify 3 یک مقیاس از پیش تعریف‌شده دارد. تمام مقادیر border-radius فیگما باید به یکی از این‌ها تبدیل شوند.</p>
+
+    <div class="scale-grid">
+      <div class="scale-item"><div class="si-label">rounded-0</div><div class="si-value">0px</div><div class="si-bar" style="border-radius:0"></div></div>
+      <div class="scale-item"><div class="si-label">rounded-sm</div><div class="si-value">2px</div><div class="si-bar" style="border-radius:2px"></div></div>
+      <div class="scale-item"><div class="si-label">rounded</div><div class="si-value">4px</div><div class="si-bar" style="border-radius:4px"></div></div>
+      <div class="scale-item"><div class="si-label">rounded-md</div><div class="si-value">6px</div><div class="si-bar" style="border-radius:6px"></div></div>
+      <div class="scale-item"><div class="si-label">rounded-lg</div><div class="si-value">8px</div><div class="si-bar" style="border-radius:8px"></div></div>
+      <div class="scale-item"><div class="si-label">rounded-xl</div><div class="si-value">12px</div><div class="si-bar" style="border-radius:12px"></div></div>
+      <div class="scale-item"><div class="si-label">rounded-pill</div><div class="si-value">9999px</div><div class="si-bar" style="border-radius:9999px"></div></div>
+      <div class="scale-item"><div class="si-label">rounded-circle</div><div class="si-value">50%</div><div class="si-bar" style="border-radius:50%;width:30px;height:30px;margin:8px auto 0"></div></div>
+    </div>
+
+    <div class="callout note"><span class="ico">💡</span>
+      <div>
+        <span class="en"><strong>Corner Smoothing</strong> (Figma's Apple-style curves) has no CSS equivalent. Use standard <code>border-radius</code>. For pixel-perfect shapes, use an SVG path.</span>
+        <span class="fa"><strong>Corner Smoothing</strong> فیگما (منحنی‌های سبک اپل) معادل CSS ندارد. از <code>border-radius</code> معمولی استفاده کنید. برای دقت بالاتر از SVG path بهره بگیرید.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 6. FILL ══ -->
+  <section id="fill">
+    <h2><span class="section-icon" style="background:var(--design);color:var(--design-t)">🎨</span>
+      <span class="en">6. Fill → Background / Color</span><span class="fa">۶. Fill → Background / Color</span>
+    </h2>
+
+    <div class="sub">
+      <h3><span class="en">Solid Fill</span><span class="fa">رنگ solid</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th><th>Vuetify 3</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv"><span class="en">Solid fill</span><span class="fa">رنگ solid</span></span></td><td><code class="cv">background-color: #HEX</code></td><td><code class="vv">class="bg-{token}"</code></td></tr>
+          <tr><td><span class="fv">No fill</span></td><td><code class="cv">background: transparent</code></td><td>—</td></tr>
+          <tr><td><span class="fv"><span class="en">Text color</span><span class="fa">رنگ متن</span></span></td><td><code class="cv">color: #HEX</code></td><td><code class="vv">class="text-{token}"</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Gradient Fill</span><span class="fa">Gradient</span></h3>
+      <div class="callout note"><span class="ico">📐</span>
+        <div>
+          <span class="en"><strong>Angle conversion:</strong> Figma measures from 12 o'clock (top), CSS from 3 o'clock (right).<br>Formula: <code>css_angle = (figma_angle + 90) % 360</code></span>
+          <span class="fa"><strong>تبدیل زاویه:</strong> فیگما از ۱۲ ساعت می‌چرخد، CSS از ۳ ساعت.<br>فرمول: <code>css_angle = (figma_angle + 90) % 360</code></span>
+        </div>
+      </div>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th><span class="en">Figma Angle</span><span class="fa">زاویه فیگما</span></th><th>CSS <code>deg</code></th></tr></thead>
+        <tbody>
+          <tr><td>0° <span class="en">(top → bottom)</span><span class="fa">(بالا → پایین)</span></td><td><code class="cv">180deg</code></td></tr>
+          <tr><td>90° <span class="en">(left → right)</span><span class="fa">(چپ → راست)</span></td><td><code class="cv">90deg</code></td></tr>
+          <tr><td>180° <span class="en">(bottom → top)</span><span class="fa">(پایین → بالا)</span></td><td><code class="cv">0deg</code></td></tr>
+          <tr><td>270° <span class="en">(right → left)</span><span class="fa">(راست → چپ)</span></td><td><code class="cv">270deg</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Image Fill</span><span class="fa">Image Fill</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th><span class="en">Figma Mode</span><span class="fa">حالت فیگما</span></th><th>CSS</th><th>Vue</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Fill (Cover)</span></td><td><code class="cv">background:url() center/cover no-repeat</code></td><td><code class="vv">&lt;v-img cover&gt;</code></td></tr>
+          <tr><td><span class="fv">Fit (Contain)</span></td><td><code class="cv">background:url() center/contain no-repeat</code></td><td><code class="vv">&lt;v-img contain&gt;</code></td></tr>
+          <tr><td><span class="fv">Crop</span></td><td><code class="cv">object-fit:none; object-position:x y</code></td><td><code class="vv">object-position prop</code></td></tr>
+          <tr><td><span class="fv">Tile</span></td><td><code class="cv">background:url() repeat</code></td><td>—</td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ══ 7. EFFECTS ══ -->
+  <section id="effects">
+    <h2><span class="section-icon" style="background:var(--pm);color:var(--pm-t)">✦</span>
+      <span class="en">7. Effects → Shadow</span><span class="fa">۷. Effects → سایه و افکت</span>
+    </h2>
+
+    <div class="sub">
+      <h3>Drop Shadow → <code>box-shadow</code></h3>
+      <div class="code-block"><div class="lang-label">CSS</div><pre><span class="cmt en">/* Figma: X=0, Y=4, Blur=8, Spread=0, #000 at 20% */</span><span class="cmt fa">/* فیگما: X=0, Y=4, Blur=8, Spread=0, #000 با ۲۰% شفافیت */</span>
+box-shadow: <span class="num">0px 4px 8px 0px</span> rgba(<span class="num">0, 0, 0, 0.20</span>);
+
+<span class="cmt en">/* Inner Shadow */</span><span class="cmt fa">/* سایه داخلی */</span>
+box-shadow: inset <span class="num">0px 2px 4px 0px</span> rgba(<span class="num">0, 0, 0, 0.15</span>);
+
+<span class="cmt en">/* Multiple shadows */</span><span class="cmt fa">/* چند سایه */</span>
+box-shadow:
+  <span class="num">0px 2px 4px</span> rgba(<span class="num">0,0,0,0.10</span>),
+  <span class="num">0px 8px 16px</span> rgba(<span class="num">0,0,0,0.08</span>);</pre></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Vuetify Elevation Scale</span><span class="fa">مقیاس Elevation در Vuetify</span></h3>
+      <div class="elevation-demo">
+        <div><div class="el-box" style="box-shadow:none;border:1px solid #eee"><span class="el-label">e-0</span><span class="en">flat</span><span class="fa">تخت</span></div></div>
+        <div><div class="el-box" style="box-shadow:0 1px 3px rgba(0,0,0,0.12),0 1px 2px rgba(0,0,0,0.10)"><span class="el-label">e-2</span><span class="en">card</span><span class="fa">card</span></div></div>
+        <div><div class="el-box" style="box-shadow:0 3px 6px rgba(0,0,0,0.13),0 3px 6px rgba(0,0,0,0.10)"><span class="el-label">e-4</span><span class="en">raised</span><span class="fa">بالا</span></div></div>
+        <div><div class="el-box" style="box-shadow:0 10px 20px rgba(0,0,0,0.14),0 6px 6px rgba(0,0,0,0.10)"><span class="el-label">e-8</span><span class="en">menu</span><span class="fa">menu</span></div></div>
+        <div><div class="el-box" style="box-shadow:0 19px 38px rgba(0,0,0,0.18),0 15px 12px rgba(0,0,0,0.12)"><span class="el-label">e-16</span><span class="en">dialog</span><span class="fa">dialog</span></div></div>
+        <div><div class="el-box" style="box-shadow:0 24px 38px rgba(0,0,0,0.20),0 9px 46px rgba(0,0,0,0.12),0 11px 15px rgba(0,0,0,0.14)"><span class="el-label">e-24</span><span class="en">drawer</span><span class="fa">drawer</span></div></div>
+      </div>
+
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Class</th><th><span class="en">Typical Use</span><span class="fa">کاربرد معمول</span></th></tr></thead>
+        <tbody>
+          <tr><td><code class="vv">elevation-0</code></td><td><span class="en">Flat — no shadow</span><span class="fa">بدون سایه</span></td></tr>
+          <tr><td><code class="vv">elevation-2</code></td><td><span class="en">Default card</span><span class="fa">card پیش‌فرض</span></td></tr>
+          <tr><td><code class="vv">elevation-4</code></td><td><span class="en">Raised card</span><span class="fa">card برجسته</span></td></tr>
+          <tr><td><code class="vv">elevation-8</code></td><td><span class="en">Menu, tooltip</span><span class="fa">menu، tooltip</span></td></tr>
+          <tr><td><code class="vv">elevation-16</code></td><td><span class="en">Modal, dialog</span><span class="fa">modal، dialog</span></td></tr>
+          <tr><td><code class="vv">elevation-24</code></td><td><span class="en">Navigation drawer</span><span class="fa">Navigation drawer</span></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Other Effects</span><span class="fa">افکت‌های دیگر</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Layer Blur</span></td><td><code class="cv">filter: blur(8px)</code></td></tr>
+          <tr><td><span class="fv">Background Blur</span></td><td><code class="cv">backdrop-filter: blur(12px)</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ══ 8. OPACITY ══ -->
+  <section id="opacity">
+    <h2><span class="section-icon" style="background:var(--surface)">◎</span>
+      <span class="en">8. Opacity</span><span class="fa">۸. Opacity — شفافیت</span>
+    </h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Figma</th><th>CSS</th><th><span class="en">Note</span><span class="fa">نکته</span></th></tr></thead>
+      <tbody>
+        <tr><td><span class="fv">Layer Opacity 50%</span></td><td><code class="cv">opacity: 0.5</code></td><td class="note-cell"><span class="en">All children affected</span><span class="fa">همه فرزندان تحت تاثیر</span></td></tr>
+        <tr><td><span class="fv">Fill opacity</span></td><td><code class="cv">rgba(r, g, b, 0.5)</code></td><td class="note-cell"><span class="en">Only the color</span><span class="fa">فقط رنگ</span></td></tr>
+        <tr><td><span class="fv">Disabled (38%)</span></td><td><code class="cv">opacity: 0.38</code></td><td class="note-cell"><span class="en">Material Design spec</span><span class="fa">استاندارد Material</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout warn"><span class="ico">⚠️</span>
+      <div>
+        <span class="en"><strong>Key difference:</strong> <code>opacity</code> on a layer affects all its children. For background-only transparency, use <code>rgba()</code> or <code>rgb(var(--v-theme-primary), 0.1)</code>.</span>
+        <span class="fa"><strong>تفاوت مهم:</strong> <code>opacity</code> روی لایه همه فرزندان را شفاف می‌کند. برای شفافیت فقط پس‌زمینه از <code>rgba()</code> یا <code>rgb(var(--v-theme-primary), 0.1)</code> استفاده کنید.</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 9. BLEND ══ -->
+  <section id="blend">
+    <h2><span class="section-icon" style="background:var(--surface)">⊕</span>
+      <span class="en">9. Blend Modes</span><span class="fa">۹. Blend Modes</span>
+    </h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Figma</th><th><code>mix-blend-mode</code></th><th>Figma</th><th><code>mix-blend-mode</code></th></tr></thead>
+      <tbody>
+        <tr><td><span class="fv">Normal</span></td><td><code class="cv">normal</code></td><td><span class="fv">Overlay</span></td><td><code class="cv">overlay</code></td></tr>
+        <tr><td><span class="fv">Darken</span></td><td><code class="cv">darken</code></td><td><span class="fv">Soft Light</span></td><td><code class="cv">soft-light</code></td></tr>
+        <tr><td><span class="fv">Multiply</span></td><td><code class="cv">multiply</code></td><td><span class="fv">Hard Light</span></td><td><code class="cv">hard-light</code></td></tr>
+        <tr><td><span class="fv">Color Burn</span></td><td><code class="cv">color-burn</code></td><td><span class="fv">Difference</span></td><td><code class="cv">difference</code></td></tr>
+        <tr><td><span class="fv">Lighten</span></td><td><code class="cv">lighten</code></td><td><span class="fv">Exclusion</span></td><td><code class="cv">exclusion</code></td></tr>
+        <tr><td><span class="fv">Screen</span></td><td><code class="cv">screen</code></td><td><span class="fv">Hue</span></td><td><code class="cv">hue</code></td></tr>
+        <tr><td><span class="fv">Color Dodge</span></td><td><code class="cv">color-dodge</code></td><td><span class="fv">Saturation</span></td><td><code class="cv">saturation</code></td></tr>
+        <tr><td><span class="fv">Plus Lighter</span></td><td><code class="cv">plus-lighter</code></td><td><span class="fv">Luminosity</span></td><td><code class="cv">luminosity</code></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ══ 10. TYPOGRAPHY ══ -->
+  <section id="typography">
+    <h2><span class="section-icon" style="background:var(--design);color:var(--design-t)">Aa</span>
+      <span class="en">10. Typography</span><span class="fa">۱۰. Typography — تایپوگرافی</span>
+    </h2>
+
+    <div class="sub">
+      <h3><span class="en">Properties</span><span class="fa">ویژگی‌ها</span></h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th><th>Vuetify 3</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Font Family</span></td><td><code class="cv">font-family: 'Name'</code></td><td><span class="en">Set in <code>vuetify.js</code> theme</span><span class="fa">تنظیم در <code>vuetify.js</code></span></td></tr>
+          <tr><td><span class="fv">Font Size</span></td><td><code class="cv">font-size: 16px</code></td><td><span class="en">Use type scale below</span><span class="fa">از جدول type scale استفاده کنید</span></td></tr>
+          <tr><td><span class="fv">Font Weight</span></td><td><code class="cv">font-weight: 500</code></td><td><code class="vv">class="font-weight-medium"</code></td></tr>
+          <tr><td><span class="fv">Italic</span></td><td><code class="cv">font-style: italic</code></td><td><code class="vv">class="font-italic"</code></td></tr>
+          <tr><td><span class="fv">Line Height (px)</span></td><td><code class="cv">line-height: 24px</code></td><td><code class="vv">style="line-height: 24px"</code></td></tr>
+          <tr><td><span class="fv">Letter Spacing</span></td><td><code class="cv">letter-spacing: 0.05em</code></td><td><code class="vv">style="letter-spacing:0.05em"</code></td></tr>
+          <tr><td><span class="fv">Align Left</span></td><td><code class="cv">text-align: left</code></td><td><code class="vv">class="text-left"</code></td></tr>
+          <tr><td><span class="fv">Align Center</span></td><td><code class="cv">text-align: center</code></td><td><code class="vv">class="text-center"</code></td></tr>
+          <tr><td><span class="fv">Align Right</span></td><td><code class="cv">text-align: right</code></td><td><code class="vv">class="text-right"</code></td></tr>
+          <tr><td><span class="fv">Uppercase</span></td><td><code class="cv">text-transform: uppercase</code></td><td><code class="vv">class="text-uppercase"</code></td></tr>
+          <tr><td><span class="fv">Underline</span></td><td><code class="cv">text-decoration: underline</code></td><td>—</td></tr>
+          <tr><td><span class="fv">Strikethrough</span></td><td><code class="cv">text-decoration: line-through</code></td><td>—</td></tr>
+          <tr><td><span class="fv"><span class="en">Paragraph Spacing</span><span class="fa">فاصله پاراگراف</span></span></td><td><code class="cv">margin-bottom: 16px</code></td><td><code class="vv">class="mb-4"</code></td></tr>
+          <tr><td><span class="fv">Truncate</span></td><td><code class="cv">overflow:hidden; text-overflow:ellipsis; white-space:nowrap</code></td><td><code class="vv">class="text-truncate"</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Vuetify 3 Type Scale</span><span class="fa">مقیاس تایپ Vuetify 3</span></h3>
+      <div class="type-table">
+        <div class="type-row"><div class="tc">Class</div><div class="ts">Size / Weight</div><div style="flex:1;font-size:11px;font-weight:600;color:var(--text-3)"><span class="en">Sample</span><span class="fa">نمونه</span></div></div>
+        <div class="type-row"><div class="tc">text-h1</div><div class="ts">96px · 300</div><div style="font-size:26px;font-weight:300;line-height:1">H1</div></div>
+        <div class="type-row"><div class="tc">text-h2</div><div class="ts">60px · 300</div><div style="font-size:22px;font-weight:300">H2</div></div>
+        <div class="type-row"><div class="tc">text-h3</div><div class="ts">48px · 400</div><div style="font-size:20px;font-weight:400">H3</div></div>
+        <div class="type-row"><div class="tc">text-h4</div><div class="ts">34px · 400</div><div style="font-size:18px;font-weight:400">H4</div></div>
+        <div class="type-row"><div class="tc">text-h5</div><div class="ts">24px · 400</div><div style="font-size:16px;font-weight:400">H5</div></div>
+        <div class="type-row"><div class="tc">text-h6</div><div class="ts">20px · 500</div><div style="font-size:15px;font-weight:500">H6</div></div>
+        <div class="type-row"><div class="tc">text-subtitle-1</div><div class="ts">16px · 400</div><div style="font-size:16px">Subtitle 1</div></div>
+        <div class="type-row"><div class="tc">text-subtitle-2</div><div class="ts">14px · 500</div><div style="font-size:14px;font-weight:500">Subtitle 2</div></div>
+        <div class="type-row"><div class="tc">text-body-1</div><div class="ts">16px · 400</div><div style="font-size:16px"><span class="en">Body 1 — main text</span><span class="fa">متن اصلی</span></div></div>
+        <div class="type-row"><div class="tc">text-body-2</div><div class="ts">14px · 400</div><div style="font-size:14px;color:#555"><span class="en">Body 2 — secondary</span><span class="fa">متن ثانویه</span></div></div>
+        <div class="type-row"><div class="tc">text-button</div><div class="ts">14px · 500</div><div style="font-size:14px;font-weight:500;letter-spacing:1.25px;text-transform:uppercase">BUTTON</div></div>
+        <div class="type-row"><div class="tc">text-caption</div><div class="ts">12px · 400</div><div style="font-size:12px;color:#777">Caption</div></div>
+        <div class="type-row"><div class="tc">text-overline</div><div class="ts">10px · 400</div><div style="font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:#777">OVERLINE</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ 11. SPACING ══ -->
+  <section id="spacing">
+    <h2><span class="section-icon" style="background:var(--pm);color:var(--pm-t)">↔</span>
+      <span class="en">11. Spacing System</span><span class="fa">۱۱. Spacing System — سیستم فاصله</span>
+    </h2>
+    <p class="desc en">Vuetify uses <strong>4px</strong> as the base unit. All Figma spacing values must be multiples of 4.</p>
+    <p class="desc fa">Vuetify از <strong>4px</strong> به عنوان واحد پایه استفاده می‌کند. تمام فاصله‌های فیگما باید مضرب ۴ باشند.</p>
+
+    <div class="scale-grid" style="grid-template-columns:repeat(auto-fill,minmax(100px,1fr))">
+      <div class="scale-item"><div class="si-label">n=0</div><div class="si-value">0px</div><div class="si-bar" style="width:0"></div></div>
+      <div class="scale-item"><div class="si-label">n=1</div><div class="si-value">4px</div><div class="si-bar" style="width:4px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=2</div><div class="si-value">8px</div><div class="si-bar" style="width:8px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=3</div><div class="si-value">12px</div><div class="si-bar" style="width:12px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=4</div><div class="si-value">16px</div><div class="si-bar" style="width:16px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=5</div><div class="si-value">20px</div><div class="si-bar" style="width:20px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=6</div><div class="si-value">24px</div><div class="si-bar" style="width:24px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=8</div><div class="si-value">32px</div><div class="si-bar" style="width:32px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=10</div><div class="si-value">40px</div><div class="si-bar" style="width:40px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=12</div><div class="si-value">48px</div><div class="si-bar" style="width:48px;height:4px"></div></div>
+      <div class="scale-item"><div class="si-label">n=16</div><div class="si-value">64px</div><div class="si-bar" style="width:64px;height:4px"></div></div>
+    </div>
+
+    <div class="code-block"><div class="lang-label">Cheatsheet</div><pre><span class="cmt en">/* margin */</span><span class="cmt fa">/* margin */</span>
+ma-{n}  mx-{n}  my-{n}  mt-{n}  mr-{n}  mb-{n}  ml-{n}
+<span class="cmt en">/* padding */</span><span class="cmt fa">/* padding */</span>
+pa-{n}  px-{n}  py-{n}  pt-{n}  pr-{n}  pb-{n}  pl-{n}
+<span class="cmt en">/* gap */</span><span class="cmt fa">/* gap */</span>
+ga-{n}  ga-x-{n}  ga-y-{n}
+<span class="cmt en">/* center a block */</span><span class="cmt fa">/* وسط‌چین block */</span>
+mx-auto</pre></div>
+  </section>
+
+  <!-- ══ 12. CONSTRAINTS ══ -->
+  <section id="constraints">
+    <h2><span class="section-icon" style="background:var(--surface)">⊞</span>
+      <span class="en">12. Constraints → Positioning</span><span class="fa">۱۲. Constraints → Positioning</span>
+    </h2>
+    <p class="desc en">Constraints apply only inside non-Auto-Layout frames. Inside Auto Layout, use flexbox alignment instead.</p>
+    <p class="desc fa">Constraints فقط در Frame‌های non-Auto-Layout معنی دارند. درون Auto Layout از flexbox alignment استفاده کنید.</p>
+
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Figma</th><th>CSS</th></tr></thead>
+      <tbody>
+        <tr><td><span class="fv">Left</span></td><td><code class="cv">position: absolute; left: {n}px</code></td></tr>
+        <tr><td><span class="fv">Right</span></td><td><code class="cv">position: absolute; right: {n}px</code></td></tr>
+        <tr><td><span class="fv">Top</span></td><td><code class="cv">position: absolute; top: {n}px</code></td></tr>
+        <tr><td><span class="fv">Bottom</span></td><td><code class="cv">position: absolute; bottom: {n}px</code></td></tr>
+        <tr><td><span class="fv">Left &amp; Right (stretch)</span></td><td><code class="cv">position: absolute; left: {n}px; right: {n}px</code></td></tr>
+        <tr><td><span class="fv">Top &amp; Bottom (stretch)</span></td><td><code class="cv">position: absolute; top: {n}px; bottom: {n}px</code></td></tr>
+        <tr><td><span class="fv">Center H</span></td><td><code class="cv">position:absolute; left:50%; transform:translateX(-50%)</code></td></tr>
+        <tr><td><span class="fv">Center V</span></td><td><code class="cv">position:absolute; top:50%; transform:translateY(-50%)</code></td></tr>
+        <tr><td><span class="fv">Center H+V</span></td><td><code class="cv">position:absolute; top:50%; left:50%; transform:translate(-50%,-50%)</code></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ══ 13. COMPONENTS ══ -->
+  <section id="components">
+    <h2><span class="section-icon" style="background:var(--tech);color:var(--tech-t)">◈</span>
+      <span class="en">13. Component Structure</span><span class="fa">۱۳. ساختار کامپوننت</span>
+    </h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Figma</th><th>Vue / Vuetify</th></tr></thead>
+      <tbody>
+        <tr><td><span class="fv">Frame</span></td><td><code class="vv">&lt;div&gt;</code>, <code class="vv">&lt;v-sheet&gt;</code>, <code class="vv">&lt;v-card&gt;</code></td></tr>
+        <tr><td><span class="fv">Group</span></td><td><code class="vv">&lt;div&gt;</code> <span class="en">(no semantic meaning)</span><span class="fa">(بدون معنای semantic)</span></td></tr>
+        <tr><td><span class="fv">Section</span></td><td><code class="vv">&lt;section&gt;</code></td></tr>
+        <tr><td><span class="fv">Component (main)</span></td><td>Vue SFC — <code class="vv">&lt;script setup&gt;</code></td></tr>
+        <tr><td><span class="fv">Instance</span></td><td><code class="vv">&lt;MyComponent /&gt;</code></td></tr>
+        <tr><td><span class="fv">Variant</span></td><td><code class="vv">props: { variant: 'filled' | 'outlined' }</code></td></tr>
+        <tr><td><span class="fv">Boolean Property</span></td><td><code class="vv">v-if</code> / <code class="vv">v-show</code></td></tr>
+        <tr><td><span class="fv">Text Property</span></td><td><span class="en">Vue prop or slot</span><span class="fa">prop یا slot</span></td></tr>
+        <tr><td><span class="fv">Instance Swap</span></td><td><code class="vv">&lt;component :is="comp" /&gt;</code></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ══ 14. STATES ══ -->
+  <section id="states">
+    <h2><span class="section-icon" style="background:var(--tech);color:var(--tech-t)">◎</span>
+      <span class="en">14. Component States</span><span class="fa">۱۴. Component States</span>
+    </h2>
+
+    <div style="margin-bottom:20px">
+      <div class="state-demo">
+        <div><button class="state-btn s-default">Default</button><div class="s-label">Default</div></div>
+        <div><button class="state-btn s-hover">Hover</button><div class="s-label">Hover</div></div>
+        <div><button class="state-btn s-active">Active</button><div class="s-label">Pressed</div></div>
+        <div><button class="state-btn s-focus">Focused</button><div class="s-label">Focused</div></div>
+        <div><button class="state-btn s-disabled" disabled>Disabled</button><div class="s-label">Disabled</div></div>
+        <div><button class="state-btn s-error">Error</button><div class="s-label">Error</div></div>
+      </div>
+    </div>
+
+    <div class="tbl-wrap"><table>
+      <thead><tr><th><span class="en">Figma State</span><span class="fa">State فیگما</span></th><th>CSS</th><th>Vue / Vuetify</th></tr></thead>
+      <tbody>
+        <tr><td><span class="fv">Default</span></td><td>—</td><td>—</td></tr>
+        <tr><td><span class="fv">Hover</span></td><td><code class="cv">:hover</code></td><td><code class="vv">@mouseenter / @mouseleave</code></td></tr>
+        <tr><td><span class="fv">Pressed</span></td><td><code class="cv">:active</code></td><td><code class="vv">@mousedown</code></td></tr>
+        <tr><td><span class="fv">Focused</span></td><td><code class="cv">:focus, :focus-visible</code></td><td><code class="vv">@focus / @blur</code></td></tr>
+        <tr><td><span class="fv">Disabled</span></td><td><code class="cv">:disabled + opacity: 0.38</code></td><td><code class="vv">:disabled="true"</code></td></tr>
+        <tr><td><span class="fv">Error</span></td><td><code class="cv">.v-input--error</code></td><td><code class="vv">:error="true"</code></td></tr>
+        <tr><td><span class="fv">Loading</span></td><td>—</td><td><code class="vv">:loading="true"</code></td></tr>
+        <tr><td><span class="fv">Selected</span></td><td><code class="cv">.selected</code></td><td><code class="vv">v-model / :model-value</code></td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <!-- ══ 15. RESPONSIVE ══ -->
+  <section id="responsive">
+    <h2><span class="section-icon" style="background:var(--tech);color:var(--tech-t)">📱</span>
+      <span class="en">15. Responsive / Breakpoints</span><span class="fa">۱۵. Responsive / Breakpoints</span>
+    </h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th><span class="en">Figma Frame</span><span class="fa">فریم فیگما</span></th><th>Vuetify</th><th>Range</th></tr></thead>
+      <tbody>
+        <tr><td><span class="fv">Mobile (360px)</span></td><td><code class="vv">xs</code></td><td>&lt; 600px</td></tr>
+        <tr><td><span class="fv">Tablet (768px)</span></td><td><code class="vv">sm</code></td><td>600–959px</td></tr>
+        <tr><td><span class="fv">Laptop (1280px)</span></td><td><code class="vv">md</code></td><td>960–1279px</td></tr>
+        <tr><td><span class="fv">Desktop (1440px)</span></td><td><code class="vv">lg</code></td><td>1280–1919px</td></tr>
+        <tr><td><span class="fv">Wide (1920px)</span></td><td><code class="vv">xl</code></td><td>1920–2559px</td></tr>
+        <tr><td><span class="fv">Ultra-wide</span></td><td><code class="vv">xxl</code></td><td>≥ 2560px</td></tr>
+      </tbody>
+    </table></div>
+    <div class="code-block"><div class="lang-label">Vue</div><pre><span class="cmt en">&lt;!-- Mobile only --&gt;</span><span class="cmt fa">&lt;!-- فقط موبایل --&gt;</span>
+<span class="tag">&lt;div</span> <span class="atr">class</span>=<span class="val">"d-flex d-sm-none"</span><span class="tag">&gt;</span>
+
+<span class="cmt en">&lt;!-- Hidden on mobile --&gt;</span><span class="cmt fa">&lt;!-- پنهان در موبایل --&gt;</span>
+<span class="tag">&lt;div</span> <span class="atr">class</span>=<span class="val">"d-none d-sm-flex"</span><span class="tag">&gt;</span>
+
+<span class="cmt en">&lt;!-- Responsive columns --&gt;</span><span class="cmt fa">&lt;!-- ستون responsive --&gt;</span>
+<span class="tag">&lt;v-col</span> <span class="atr">cols</span>=<span class="val">"12"</span> <span class="atr">sm</span>=<span class="val">"6"</span> <span class="atr">md</span>=<span class="val">"4"</span><span class="tag">&gt;</span></pre></div>
+  </section>
+
+  <!-- ══ 16. CLIP ══ -->
+  <section id="clip">
+    <h2><span class="section-icon" style="background:var(--surface)">✂</span>
+      <span class="en">16. Clip Content & Z-index</span><span class="fa">۱۶. Clip و Z-index</span>
+    </h2>
+    <div class="sub">
+      <h3>Clip Content</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Figma</th><th>CSS</th></tr></thead>
+        <tbody>
+          <tr><td><span class="fv">Clip content ✓</span></td><td><code class="cv">overflow: hidden</code></td></tr>
+          <tr><td><span class="fv">Clip content ✗</span></td><td><code class="cv">overflow: visible</code></td></tr>
+          <tr><td><span class="fv"><span class="en">Scroll inside</span><span class="fa">اسکرول داخلی</span></span></td><td><code class="cv">overflow: auto</code></td></tr>
+          <tr><td><span class="fv"><span class="en">Clip with shape</span><span class="fa">کلیپ با شکل</span></span></td><td><code class="cv">clip-path: polygon(...)</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+    <div class="sub">
+      <h3>Z-index</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th><span class="en">Context</span><span class="fa">کاربرد</span></th><th>Vuetify z-index</th></tr></thead>
+        <tbody>
+          <tr><td><span class="en">Base</span><span class="fa">پایه</span></td><td><code class="cv">0</code></td></tr>
+          <tr><td>Tooltip / Menu</td><td><code class="cv">2000</code></td></tr>
+          <tr><td>Overlay backdrop</td><td><code class="cv">2300</code></td></tr>
+          <tr><td>Dialog / Modal</td><td><code class="cv">2400</code></td></tr>
+          <tr><td>App Bar</td><td><code class="cv">1004</code></td></tr>
+          <tr><td>Snackbar</td><td><code class="cv">2500</code></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ══ 17. IMAGES ══ -->
+  <section id="images">
+    <h2><span class="section-icon" style="background:var(--design);color:var(--design-t)">🖼</span>
+      <span class="en">17. Images & Icons</span><span class="fa">۱۷. تصویر و آیکون</span>
+    </h2>
+    <div class="code-block"><div class="lang-label">Vue</div><pre><span class="cmt en">&lt;!-- Cover (Figma: Fill) --&gt;</span><span class="cmt fa">&lt;!-- کاور (فیگما: Fill) --&gt;</span>
+<span class="tag">&lt;v-img</span> <span class="atr">:src</span>=<span class="val">"url"</span> <span class="atr">cover</span> <span class="atr">:aspect-ratio</span>=<span class="val">"16/9"</span> <span class="tag">/&gt;</span>
+
+<span class="cmt en">&lt;!-- Contain (Figma: Fit) --&gt;</span><span class="cmt fa">&lt;!-- Contain (فیگما: Fit) --&gt;</span>
+<span class="tag">&lt;v-img</span> <span class="atr">:src</span>=<span class="val">"url"</span> <span class="atr">contain</span> <span class="tag">/&gt;</span>
+
+<span class="cmt en">&lt;!-- With placeholder --&gt;</span><span class="cmt fa">&lt;!-- با placeholder --&gt;</span>
+<span class="tag">&lt;v-img</span> <span class="atr">:src</span>=<span class="val">"url"</span> <span class="atr">cover</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;template</span> <span class="atr">#placeholder</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;v-skeleton-loader</span> <span class="atr">type</span>=<span class="val">"image"</span> <span class="tag">/&gt;</span>
+  <span class="tag">&lt;/template&gt;</span>
+<span class="tag">&lt;/v-img&gt;</span>
+
+<span class="cmt en">&lt;!-- Icon — always MDI --&gt;</span><span class="cmt fa">&lt;!-- آیکون — همیشه MDI --&gt;</span>
+<span class="tag">&lt;v-icon</span> <span class="atr">size</span>=<span class="val">"24"</span> <span class="atr">color</span>=<span class="val">"primary"</span><span class="tag">&gt;</span>mdi-check-circle<span class="tag">&lt;/v-icon&gt;</span></pre></div>
+  </section>
+
+  <!-- ══ 18. COLOR ══ -->
+  <section id="color">
+    <h2><span class="section-icon" style="background:var(--design);color:var(--design-t)">◉</span>
+      <span class="en">18. Color System</span><span class="fa">۱۸. سیستم رنگ</span>
+    </h2>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Token</th><th><span class="en">Usage</span><span class="fa">کاربرد</span></th><th>Vue</th></tr></thead>
+      <tbody>
+        <tr><td><code style="background:#6200EA;color:#fff;padding:2px 8px;border-radius:4px">primary</code></td><td><span class="en">Brand main color</span><span class="fa">رنگ اصلی برند</span></td><td><code class="vv">color="primary"</code></td></tr>
+        <tr><td><code style="background:#03DAC6;color:#000;padding:2px 8px;border-radius:4px">secondary</code></td><td><span class="en">Supporting color</span><span class="fa">رنگ مکمل</span></td><td><code class="vv">color="secondary"</code></td></tr>
+        <tr><td><code style="background:#B00020;color:#fff;padding:2px 8px;border-radius:4px">error</code></td><td><span class="en">Error state</span><span class="fa">خطا</span></td><td><code class="vv">color="error"</code></td></tr>
+        <tr><td><code style="background:#E65100;color:#fff;padding:2px 8px;border-radius:4px">warning</code></td><td><span class="en">Warning state</span><span class="fa">هشدار</span></td><td><code class="vv">color="warning"</code></td></tr>
+        <tr><td><code style="background:#0288D1;color:#fff;padding:2px 8px;border-radius:4px">info</code></td><td><span class="en">Informational</span><span class="fa">اطلاعات</span></td><td><code class="vv">color="info"</code></td></tr>
+        <tr><td><code style="background:#2E7D32;color:#fff;padding:2px 8px;border-radius:4px">success</code></td><td><span class="en">Success state</span><span class="fa">موفقیت</span></td><td><code class="vv">color="success"</code></td></tr>
+        <tr><td><code style="background:#fff;border:1px solid #ddd;padding:2px 8px;border-radius:4px">surface</code></td><td><span class="en">Card background</span><span class="fa">پس‌زمینه card</span></td><td><code class="vv">class="bg-surface"</code></td></tr>
+      </tbody>
+    </table></div>
+    <div class="code-block"><div class="lang-label">CSS Variables</div><pre><span class="cmt en">/* Theme color with opacity */</span><span class="cmt fa">/* رنگ theme با opacity */</span>
+background: rgb(<span class="kw">var</span>(--v-theme-primary), <span class="num">0.1</span>);
+color: rgb(<span class="kw">var</span>(--v-theme-on-surface));</pre></div>
+  </section>
+
+  <!-- ══ 19. SPECIAL CASES ══ -->
+  <section id="special">
+    <h2><span class="section-icon" style="background:var(--warn);color:var(--warn-t)">⚑</span>
+      <span class="en">19. Special Cases & Common Pitfalls</span><span class="fa">۱۹. موارد خاص و دام‌های رایج</span>
+    </h2>
+
+    <div class="sub">
+      <h3><span class="en">Fill width inside Auto Layout</span><span class="fa">Fill width درون Auto Layout</span></h3>
+      <div class="code-block"><div class="lang-label">Vue</div><pre><span class="tag">&lt;div</span> <span class="atr">class</span>=<span class="val">"d-flex flex-row"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="atr">style</span>=<span class="val">"width:48px"</span><span class="tag">&gt;</span>icon<span class="tag">&lt;/div&gt;</span>
+  <span class="tag">&lt;div</span> <span class="atr">class</span>=<span class="val">"flex-grow-1"</span><span class="tag">&gt;</span>  <span class="cmt en">&lt;!-- Fill --&gt;</span><span class="cmt fa">&lt;!-- Fill --&gt;</span>
+    content
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Nested Auto Layout — most common pattern</span><span class="fa">Nested Auto Layout — رایج‌ترین الگو</span></h3>
+      <div class="code-block"><div class="lang-label">Vue</div><pre><span class="cmt">
+  Figma:
+  outer (Vertical, gap=16, padding=24)
+    └─ inner (Horizontal, gap=8, align=center)
+         ├─ icon (Fixed 24×24)
+         └─ label (Fill)
+</span>
+<span class="tag">&lt;div</span> <span class="atr">class</span>=<span class="val">"d-flex flex-column ga-4 pa-6"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;div</span> <span class="atr">class</span>=<span class="val">"d-flex flex-row ga-2 align-center"</span><span class="tag">&gt;</span>
+    <span class="tag">&lt;v-icon</span> <span class="atr">size</span>=<span class="val">"24"</span><span class="tag">&gt;</span>mdi-check<span class="tag">&lt;/v-icon&gt;</span>
+    <span class="tag">&lt;span</span> <span class="atr">class</span>=<span class="val">"flex-grow-1"</span><span class="tag">&gt;</span>label<span class="tag">&lt;/span&gt;</span>
+  <span class="tag">&lt;/div&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Gradient angle conversion</span><span class="fa">تبدیل زاویه gradient</span></h3>
+      <div class="code-block"><div class="lang-label">Formula</div><pre>css_angle = (figma_angle + <span class="num">90</span>) % <span class="num">360</span>
+
+Figma <span class="num">0°</span>   → CSS <span class="num">180deg</span>  <span class="cmt en">(top → bottom)</span><span class="cmt fa">(بالا → پایین)</span>
+Figma <span class="num">90°</span>  → CSS <span class="num">90deg</span>   <span class="cmt en">(left → right)</span><span class="cmt fa">(چپ → راست)</span>
+Figma <span class="num">180°</span> → CSS <span class="num">0deg</span>    <span class="cmt en">(bottom → top)</span><span class="cmt fa">(پایین → بالا)</span>
+Figma <span class="num">270°</span> → CSS <span class="num">270deg</span>  <span class="cmt en">(right → left)</span><span class="cmt fa">(راست → چپ)</span></pre></div>
+    </div>
+
+    <div class="sub">
+      <h3><span class="en">Image aspect ratio</span><span class="fa">نسبت تصویر</span></h3>
+      <div class="code-block"><div class="lang-label">Vue</div><pre><span class="tag">&lt;v-img</span> <span class="atr">:src</span>=<span class="val">"url"</span> <span class="atr">:aspect-ratio</span>=<span class="val">"16/9"</span> <span class="atr">cover</span> <span class="tag">/&gt;</span>
+
+<span class="cmt en">&lt;!-- Or CSS --&gt;</span><span class="cmt fa">&lt;!-- یا CSS --&gt;</span>
+<span class="tag">&lt;div</span> <span class="atr">style</span>=<span class="val">"aspect-ratio:16/9; overflow:hidden"</span><span class="tag">&gt;</span>
+  <span class="tag">&lt;img</span> <span class="atr">style</span>=<span class="val">"width:100%;height:100%;object-fit:cover"</span><span class="tag">&gt;</span>
+<span class="tag">&lt;/div&gt;</span></pre></div>
+    </div>
+  </section>
+
+  <!-- ══ CHECKLIST ══ -->
+  <section id="checklist">
+    <h2><span class="section-icon" style="background:var(--design);color:var(--design-t)">✓</span>
+      <span class="en">Handoff Checklist</span><span class="fa">چک‌لیست Handoff</span>
+    </h2>
+    <p class="desc en">Before sending a design to the Tech team, verify all items below.</p>
+    <p class="desc fa">قبل از ارسال طراحی به تیم Tech، همه موارد زیر را بررسی کنید.</p>
+
+    <ul class="checklist">
+      <li><span class="ck">✓</span><span class="en">All spacing values are multiples of 4px</span><span class="fa">تمام فاصله‌ها مضرب ۴px هستند</span></li>
+      <li><span class="ck">✓</span><span class="en">Font sizes match the Vuetify type scale</span><span class="fa">اندازه‌های فونت با Vuetify type scale تطابق دارند</span></li>
+      <li><span class="ck">✓</span><span class="en">Colors reference design tokens — not raw hex values</span><span class="fa">رنگ‌ها به design token اشاره می‌کنند، نه hex مستقیم</span></li>
+      <li><span class="ck">✓</span><span class="en">Auto Layout direction (H/V) and gap are clearly annotated</span><span class="fa">direction و gap در Auto Layout مشخص شده‌اند</span></li>
+      <li><span class="ck">✓</span><span class="en">Padding is explicitly set on every frame</span><span class="fa">Padding روی هر فریم به صراحت تنظیم شده</span></li>
+      <li><span class="ck">✓</span><span class="en">Responsive frames exist (mobile / tablet / desktop)</span><span class="fa">فریم‌های responsive وجود دارند (موبایل / تبلت / دسکتاپ)</span></li>
+      <li><span class="ck">✓</span><span class="en">All states are designed: hover / disabled / error / loading</span><span class="fa">همه states طراحی شده‌اند: hover / disabled / error / loading</span></li>
+      <li><span class="ck">✓</span><span class="en">Stroke position is specified: inside / outside / center</span><span class="fa">موقعیت Stroke مشخص است: inside / outside / center</span></li>
+      <li><span class="ck">✓</span><span class="en">Image fill mode is specified: cover / contain / crop</span><span class="fa">حالت image fill مشخص است: cover / contain / crop</span></li>
+      <li><span class="ck">✓</span><span class="en">Component variants map to Vue props</span><span class="fa">Variant‌های کامپوننت به Vue props تبدیل شده‌اند</span></li>
+      <li><span class="ck">✓</span><span class="en">Icons are from MDI or their names are specified</span><span class="fa">آیکون‌ها از MDI هستند یا نامشان مشخص شده</span></li>
+      <li><span class="ck">✓</span><span class="en">Border radius values match Vuetify scale</span><span class="fa">مقادیر border-radius با مقیاس Vuetify تطابق دارند</span></li>
+      <li><span class="ck">✓</span><span class="en">Elevation matches Vuetify scale (0/2/4/8/12/16/24)</span><span class="fa">Elevation با مقیاس Vuetify تطابق دارد</span></li>
+      <li><span class="ck">✓</span><span class="en">Clip content is set on frames with overflow</span><span class="fa">Clip content روی فریم‌های overflow تنظیم شده</span></li>
+    </ul>
+  </section>
+
+</main>
+</div><!-- .layout -->
+
+<script>
+  function setLang(lang) {
+    const root = document.getElementById('root');
+    root.setAttribute('data-lang', lang);
+    root.setAttribute('lang', lang);
+    document.documentElement.setAttribute('lang', lang);
+
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('btn-fa').classList.toggle('active', lang === 'fa');
+
+    localStorage.setItem('figma-guide-lang', lang);
+  }
+
+  // Restore saved language
+  const saved = localStorage.getItem('figma-guide-lang');
+  if (saved === 'fa') setLang('fa');
+
+  // Active nav highlight on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const links    = document.querySelectorAll('nav a');
+
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-10% 0px -75% 0px' });
+
+  sections.forEach(s => io.observe(s));
+</script>
+</body>
+</html>
