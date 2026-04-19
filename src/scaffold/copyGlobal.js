@@ -106,16 +106,20 @@ After completing all 14 output files, write each file directly to its specified 
 
   // ── /start-designer-interview ─────────────────────────────────────────────
   const startDesignerInterviewContent = `---
-description: Start the Designer onboarding interview
+description: Start Designer onboarding — connects Figma MCP, reads the Figma file, and generates all 11 context files
 ---
 
-Read the file at \`./claude-workflow/interview/designer-interview.md\` and immediately start the interview.
+Read the file at \`./claude-workflow/interview/designer-interview.md\` and immediately start the onboarding flow.
 
-Your first question must ask which language the designer wants: Persian or English.
-Use the selected language for all interview questions and designer-facing guidance during the interview.
-Generate every output file in English only, regardless of the interview language.
+Follow the steps exactly as written:
+1. Check Figma MCP access via whoami
+2. Ask two quick questions (language + repository status)
+3. Ask for Figma file link(s)
+4. Read the Figma file using MCP tools
+5. Generate all 11 output files
 
-After completing all 8 output files, write each file directly to its specified path using your Write/Edit tools. Ask the designer for approval before writing each file.
+Generate every output file in English only, regardless of the selected working language.
+After generating all 11 files, write each file directly to its specified path using your Write/Edit tools. Ask the designer for approval before writing.
 `;
   const startDesignerInterviewPath = path.join(GLOBAL_CLAUDE_DIR, 'commands', 'start-designer-interview.md');
   fs.writeFileSync(startDesignerInterviewPath, startDesignerInterviewContent, 'utf8');
