@@ -9,6 +9,15 @@ This command runs two skills in sequence and produces a handoff document that en
 ## Chain
 
 **Step 1 — vuetify-constraint-check**
+
+First, check whether `/design-review` was already run in this session:
+- If yes, and no unresolved Vuetify gaps remain: skip this step. Use the results from `/design-review` and output:
+  ```
+  Step 1 skipped — vuetify-constraint-check results from /design-review used.
+  Proceeding to design-handoff.
+  ```
+- If no, or if there are unresolved gaps from `/design-review`: run the full `vuetify-constraint-check` skill.
+
 Verify that every UI component in the design has a Vuetify 3 equivalent. Map all components, check theming compliance, and resolve or document any gaps before proceeding.
 
 If any ⚠️ Vuetify gap is unresolved and marked `Blocked: yes`, stop here. The designer must resolve the gap before the handoff document is generated.

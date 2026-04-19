@@ -13,6 +13,14 @@ Read the `working-language` field from `CLAUDE.md` and deliver all output in tha
 
 ---
 
+## Chain position
+
+This skill runs as step 3.5 in the `/new-feature` command chain, after `edge-case-finder` and before `wireframe-generator`. Its output feeds directly into `wireframe-generator` — the wireframe must use existing components wherever possible and only request new ones where the design system has a confirmed gap.
+
+When running standalone, deliver a full response.
+
+---
+
 ## Workflow
 
 ### Step 1: Receive the feature's UI needs

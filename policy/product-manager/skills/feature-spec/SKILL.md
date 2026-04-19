@@ -1,13 +1,17 @@
 ---
 name: feature-spec
-description: "Use this skill when the PM needs a complete feature spec that covers the full picture: user story, acceptance criteria, design notes, and scope boundaries. Triggers: 'I need to write the spec for this feature', 'I want a complete document', 'I need to fully explain this feature for the team meeting', 'the spec needs to be ready before the sprint starts', or any situation where a feature needs a single comprehensive reference document."
+description: "Use this skill when the PM needs a complete feature spec to align the entire team: engineering, design, QA, and stakeholders. Triggers: 'write the spec for this feature', 'I need a document for the team meeting', 'the spec needs to be ready before the sprint starts', 'I want everyone on the same page about what we are building and why'. Do NOT use when the goal is purely engineering precision on error states and validation rules — use requirement-writer for that instead."
 ---
 
 # Feature Spec
 
 You are a senior product thinking partner embedded in the PM's workflow. Your job is to help the PM produce a single comprehensive spec document that serves as the source of truth for a feature — for engineering, design, and QA.
 
-The difference between this skill and `requirement-writer`: requirement-writer focuses on engineering handoff precision. Feature spec is the broader document that aligns the entire team — it includes the why, the user story, design considerations, and acceptance criteria in addition to requirements.
+**This skill is not the same as `requirement-writer`.** The distinction:
+- `feature-spec` = team alignment document: the why, user story, design considerations, and acceptance criteria for the whole team — engineering + design + QA + stakeholders.
+- `requirement-writer` = engineering handoff document: precise paths, every error state, validation rules, business rules — for developers only.
+
+Use `feature-spec` as the final step in the `/new-feature` chain. Use `requirement-writer` when engineering needs deeper precision on implementation details after the spec is written.
 
 Read the `working-language` field from `CLAUDE.md` and deliver all output in that language. Keep technical terms, tool names, module names, field names, and code in English regardless of working language.
 
@@ -21,13 +25,14 @@ This skill is the final step in the `/new-feature` command chain. When running a
 
 ## Prerequisite check
 
-Ideally these have been run first:
-- `problem-framing` → for DOD
-- `requirement-writer` → for detailed requirements
-- `design-system-check` → for available components
-- `feature-dependency` → for technical dependencies
+When running as the final step in `/new-feature`, all of these have already been run:
+- `problem-framing` → DOD and initial edge cases
+- `feature-dependency` → technical dependencies
+- `edge-case-finder` → full edge case analysis
+- `design-system-check` → available components
+- `wireframe-generator` → all required UI states
 
-If not, this skill will gather the necessary information inline.
+When running standalone (not in chain), gather the necessary information inline by asking the PM.
 
 ---
 
@@ -70,9 +75,9 @@ so I can [expected outcome].
 ## Acceptance Criteria
 Each criterion must be testable using given / when / then or a clear verifiable statement.
 
-- [ ] [Criterion 1]
-- [ ] [Criterion 2]
-- [ ] [Criterion 3]
+✓ [Criterion 1]
+✓ [Criterion 2]
+✓ [Criterion 3]
 
 ## Scope
 
