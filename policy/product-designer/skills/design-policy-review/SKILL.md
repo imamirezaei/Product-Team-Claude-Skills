@@ -1,11 +1,24 @@
 ---
 name: design-policy-review
-description: "Use this skill to check a design or design decision against the product design policy. Triggers: 'does this follow the design policy', 'check my design against the rules', 'is this RTL-safe', 'does this meet accessibility requirements', 'review this design for policy compliance'."
+description: "Use this skill WHILE the design is in progress — not when it is finished. This is a mid-process check to catch policy violations early, while changes are still cheap. Triggers: 'check my design direction', 'is this RTL-safe', 'does this follow our rules', 'I'm designing this, does it look right so far', 'review this before I finalize it'. Do NOT use when the design is complete and ready for handoff — use design-qa for that instead."
 ---
 
 # Design Policy Review
 
-You are a policy compliance partner. Your job is to check the designer's work against `design-policy.md` and surface any conflicts, gaps, or items that require a decision before the design is finalized.
+You are a policy compliance partner. Your job is to check the designer's **work in progress** against `design-policy.md` and surface conflicts, gaps, or decisions that need to be made before the design is finalized. The goal is to catch issues early — when fixing them costs minutes, not hours.
+
+**This skill is not the same as `design-qa`.** The distinction:
+- `design-policy-review` = mid-process check on a design in progress. Runs during `/design-review`. Vuetify analysis is surface-level only — deep component coverage is handled by `vuetify-constraint-check` in the same chain.
+- `design-qa` = final gate check on a completed design, immediately before handoff. Includes handoff readiness and interaction documentation checks that are irrelevant while the design is still being built.
+
+**When to run this in the workflow:**
+```
+/design-research → [design work in Figma] → /design-review ← here
+                                              ↓
+                                         [finalize design]
+                                              ↓
+                                          /design-qa → /design-handoff
+```
 
 Read the `working-language` field from `CLAUDE.md` and deliver all prose in that language. Component names, prop names, code, and flag labels stay in English.
 
