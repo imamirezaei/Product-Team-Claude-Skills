@@ -1,0 +1,740 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claude Code for Product Managers</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --blue-50: #e6f1fb; --blue-100: #b5d4f4; --blue-400: #378add;
+        --blue-600: #185fa5; --blue-800: #0c447c; --blue-900: #042c53;
+        --teal-50: #e1f5ee; --teal-100: #9fe1cb; --teal-400: #1d9e75;
+        --teal-600: #0f6e56; --teal-800: #085041;
+        --purple-50: #eeedfe; --purple-100: #cecbf6; --purple-400: #7f77dd;
+        --purple-600: #534ab7; --purple-800: #3c3489;
+        --amber-50: #faeeda; --amber-100: #fac775; --amber-400: #ba7517;
+        --amber-600: #854f0b; --amber-800: #633806;
+        --coral-50: #faece7; --coral-400: #d85a30;
+        --coral-600: #993c1d; --coral-800: #712b13;
+        --gray-50: #f1efe8; --gray-100: #d3d1c7; --gray-200: #b4b2a9;
+        --gray-400: #888780; --gray-600: #5f5e5a; --gray-800: #444441;
+        --text: #1a1a18; --text-sec: #5f5e5a; --text-hint: #888780;
+        --bg: #ffffff; --bg-sec: #f8f7f4; --bg-ter: #f1efe8;
+        --border: rgba(0,0,0,0.1); --border-med: rgba(0,0,0,0.18);
+        --radius: 8px; --radius-lg: 12px;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+      /* Nav */
+      .nav { background: var(--bg-sec); border-bottom: 0.5px solid var(--border-med); padding: 12px 72px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); }
+      .nav-links { display: flex; gap: 24px; align-items: center; }
+      .nav-link { font-size: 12px; font-weight: 500; color: var(--blue-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--blue-50); }
+      .nav-link.active { background: var(--blue-600); color: white; }
+      .nav-link:hover { opacity: 0.8; }
+
+      /* Slides */
+      .slide { min-height: 100vh; padding: 60px 72px; display: flex; flex-direction: column; justify-content: center; border-bottom: 1px solid var(--border); }
+      .slide-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+
+      /* Typography */
+      h2 { font-size: 36px; font-weight: 500; color: var(--text); }
+      h3 { font-size: 17px; font-weight: 500; color: var(--text); }
+      p { font-size: 15px; font-weight: 400; color: var(--text-sec); line-height: 1.7; }
+      .lead { font-size: 18px; font-weight: 400; color: var(--text-sec); line-height: 1.6; }
+
+      /* Pills */
+      .pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+      .pill-blue { background: var(--blue-50); color: var(--blue-800); }
+      .pill-teal { background: var(--teal-50); color: var(--teal-800); }
+      .pill-purple { background: var(--purple-50); color: var(--purple-800); }
+      .pill-amber { background: var(--amber-50); color: var(--amber-800); }
+      .pill-gray { background: var(--gray-50); color: var(--gray-800); }
+      .pill-coral { background: var(--coral-50); color: var(--coral-800); }
+
+      /* Cards */
+      .card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 20px 24px; }
+      .card-sec { background: var(--bg-sec); border-radius: var(--radius-lg); padding: 20px 24px; }
+
+      /* Grids */
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+      .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+
+      /* Arch layers */
+      .arch-layer { border-radius: var(--radius); padding: 14px 20px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+      .arch-arrow { text-align: center; color: var(--gray-400); font-size: 16px; margin: 4px 0; line-height: 1; }
+
+      /* File rows */
+      .file-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+      .file-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+      .file-name { font-size: 13px; font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; flex: 0 0 auto; }
+      .file-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
+
+      /* Step rows */
+      .step-row { display: flex; gap: 16px; margin-bottom: 20px; }
+      .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--blue-600); color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+      .step-body h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+      .step-body p { font-size: 13px; color: var(--text-sec); }
+
+      /* Cmd rows */
+      .cmd-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+      .cmd-name { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; font-weight: 500; color: var(--blue-800); min-width: 200px; }
+      .cmd-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
+
+      /* Rule rows */
+      .rule-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+      .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-400); margin-top: 8px; flex-shrink: 0; }
+      .rule-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+      .rule-desc { font-size: 12px; color: var(--text-sec); }
+
+      /* Skill cards */
+      .skill-card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 16px 18px; }
+      .skill-card h3 { font-size: 13px; font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; margin-bottom: 6px; }
+      .skill-card p { font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+      .skill-group-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; margin-top: 24px; }
+      .skill-group-label:first-child { margin-top: 0; }
+
+      /* Stats */
+      .stat { text-align: center; padding: 20px; background: var(--bg-sec); border-radius: var(--radius-lg); }
+      .stat-num { font-size: 36px; font-weight: 500; color: var(--text); }
+      .stat-label { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+
+      /* Callouts */
+      .callout-teal { padding: 16px 20px; background: var(--teal-50); border-radius: var(--radius); border-left: 3px solid var(--teal-400); }
+      .callout-teal p { font-size: 13px; color: var(--teal-800); }
+      .callout-amber { padding: 16px 20px; background: var(--amber-50); border-radius: var(--radius); border-left: 3px solid var(--amber-400); }
+      .callout-amber p { font-size: 13px; color: var(--amber-800); }
+
+      /* Code */
+      code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--bg-ter); padding: 2px 6px; border-radius: 4px; }
+      .code-block { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--gray-800); color: #e8e6e0; padding: 12px 16px; border-radius: 6px; display: block; line-height: 1.8; }
+
+      /* Divider */
+      .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+      /* Title slide */
+      .slide-title { background: var(--blue-900); color: white; }
+      .title-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); margin-bottom: 48px; }
+      .title-h1 { font-size: 52px; font-weight: 500; color: white; line-height: 1.1; max-width: 700px; margin-bottom: 20px; }
+      .title-desc { font-size: 18px; font-weight: 400; color: rgba(255,255,255,0.55); max-width: 560px; margin-bottom: 56px; }
+      .title-stats { display: flex; gap: 0; }
+      .title-stat { padding: 0 32px 0 0; margin-right: 32px; border-right: 1px solid rgba(255,255,255,0.12); }
+      .title-stat:last-child { border-right: none; }
+      .title-stat-num { font-size: 32px; font-weight: 500; color: white; }
+      .title-stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    </style>
+  </head>
+  <body>
+
+    <nav class="nav">
+      <span class="nav-title">Product Team · Claude Code</span>
+      <div class="nav-links">
+        <a href="pm-presentation.html" class="nav-link active">Product Manager</a>
+        <a href="pd-presentation.html" class="nav-link">Product Designer</a>
+      </div>
+    </nav>
+
+    <!-- Slide 1: Title -->
+    <div class="slide slide-title">
+      <div class="title-label">Product Team Claude Skills · 2026</div>
+      <h1 class="title-h1">Claude Code for Product Managers</h1>
+      <p class="title-desc">A structured system that turns Claude into a personalized PM partner — context-aware, role-specific, and tailored to your product.</p>
+      <div class="title-stats">
+        <div class="title-stat">
+          <div class="title-stat-num">15</div>
+          <div class="title-stat-label">Skills</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">9</div>
+          <div class="title-stat-label">Commands</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">4</div>
+          <div class="title-stat-label">Context layers</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">14</div>
+          <div class="title-stat-label">Generated files</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Context / Problem -->
+    <div class="slide">
+      <div class="slide-label">Context</div>
+      <h2 style="margin-bottom: 8px;">Why generic AI tools fall short for PMs</h2>
+      <p style="font-size: 14px; margin-bottom: 32px;">Every request to a generic assistant starts from zero — no product context, no team knowledge, no PM-specific behavior.</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="pill pill-coral" style="margin-bottom: 12px;">Pain point 1</div>
+          <h3 style="margin-bottom: 8px;">No product context</h3>
+          <p style="font-size: 13px;">Claude doesn't know your stack, your team structure, or your decision boundaries. Every session starts blank.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-coral" style="margin-bottom: 12px;">Pain point 2</div>
+          <h3 style="margin-bottom: 8px;">Generic output format</h3>
+          <p style="font-size: 13px;">Responses aren't structured for PM deliverables. No DOD, no out-of-scope section, no authority flags.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-coral" style="margin-bottom: 12px;">Pain point 3</div>
+          <h3 style="margin-bottom: 8px;">No skill specialization</h3>
+          <p style="font-size: 13px;">A spec request, an edge-case analysis, and a feature prioritization are all treated the same way.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-coral" style="margin-bottom: 12px;">Pain point 4</div>
+          <h3 style="margin-bottom: 8px;">Technical overreach</h3>
+          <p style="font-size: 13px;">Generic Claude recommends architecture and tech stack choices — decisions that belong to engineering, not PM.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: 4-Layer Architecture -->
+    <div class="slide">
+      <div class="slide-label">Design Principle</div>
+      <h2 style="margin-bottom: 8px;">4-Layer Context Assembly</h2>
+      <p style="font-size: 14px; margin-bottom: 32px; max-width: 680px;">Every Claude response is built from four layers merged at request time. The policy layer is fixed and shared. The dynamic layer is unique to each PM and product.</p>
+
+      <div style="max-width: 760px;">
+        <div class="arch-layer" style="background: var(--blue-50);">
+          <div>
+            <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-600);">Layer 1 · Policy</span>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">Skills, commands, rules, output style</div>
+            <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>~/.claude/</code> and <code>claude-workflow/policy/</code></div>
+          </div>
+          <div class="pill pill-blue">Fixed · npm update</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--purple-50);">
+          <div>
+            <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--purple-600);">Layer 2 · Interview</span>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">10-section PM interview engine</div>
+            <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>claude-workflow/interview/pm-interview.md</code> · run once</div>
+          </div>
+          <div class="pill pill-purple">Run once</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--teal-50);">
+          <div>
+            <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal-600);">Layer 3 · Dynamic</span>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">CLAUDE.md + 11 context files + product agent</div>
+            <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>CLAUDE.md</code>, <code>.claude/skills/product-manager/*/context.md</code></div>
+          </div>
+          <div class="pill pill-teal">Generated · unique per PM</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--amber-50);">
+          <div>
+            <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-600);">Layer 4 · Personal</span>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">Private notes and local settings</div>
+            <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>CLAUDE.local.md</code>, <code>.claude/settings.local.json</code> · gitignored</div>
+          </div>
+          <div class="pill pill-amber">Private · never committed</div>
+        </div>
+      </div>
+
+      <div class="callout-teal" style="margin-top: 28px; max-width: 760px;">
+        <p><strong>Key principle:</strong> When a new version ships, <code>claude-pm update</code> rewrites Layer 1. Layers 3 and 4 — the PM's personal context — are never touched.</p>
+      </div>
+    </div>
+
+    <!-- Slide 4: File Map -->
+    <div class="slide">
+      <div class="slide-label">Files · What Each One Does</div>
+      <h2 style="margin-bottom: 8px;">Every file, explained</h2>
+      <p style="font-size: 14px; margin-bottom: 32px;">Files are split across two locations: global (<code>~/.claude/</code>, shared across all your projects) and project-level (inside your product repo).</p>
+
+      <div class="grid-2" style="gap: 32px; max-width: 960px;">
+        <!-- Global files -->
+        <div>
+          <div style="font-size: 11px; font-weight: 500; color: var(--blue-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">Global — ~/.claude/</div>
+
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800);">SK</div>
+            <div class="file-name" style="min-width: 200px;">skills/product-manager/*/SKILL.md</div>
+            <div class="file-desc">11 files · defines each skill's instructions and output structure</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">SK</div>
+            <div class="file-name" style="min-width: 200px;">skills/shared/*/SKILL.md</div>
+            <div class="file-desc">4 files · skills shared across PM and Designer roles</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">CM</div>
+            <div class="file-name" style="min-width: 200px;">commands/product-manager/*.md</div>
+            <div class="file-desc">9 slash commands · each chains one or more skills</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--gray-50); color: var(--gray-800);">OS</div>
+            <div class="file-name" style="min-width: 200px;">output-styles/pm-standard.md</div>
+            <div class="file-desc">6-section response format applied to all PM deliverables</div>
+          </div>
+          <div class="file-row" style="border-bottom: none;">
+            <div class="file-icon" style="background: var(--gray-50); color: var(--gray-800);">IV</div>
+            <div class="file-name" style="min-width: 200px;">commands/start-interview.md</div>
+            <div class="file-desc">Entry point for PM onboarding · triggers the interview engine</div>
+          </div>
+        </div>
+
+        <!-- Project-level files -->
+        <div>
+          <div style="font-size: 11px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">Project-level — inside product repo</div>
+
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">CL</div>
+            <div class="file-name">CLAUDE.md</div>
+            <div class="file-desc">PM profile + product context + working language · generated by interview</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">CX</div>
+            <div class="file-name">skills/*/context.md</div>
+            <div class="file-desc">11 files · product-specific answers mapped to each skill</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">AG</div>
+            <div class="file-name">agents/product-agent.md</div>
+            <div class="file-desc">Specialized agent definition · generated by interview</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--gray-50); color: var(--gray-800);">ST</div>
+            <div class="file-name">settings.json</div>
+            <div class="file-desc">Claude Code permissions for this repo · read/edit/git rules</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800);">OP</div>
+            <div class="file-name">outputs/</div>
+            <div class="file-desc">Saved deliverables · specs, decisions, QA plans — MD or HTML</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--amber-50); color: var(--amber-800);">PR</div>
+            <div class="file-name">CLAUDE.local.md</div>
+            <div class="file-desc">Private notes · gitignored · loaded alongside CLAUDE.md</div>
+          </div>
+          <div class="file-row" style="border-bottom: none;">
+            <div class="file-icon" style="background: var(--gray-50); color: var(--gray-800);">PL</div>
+            <div class="file-name">claude-workflow/policy/</div>
+            <div class="file-desc">Full policy copy for @file imports · updated by claude-pm update</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: How a request is formed -->
+    <div class="slide">
+      <div class="slide-label">Request Assembly</div>
+      <h2 style="margin-bottom: 8px;">How a Claude request is formed</h2>
+      <p style="font-size: 14px; margin-bottom: 32px; max-width: 680px;">When you run a command, Claude assembles context from all four layers before generating a single word of output. Here's exactly what happens for <code>/new-feature payment gateway</code>.</p>
+
+      <div style="max-width: 860px;">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>CLAUDE.md is loaded automatically</h3>
+            <p>Claude Code always injects <code>CLAUDE.md</code> into the system prompt. It contains your PM profile, product name, team structure, decision authority boundaries, and working language.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Command file is read</h3>
+            <p><code>~/.claude/commands/product-manager/new-feature.md</code> defines the chain: problem-framing → feature-dependency → edge-case-finder → design-system-check → wireframe-generator → feature-spec. Claude runs each in order.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>SKILL.md is read for each skill</h3>
+            <p><code>~/.claude/skills/product-manager/problem-framing/SKILL.md</code> defines <strong>what the skill does and how</strong> — instructions, output format, edge case dimensions, and DOD requirements. This is the fixed policy.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>context.md is read for the same skill</h3>
+            <p><code>.claude/skills/product-manager/problem-framing/context.md</code> contains <strong>who and what</strong> — your product domain, user types, typical constraints, and known edge cases. This was written by the interview engine.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Layers are merged into a complete context</h3>
+            <p>SKILL.md (instructions) + context.md (product knowledge) + CLAUDE.md (PM profile) + output-style = a fully contextualized, PM-specific request. No context needs to be re-explained in the chat.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-teal" style="margin-top: 8px; max-width: 860px;">
+        <p><strong>SKILL.md answers "how".</strong> context.md answers "for what product and team". Together they replace the paragraphs of context you'd otherwise type every time.</p>
+      </div>
+    </div>
+
+    <!-- Slide 6: Interview Engine -->
+    <div class="slide">
+      <div class="slide-label">Layer 2 · Interview Engine</div>
+      <h2 style="margin-bottom: 8px;">The PM interview — run once, persist forever</h2>
+      <p style="font-size: 14px; margin-bottom: 32px; max-width: 680px;">A structured 647-line interview across 10 sections. Each question maps to one or more output files. Nothing is collected without a purpose.</p>
+
+      <div class="grid-2" style="gap: 32px; max-width: 960px;">
+        <div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">A</div>
+            <div>
+              <div class="file-name">Product &amp; Business</div>
+              <div class="file-desc">→ CLAUDE.md, edge-case-finder/context, feature-dependency/context</div>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">B</div>
+            <div>
+              <div class="file-name">Team Structure</div>
+              <div class="file-desc">→ CLAUDE.md, feature-spec/context, requirement-writer/context</div>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">C</div>
+            <div>
+              <div class="file-name">Decision Architecture</div>
+              <div class="file-desc">→ CLAUDE.md, feature-prioritization/context, decision-logger/context</div>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">D</div>
+            <div>
+              <div class="file-name">Feature Workflow</div>
+              <div class="file-desc">→ CLAUDE.md, feature-spec/context, scope-check/context</div>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">E</div>
+            <div>
+              <div class="file-name">Requirements &amp; Handoff</div>
+              <div class="file-desc">→ requirement-writer/context, feature-spec/context</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800); font-size: 10px;">F</div>
+            <div>
+              <div class="file-name">Prioritization &amp; Roadmap</div>
+              <div class="file-desc">→ feature-prioritization/context, scope-check/context</div>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800); font-size: 10px;">G</div>
+            <div>
+              <div class="file-name">Documentation</div>
+              <div class="file-desc">→ decision-logger/context</div>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800); font-size: 10px;">H</div>
+            <div>
+              <div class="file-name">Technical Context</div>
+              <div class="file-desc">→ feature-dependency/context, design-system-check/context, release-impact/context, qa-guide/context</div>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800); font-size: 10px;">I</div>
+            <div>
+              <div class="file-name">Discovery &amp; Signals</div>
+              <div class="file-desc">→ CLAUDE.md</div>
+            </div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800); font-size: 10px;">J</div>
+            <div>
+              <div class="file-name">Meeting Culture &amp; PM Profile</div>
+              <div class="file-desc">→ CLAUDE.md, all skills</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 28px; display: flex; gap: 16px; max-width: 960px;">
+        <div class="stat" style="flex: 1;">
+          <div class="stat-num">14</div>
+          <div class="stat-label">Generated files</div>
+        </div>
+        <div class="stat" style="flex: 1;">
+          <div class="stat-num">647</div>
+          <div class="stat-label">Lines in interview</div>
+        </div>
+        <div class="stat" style="flex: 1;">
+          <div class="stat-num">10</div>
+          <div class="stat-label">Interview sections</div>
+        </div>
+        <div class="stat" style="flex: 1;">
+          <div class="stat-num">1×</div>
+          <div class="stat-label">Run once</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Skills -->
+    <div class="slide">
+      <div class="slide-label">Layer 1 · Policy</div>
+      <h2 style="margin-bottom: 8px;">15 skills — 11 PM · 4 shared</h2>
+      <p style="font-size: 14px; margin-bottom: 28px;">Each skill lives at <code>~/.claude/skills/</code> as a <code>SKILL.md</code> file. Skills are loaded at request time and merged with the matching <code>context.md</code>.</p>
+
+      <div style="max-width: 960px;">
+        <div class="skill-group-label">Think — reasoning and decision support</div>
+        <div class="grid-3" style="margin-bottom: 20px;">
+          <div class="skill-card">
+            <h3>problem-framing</h3>
+            <p>Turns a vague feature request into a precise, engineering-ready DOD with preliminary edge cases.</p>
+          </div>
+          <div class="skill-card">
+            <h3>feature-prioritization</h3>
+            <p>Compares features against the roadmap and makes trade-offs and blockers explicit.</p>
+          </div>
+          <div class="skill-card">
+            <h3>decision-logger</h3>
+            <p>Captures product decisions with rationale before they disappear into Slack history.</p>
+          </div>
+        </div>
+
+        <div class="skill-group-label">Produce — artifact generation</div>
+        <div class="grid-3" style="margin-bottom: 20px;">
+          <div class="skill-card">
+            <h3>feature-spec</h3>
+            <p>Complete feature spec as single source of truth for engineering, design, and QA.</p>
+          </div>
+          <div class="skill-card">
+            <h3>requirement-writer</h3>
+            <p>Full requirement covering happy path, edge cases, and all error states.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">task-writer</h3>
+            <p style="color: var(--teal-600);">Linear task with the standard four-part structure in the PM's preferred language.</p>
+          </div>
+        </div>
+
+        <div class="skill-group-label">Review — validation</div>
+        <div class="grid-3" style="margin-bottom: 20px;">
+          <div class="skill-card">
+            <h3>edge-case-finder</h3>
+            <p>Stress-tests a feature across 6 dimensions, prioritized by risk 🔴🟡🟢.</p>
+          </div>
+          <div class="skill-card">
+            <h3>scope-check</h3>
+            <p>Identifies scope creep and produces MVP vs. full scope comparison.</p>
+          </div>
+          <div class="skill-card">
+            <h3>qa-guide</h3>
+            <p>Complete, prioritized test plan organized by risk level and test type.</p>
+          </div>
+        </div>
+
+        <div class="skill-group-label">Technical Awareness + Shared</div>
+        <div class="grid-4">
+          <div class="skill-card">
+            <h3>feature-dependency</h3>
+            <p>Reads the repo to identify real dependencies for a planned feature.</p>
+          </div>
+          <div class="skill-card">
+            <h3>release-impact</h3>
+            <p>Analyzes blast radius before a change reaches production.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">design-system-check</h3>
+            <p style="color: var(--teal-600);">Scans design system before UI is requested — prevents duplicate components.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">wireframe-generator</h3>
+            <p style="color: var(--teal-600);">Mid-fidelity HTML wireframe covering all states using existing design system components.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Commands -->
+    <div class="slide">
+      <div class="slide-label">Layer 1 · Policy</div>
+      <h2 style="margin-bottom: 8px;">9 slash commands</h2>
+      <p style="font-size: 14px; margin-bottom: 28px; max-width: 680px;">Commands are skill chains. Each one runs one or more skills in sequence, passing outputs between steps. The PM approves each step before the next begins.</p>
+
+      <div style="max-width: 840px;">
+        <div class="cmd-row">
+          <div class="cmd-name">/new-feature</div>
+          <div class="cmd-desc">problem-framing → feature-dependency → edge-case-finder → design-system-check → wireframe-generator → feature-spec</div>
+          <div class="pill pill-blue">6 skills</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/release-check</div>
+          <div class="cmd-desc">release-impact → qa-guide · analyzes blast radius then generates test plan</div>
+          <div class="pill pill-blue">2 skills</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/sync-spec</div>
+          <div class="cmd-desc">Reads the repo and the spec, finds gaps and drifts between what was planned and what was built</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/write-task</div>
+          <div class="cmd-desc">Linear task with the standard four-part structure in the PM's working language</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/find-edges</div>
+          <div class="cmd-desc">Stress-tests a feature across 6 dimensions — permission, state, data, concurrency, integration, UX</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/prioritize</div>
+          <div class="cmd-desc">Compares a list of features against the current roadmap and makes trade-offs explicit</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/log-decision</div>
+          <div class="cmd-desc">Captures a decision: what was decided, why, what was rejected, and who approved</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/qa-plan</div>
+          <div class="cmd-desc">Generates a complete, prioritized test plan for a feature organized by risk level</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row" style="border-bottom: none;">
+          <div class="cmd-name">/meeting-prep</div>
+          <div class="cmd-desc">Prepares talking points, likely objections, and questions for an upcoming meeting</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Rules -->
+    <div class="slide">
+      <div class="slide-label">Layer 1 · Policy</div>
+      <h2 style="margin-bottom: 8px;">6 hard rules — always active</h2>
+      <p style="font-size: 14px; margin-bottom: 28px; max-width: 680px;">Rules are enforced in every response, regardless of which skill or command is running. They cannot be overridden by the PM in the chat.</p>
+
+      <div style="max-width: 760px;">
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">no-technical-decisions <span class="pill pill-blue" style="vertical-align: middle;">PM only</span></div>
+            <div class="rule-desc">Claude flags technical decisions but never makes them. Always includes a 📖 Further Reading block so the PM can prepare for the engineering conversation.</div>
+          </div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">no-scope-expansion <span class="pill pill-blue" style="vertical-align: middle;">PM only</span></div>
+            <div class="rule-desc">Claude never adds features or requirements the PM didn't ask for. At most one out-of-scope note per skill if something critical is missing.</div>
+          </div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">always-include-dod <span class="pill pill-blue" style="vertical-align: middle;">PM only</span></div>
+            <div class="rule-desc">Every feature-related output includes a Definition of Done. The DOD is not optional — it is required for the output to be considered complete.</div>
+          </div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">always-include-edge-cases <span class="pill pill-blue" style="vertical-align: middle;">PM only</span></div>
+            <div class="rule-desc">No requirement passes without edge case coverage. Every requirement output includes at minimum a risk-flagged edge case list.</div>
+          </div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">flag-authority-limits <span class="pill pill-teal" style="vertical-align: middle;">Shared</span></div>
+            <div class="rule-desc">Any decision outside the PM's authority is marked ⚠️ Needs Approval with a clear statement of who must approve and why.</div>
+          </div>
+        </div>
+        <div class="rule-row" style="border-bottom: none;">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">working-language <span class="pill pill-teal" style="vertical-align: middle;">Shared</span></div>
+            <div class="rule-desc">All outputs are in the PM's chosen language (Persian or English). Technical terms stay in English regardless. Set once in CLAUDE.md, never changed by Claude.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Init flow -->
+    <div class="slide">
+      <div class="slide-label">Process · Setup</div>
+      <h2 style="margin-bottom: 8px;">Init flow — from zero to ready</h2>
+      <p style="font-size: 14px; margin-bottom: 28px; max-width: 680px;">Run <code>claude-pm init --role pm</code> from your product repo. The entire setup takes under a minute.</p>
+
+      <div style="max-width: 760px;">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Guard checks</h3>
+            <p>Verifies git repo exists. Checks for prior initialization (use <code>--force</code> to override). Warns if Claude Code is not detected.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Global install → ~/.claude/</h3>
+            <p>Copies all 15 skill files, 9 commands, output style, and <code>/start-interview</code> command. Never overwrites existing files unless forced.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Project scaffold → product repo</h3>
+            <p>Copies full <code>policy/</code> tree to <code>claude-workflow/policy/</code>, writes placeholder <code>CLAUDE.md</code>, <code>settings.json</code>, <code>product-agent.md</code>, and 11 <code>context.md</code> placeholders. Creates <code>.claude/outputs/</code>.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Gitignore patch</h3>
+            <p>Adds <code>CLAUDE.local.md</code> and <code>.claude/settings.local.json</code> to <code>.gitignore</code>. These files are never committed.</p>
+          </div>
+        </div>
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Run /start-interview in Claude Code</h3>
+            <p>Opens the 647-line PM interview. Asks working language first. Generates 14 files. PM approves each write. Context persists forever — update only the files that change.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Summary -->
+    <div class="slide" style="background: var(--bg-sec);">
+      <div class="slide-label">Summary</div>
+      <h2 style="margin-bottom: 36px;">What this system delivers</h2>
+
+      <div class="grid-3" style="max-width: 960px; margin-bottom: 32px;">
+        <div class="card">
+          <div class="pill pill-blue" style="margin-bottom: 12px;">Context</div>
+          <h3 style="margin-bottom: 8px;">Zero re-explanation</h3>
+          <p style="font-size: 13px;">CLAUDE.md and 11 context files carry all product and team context permanently. Claude knows your product from the first message.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-teal" style="margin-bottom: 12px;">Workflow</div>
+          <h3 style="margin-bottom: 8px;">PM-specific outputs</h3>
+          <p style="font-size: 13px;">Every deliverable follows the 6-section pm-standard format with DOD, out-of-scope, and authority flags built in.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-purple" style="margin-bottom: 12px;">Boundaries</div>
+          <h3 style="margin-bottom: 8px;">Hard rules enforced</h3>
+          <p style="font-size: 13px;">Claude never makes technical decisions, never expands scope, always flags authority limits. The PM stays in control.</p>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; max-width: 960px;">
+        <div class="stat" style="flex: 1;"><div class="stat-num">15</div><div class="stat-label">Skills available</div></div>
+        <div class="stat" style="flex: 1;"><div class="stat-num">9</div><div class="stat-label">Slash commands</div></div>
+        <div class="stat" style="flex: 1;"><div class="stat-num">6</div><div class="stat-label">Always-active rules</div></div>
+        <div class="stat" style="flex: 1;"><div class="stat-num">14</div><div class="stat-label">Generated context files</div></div>
+      </div>
+    </div>
+
+  </body>
+</html>

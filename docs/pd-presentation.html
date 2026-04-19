@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claude Code for Product Designers</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --blue-50: #e6f1fb; --blue-100: #b5d4f4; --blue-400: #378add;
+        --blue-600: #185fa5; --blue-800: #0c447c; --blue-900: #042c53;
+        --teal-50: #e1f5ee; --teal-100: #9fe1cb; --teal-400: #1d9e75;
+        --teal-600: #0f6e56; --teal-800: #085041;
+        --purple-50: #eeedfe; --purple-100: #cecbf6; --purple-400: #7f77dd;
+        --purple-600: #534ab7; --purple-800: #3c3489;
+        --amber-50: #faeeda; --amber-100: #fac775; --amber-400: #ba7517;
+        --amber-600: #854f0b; --amber-800: #633806;
+        --coral-50: #faece7; --coral-400: #d85a30;
+        --coral-600: #993c1d; --coral-800: #712b13;
+        --gray-50: #f1efe8; --gray-100: #d3d1c7; --gray-200: #b4b2a9;
+        --gray-400: #888780; --gray-600: #5f5e5a; --gray-800: #444441;
+        --text: #1a1a18; --text-sec: #5f5e5a; --text-hint: #888780;
+        --bg: #ffffff; --bg-sec: #f8f7f4; --bg-ter: #f1efe8;
+        --border: rgba(0,0,0,0.1); --border-med: rgba(0,0,0,0.18);
+        --radius: 8px; --radius-lg: 12px;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+      /* Nav */
+      .nav { background: var(--bg-sec); border-bottom: 0.5px solid var(--border-med); padding: 12px 72px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); }
+      .nav-links { display: flex; gap: 24px; align-items: center; }
+      .nav-link { font-size: 12px; font-weight: 500; color: var(--purple-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--purple-50); }
+      .nav-link.active { background: var(--purple-600); color: white; }
+      .nav-link:hover { opacity: 0.8; }
+
+      /* Slides */
+      .slide { min-height: 100vh; padding: 60px 72px; display: flex; flex-direction: column; justify-content: center; border-bottom: 1px solid var(--border); }
+      .slide-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+
+      /* Typography */
+      h2 { font-size: 36px; font-weight: 500; color: var(--text); }
+      h3 { font-size: 17px; font-weight: 500; color: var(--text); }
+      p { font-size: 15px; font-weight: 400; color: var(--text-sec); line-height: 1.7; }
+      .lead { font-size: 18px; font-weight: 400; color: var(--text-sec); line-height: 1.6; }
+
+      /* Pills */
+      .pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+      .pill-blue { background: var(--blue-50); color: var(--blue-800); }
+      .pill-teal { background: var(--teal-50); color: var(--teal-800); }
+      .pill-purple { background: var(--purple-50); color: var(--purple-800); }
+      .pill-amber { background: var(--amber-50); color: var(--amber-800); }
+      .pill-gray { background: var(--gray-50); color: var(--gray-800); }
+      .pill-coral { background: var(--coral-50); color: var(--coral-800); }
+
+      /* Cards */
+      .card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 20px 24px; }
+      .card-sec { background: var(--bg-sec); border-radius: var(--radius-lg); padding: 20px 24px; }
+
+      /* Grids */
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+      .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+
+      /* Arch layers */
+      .arch-layer { border-radius: var(--radius); padding: 14px 20px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+      .arch-arrow { text-align: center; color: var(--gray-400); font-size: 16px; margin: 4px 0; line-height: 1; }
+
+      /* File rows */
+      .file-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+      .file-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+      .file-name { font-size: 13px; font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; flex: 0 0 auto; }
+      .file-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
+
+      /* Step rows */
+      .step-row { display: flex; gap: 16px; margin-bottom: 20px; }
+      .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--purple-600); color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+      .step-body h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+      .step-body p { font-size: 13px; color: var(--text-sec); }
+
+      /* Cmd rows */
+      .cmd-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+      .cmd-name { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; font-weight: 500; color: var(--purple-800); min-width: 200px; }
+      .cmd-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
+
+      /* Rule rows */
+      .rule-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+      .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--purple-400); margin-top: 8px; flex-shrink: 0; }
+      .rule-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+      .rule-desc { font-size: 12px; color: var(--text-sec); }
+
+      /* Skill cards */
+      .skill-card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 16px 18px; }
+      .skill-card h3 { font-size: 13px; font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; margin-bottom: 6px; }
+      .skill-card p { font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+      .skill-group-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; margin-top: 24px; }
+      .skill-group-label:first-child { margin-top: 0; }
+
+      /* Stats */
+      .stat { text-align: center; padding: 20px; background: var(--bg-sec); border-radius: var(--radius-lg); }
+      .stat-num { font-size: 36px; font-weight: 500; color: var(--text); }
+      .stat-label { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+
+      /* Callouts */
+      .callout-teal { padding: 16px 20px; background: var(--teal-50); border-radius: var(--radius); border-left: 3px solid var(--teal-400); }
+      .callout-teal p { font-size: 13px; color: var(--teal-800); }
+      .callout-amber { padding: 16px 20px; background: var(--amber-50); border-radius: var(--radius); border-left: 3px solid var(--amber-400); }
+      .callout-amber p { font-size: 13px; color: var(--amber-800); }
+      .callout-purple { padding: 16px 20px; background: var(--purple-50); border-radius: var(--radius); border-left: 3px solid var(--purple-400); }
+      .callout-purple p { font-size: 13px; color: var(--purple-800); }
+
+      /* Code */
+      code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--bg-ter); padding: 2px 6px; border-radius: 4px; }
+      .code-block { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--gray-800); color: #e8e6e0; padding: 12px 16px; border-radius: 6px; display: block; line-height: 1.8; }
+
+      /* Divider */
+      .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+      /* Title slide */
+      .slide-title { background: var(--purple-800); color: white; }
+      .title-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); margin-bottom: 48px; }
+      .title-h1 { font-size: 52px; font-weight: 500; color: white; line-height: 1.1; max-width: 700px; margin-bottom: 20px; }
+      .title-desc { font-size: 18px; font-weight: 400; color: rgba(255,255,255,0.55); max-width: 560px; margin-bottom: 56px; }
+      .title-stats { display: flex; gap: 0; }
+      .title-stat { padding: 0 32px 0 0; margin-right: 32px; border-right: 1px solid rgba(255,255,255,0.12); }
+      .title-stat:last-child { border-right: none; }
+      .title-stat-num { font-size: 32px; font-weight: 500; color: white; }
+      .title-stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+    </style>
+  </head>
+  <body>
+
+    <nav class="nav">
+      <span class="nav-title">Product Team · Claude Code</span>
+      <div class="nav-links">
+        <a href="pm-presentation.html" class="nav-link">Product Manager</a>
+        <a href="pd-presentation.html" class="nav-link active">Product Designer</a>
+      </div>
+    </nav>
+
+    <!-- Slide 1: Title -->
+    <div class="slide slide-title">
+      <div class="title-label">Product Team Claude Skills · 2026</div>
+      <h1 class="title-h1">Claude Code for Product Designers</h1>
+      <p class="title-desc">A Figma-powered workflow that turns Claude into a design-aware partner — Vuetify-compatible, policy-enforcing, and context-rich from day one.</p>
+      <div class="title-stats">
+        <div class="title-stat">
+          <div class="title-stat-num">11</div>
+          <div class="title-stat-label">Skills</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">6</div>
+          <div class="title-stat-label">Commands</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">4</div>
+          <div class="title-stat-label">Context layers</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">11</div>
+          <div class="title-stat-label">Generated files</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Context -->
+    <div class="slide">
+      <div class="slide-label">Context</div>
+      <h2 style="margin-bottom: 8px;">Why generic AI tools fall short for designers</h2>
+      <p style="font-size: 14px; margin-bottom: 32px;">Design reviews, Figma handoffs, and Vuetify constraint checks require deep product and system knowledge that a generic assistant doesn't have.</p>
+      <div class="grid-2">
+        <div class="card">
+          <div class="pill pill-coral" style="margin-bottom: 12px;">Pain point 1</div>
+          <h3 style="margin-bottom: 8px;">No design system awareness</h3>
+          <p style="font-size: 13px;">Generic Claude doesn't know which Vuetify components your product uses, what's been customized, or what gaps exist in the design system.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-coral" style="margin-bottom: 12px;">Pain point 2</div>
+          <h3 style="margin-bottom: 8px;">No policy context</h3>
+          <p style="font-size: 13px;">Design decisions must follow product policy (RTL, accessibility baseline, state coverage). A generic assistant can't enforce rules it doesn't know about.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-coral" style="margin-bottom: 12px;">Pain point 3</div>
+          <h3 style="margin-bottom: 8px;">Disconnected from Figma</h3>
+          <p style="font-size: 13px;">Describing a design in chat is slow and lossy. The context should come directly from the Figma file — components, tokens, flows, and states.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-coral" style="margin-bottom: 12px;">Pain point 4</div>
+          <h3 style="margin-bottom: 8px;">Scope overreach</h3>
+          <p style="font-size: 13px;">Generic Claude suggests adding scope beyond what the PM approved in the wireframe — creating tension between design and product management.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: 4-Layer Architecture -->
+    <div class="slide">
+      <div class="slide-label">Design Principle</div>
+      <h2 style="margin-bottom: 8px;">4-Layer Context Assembly</h2>
+      <p style="font-size: 14px; margin-bottom: 32px; max-width: 680px;">Same 4-layer model as the PM workflow. The key difference: Layer 2 (the interview) is Figma-powered — Claude reads the design file directly instead of asking questions.</p>
+
+      <div style="max-width: 760px;">
+        <div class="arch-layer" style="background: var(--purple-50);">
+          <div>
+            <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--purple-600);">Layer 1 · Policy</span>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">Skills, commands, rules, output style</div>
+            <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>~/.claude/</code> and <code>claude-workflow/policy/</code></div>
+          </div>
+          <div class="pill pill-purple">Fixed · npm update</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--teal-50);">
+          <div>
+            <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal-600);">Layer 2 · Figma Interview</span>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">Automated Figma-based onboarding</div>
+            <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>claude-workflow/interview/designer-interview.md</code> · reads Figma via MCP</div>
+          </div>
+          <div class="pill pill-teal">Figma-powered · run once</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--blue-50);">
+          <div>
+            <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-600);">Layer 3 · Dynamic</span>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">CLAUDE.md + 7 context files + 2 design agents</div>
+            <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>CLAUDE.md</code>, <code>.claude/skills/product-designer/*/context.md</code></div>
+          </div>
+          <div class="pill pill-blue">Generated · unique per designer</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--amber-50);">
+          <div>
+            <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-600);">Layer 4 · Personal</span>
+            <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">Private notes and local settings</div>
+            <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>CLAUDE.local.md</code>, <code>.claude/settings.local.json</code> · gitignored</div>
+          </div>
+          <div class="pill pill-amber">Private · never committed</div>
+        </div>
+      </div>
+
+      <div class="callout-purple" style="margin-top: 28px; max-width: 760px;">
+        <p><strong>Key difference from PM:</strong> The designer interview doesn't ask questions. It connects to Figma via MCP, reads your design system and product screens directly, and generates all 11 context files from the Figma file content.</p>
+      </div>
+    </div>
+
+    <!-- Slide 4: File Map -->
+    <div class="slide">
+      <div class="slide-label">Files · What Each One Does</div>
+      <h2 style="margin-bottom: 8px;">Every file, explained</h2>
+      <p style="font-size: 14px; margin-bottom: 32px;">The designer setup generates 11 files — fewer than the PM (14), because Figma data replaces several manual interview answers.</p>
+
+      <div class="grid-2" style="gap: 32px; max-width: 960px;">
+        <!-- Global files -->
+        <div>
+          <div style="font-size: 11px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">Global — ~/.claude/</div>
+
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">SK</div>
+            <div class="file-name" style="min-width: 200px;">skills/product-designer/*/SKILL.md</div>
+            <div class="file-desc">7 files · design review, Figma-to-code, constraint check, microcopy, handoff, research, policy review</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">SK</div>
+            <div class="file-name" style="min-width: 200px;">skills/shared/*/SKILL.md</div>
+            <div class="file-desc">4 files · wireframe-generator, design-system-check, task-writer, presentation-style</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">CM</div>
+            <div class="file-name" style="min-width: 200px;">commands/product-designer/*.md</div>
+            <div class="file-desc">6 slash commands · each chains one or more skills</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--gray-50); color: var(--gray-800);">OS</div>
+            <div class="file-name" style="min-width: 200px;">output-styles/design-standard.md</div>
+            <div class="file-desc">Response format with flag system (🔴 Blocker, 🟡 Important, 🟢 Suggestion) and state coverage table</div>
+          </div>
+          <div class="file-row" style="border-bottom: none;">
+            <div class="file-icon" style="background: var(--gray-50); color: var(--gray-800);">IV</div>
+            <div class="file-name" style="min-width: 200px;">commands/start-designer-interview.md</div>
+            <div class="file-desc">Entry point for designer onboarding · triggers the Figma-based interview</div>
+          </div>
+        </div>
+
+        <!-- Project-level files -->
+        <div>
+          <div style="font-size: 11px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;">Project-level — inside product repo</div>
+
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">CL</div>
+            <div class="file-name">CLAUDE.md</div>
+            <div class="file-desc">Designer profile + product design context + working language · generated from Figma</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">CX</div>
+            <div class="file-name">skills/*/context.md</div>
+            <div class="file-desc">7 files · design system details, Vuetify constraints, component inventory — extracted from Figma</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">AG</div>
+            <div class="file-name">agents/design-agent.md</div>
+            <div class="file-desc">Primary design agent · handles reviews, checks, and handoffs</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">AG</div>
+            <div class="file-name">agents/handoff-agent.md</div>
+            <div class="file-desc">Specialized handoff agent · ensures engineering receives complete, implementable specs</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--gray-50); color: var(--gray-800);">ST</div>
+            <div class="file-name">settings.json</div>
+            <div class="file-desc">Claude Code permissions for this repo · includes Figma MCP access settings</div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800);">OP</div>
+            <div class="file-name">outputs/</div>
+            <div class="file-desc">Saved deliverables · design reviews, handoff docs, QA reports — MD or HTML</div>
+          </div>
+          <div class="file-row" style="border-bottom: none;">
+            <div class="file-icon" style="background: var(--amber-50); color: var(--amber-800);">PR</div>
+            <div class="file-name">CLAUDE.local.md</div>
+            <div class="file-desc">Private notes · gitignored · personal context loaded alongside CLAUDE.md</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: How a request is formed -->
+    <div class="slide">
+      <div class="slide-label">Request Assembly</div>
+      <h2 style="margin-bottom: 8px;">How a Claude request is formed</h2>
+      <p style="font-size: 14px; margin-bottom: 32px; max-width: 680px;">The same 4-layer merge applies to every designer command. Here's what happens when you run <code>/design-review</code>.</p>
+
+      <div style="max-width: 860px;">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>CLAUDE.md is loaded automatically</h3>
+            <p>Claude Code injects <code>CLAUDE.md</code> into every session. It contains the designer's profile, product design language, Vuetify version, design system boundaries, and working language.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Command file is read</h3>
+            <p><code>~/.claude/commands/product-designer/design-review.md</code> defines the chain: design-policy-review → vuetify-constraint-check → unified review report. Each step has a defined output format.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>SKILL.md is read for each skill</h3>
+            <p><code>~/.claude/skills/product-designer/design-policy-review/SKILL.md</code> defines <strong>what to check and how</strong> — Vuetify coverage check, RTL layout rules, state coverage requirements, microcopy standards, accessibility baseline.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>context.md is read for the same skill</h3>
+            <p><code>.claude/skills/product-designer/design-policy-review/context.md</code> contains <strong>your product's design system</strong> — component inventory extracted from Figma, known gaps, customized components, and team-specific rules.</p>
+          </div>
+        </div>
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Layers merge → a complete, contextualized review</h3>
+            <p>SKILL.md (check instructions) + context.md (your Figma-extracted design system) + CLAUDE.md (designer profile) + design-standard.md (output format with flag system) = a review that knows your product, your components, and your rules.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout-teal" style="margin-top: 8px; max-width: 860px;">
+        <p><strong>SKILL.md answers "how to review".</strong> context.md answers "against which design system and constraints". The context was extracted from Figma — no manual description needed.</p>
+      </div>
+    </div>
+
+    <!-- Slide 6: Designer Interview (Figma) -->
+    <div class="slide">
+      <div class="slide-label">Layer 2 · Figma Interview</div>
+      <h2 style="margin-bottom: 8px;">The designer interview — automated from Figma</h2>
+      <p style="font-size: 14px; margin-bottom: 32px; max-width: 680px;">Unlike the PM interview (647 lines of questions), the designer onboarding connects to Figma via MCP and reads the design system and product screens directly. Two questions. No manual context entry.</p>
+
+      <div style="max-width: 840px;">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Verify Figma MCP access</h3>
+            <p>Checks <code>whoami</code> via Figma MCP to confirm access is available before starting. If Figma MCP is not connected, provides setup instructions.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Two quick questions</h3>
+            <p>Working language (Persian or English) and whether the designer wants to connect an existing git repository. These are the only manual inputs required.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Designer provides Figma file links</h3>
+            <p>Design system file link + one or more product screen links. These are the source of truth for all generated context.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Claude reads Figma directly</h3>
+            <p>Uses Figma MCP tools to read components, color tokens, text styles, spacing variables, component variants, and screen flows. No copy-pasting, no manual description.</p>
+          </div>
+        </div>
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>11 files generated and written</h3>
+            <p>CLAUDE.md, design-agent.md, handoff-agent.md, design-standard.md, and 7 skill context files. Designer approves each write. Context reflects the actual Figma file.</p>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 28px; display: flex; gap: 16px; max-width: 840px;">
+        <div class="stat" style="flex: 1;">
+          <div class="stat-num">11</div>
+          <div class="stat-label">Generated files</div>
+        </div>
+        <div class="stat" style="flex: 1;">
+          <div class="stat-num">2</div>
+          <div class="stat-label">Manual questions</div>
+        </div>
+        <div class="stat" style="flex: 1;">
+          <div class="stat-num">Figma</div>
+          <div class="stat-label">Source of context</div>
+        </div>
+        <div class="stat" style="flex: 1;">
+          <div class="stat-num">1×</div>
+          <div class="stat-label">Run once</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: Skills -->
+    <div class="slide">
+      <div class="slide-label">Layer 1 · Policy</div>
+      <h2 style="margin-bottom: 8px;">11 skills — 7 designer · 4 shared</h2>
+      <p style="font-size: 14px; margin-bottom: 28px;">Shared skills are available to both the PM and the Designer. Designer-specific skills cover the full design workflow from research to handoff.</p>
+
+      <div style="max-width: 960px;">
+        <div class="skill-group-label">Review — design quality and policy compliance</div>
+        <div class="grid-3" style="margin-bottom: 20px;">
+          <div class="skill-card">
+            <h3>design-policy-review</h3>
+            <p>Checks design against policy: Vuetify coverage, RTL layout, state coverage, microcopy quality, and accessibility baseline.</p>
+          </div>
+          <div class="skill-card">
+            <h3>vuetify-constraint-check</h3>
+            <p>For every UI component, verifies Vuetify 3 coverage. Maps each element to a component, checks theming, flags gaps with options.</p>
+          </div>
+          <div class="skill-card">
+            <h3>design-qa</h3>
+            <p>QA-perspective review of a design: checks all states are covered, identifies implementation ambiguities before handoff.</p>
+          </div>
+        </div>
+
+        <div class="skill-group-label">Produce — artifacts and deliverables</div>
+        <div class="grid-3" style="margin-bottom: 20px;">
+          <div class="skill-card">
+            <h3>design-handoff</h3>
+            <p>Generates a complete handoff document for engineering with component mapping, state specs, and Vuetify prop recommendations.</p>
+          </div>
+          <div class="skill-card">
+            <h3>figma-to-code</h3>
+            <p>Translates Figma screens into Vue + Vuetify code with correct component choices, props, and responsive behavior.</p>
+          </div>
+          <div class="skill-card">
+            <h3>microcopy-writer</h3>
+            <p>Writes UI copy (labels, placeholders, error messages, empty states) following product voice and tone guidelines.</p>
+          </div>
+        </div>
+
+        <div class="skill-group-label">Research + Shared</div>
+        <div class="grid-4">
+          <div class="skill-card">
+            <h3>design-research</h3>
+            <p>Structures research questions, synthesizes user feedback, and surfaces insights in a format PMs can act on.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">design-system-check</h3>
+            <p style="color: var(--teal-600);">Scans design system before new UI is requested — prevents duplicate components.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">wireframe-generator</h3>
+            <p style="color: var(--teal-600);">Mid-fidelity HTML wireframe covering all states using existing design system components.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">presentation-style</h3>
+            <p style="color: var(--teal-600);">Generates polished single-file HTML slide decks following the product design system.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Commands -->
+    <div class="slide">
+      <div class="slide-label">Layer 1 · Policy</div>
+      <h2 style="margin-bottom: 8px;">6 slash commands</h2>
+      <p style="font-size: 14px; margin-bottom: 28px; max-width: 680px;">Designer commands cover the full design cycle — from research and review through Figma-to-code translation and final handoff.</p>
+
+      <div style="max-width: 840px;">
+        <div class="cmd-row">
+          <div class="cmd-name">/design-review</div>
+          <div class="cmd-desc">design-policy-review → vuetify-constraint-check → unified review report with blockers, improvements, and required actions</div>
+          <div class="pill pill-purple">2 skills</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/design-handoff</div>
+          <div class="cmd-desc">Runs design-qa then generates a complete handoff document for engineering — component specs, state coverage, Vuetify props</div>
+          <div class="pill pill-purple">2 skills</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/figma-to-code</div>
+          <div class="cmd-desc">Reads a Figma screen via MCP and translates it into Vue + Vuetify 3 code following your design system conventions</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/design-qa</div>
+          <div class="cmd-desc">QA-lens review of a design before handoff — all states covered, no implementation ambiguities, no blockers outstanding</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row">
+          <div class="cmd-name">/design-research</div>
+          <div class="cmd-desc">Structures research questions and synthesizes user feedback into PM-ready insights with confidence levels</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+        <div class="cmd-row" style="border-bottom: none;">
+          <div class="cmd-name">/microcopy-writer</div>
+          <div class="cmd-desc">Writes UI copy for a screen or component following product voice — labels, placeholders, errors, empty states, confirmations</div>
+          <div class="pill pill-gray">1 skill</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Rules -->
+    <div class="slide">
+      <div class="slide-label">Layer 1 · Policy</div>
+      <h2 style="margin-bottom: 8px;">5 hard rules — always active</h2>
+      <p style="font-size: 14px; margin-bottom: 28px; max-width: 680px;">Designer rules enforce design boundaries: Vuetify compatibility, policy-first decisions, wireframes before high-fidelity, and authority respect.</p>
+
+      <div style="max-width: 760px;">
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">design-policy-first <span class="pill pill-purple" style="vertical-align: middle;">Designer only</span></div>
+            <div class="rule-desc">Every design recommendation is checked against <code>design-policy.md</code> before being presented. Policy violations are flagged, never silently ignored.</div>
+          </div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">vuetify-compatibility <span class="pill pill-purple" style="vertical-align: middle;">Designer only</span></div>
+            <div class="rule-desc">All UI suggestions must use Vuetify 3 components where they exist. Custom components are only proposed when Vuetify has no coverage. Always includes component name and key props.</div>
+          </div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">wireframe-before-design <span class="pill pill-purple" style="vertical-align: middle;">Designer only</span></div>
+            <div class="rule-desc">Claude never generates high-fidelity UI without a wireframe step first. The wireframe must be approved before design work proceeds.</div>
+          </div>
+        </div>
+        <div class="rule-row">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">flag-authority-limits <span class="pill pill-teal" style="vertical-align: middle;">Shared</span></div>
+            <div class="rule-desc">Any decision outside the designer's authority is marked ⚠️ Authority with a clear statement of who must sign off. Applies to design system changes, scope additions, and new patterns.</div>
+          </div>
+        </div>
+        <div class="rule-row" style="border-bottom: none;">
+          <div class="rule-dot"></div>
+          <div>
+            <div class="rule-title">working-language <span class="pill pill-teal" style="vertical-align: middle;">Shared</span></div>
+            <div class="rule-desc">All outputs in the designer's chosen language. Component names, prop names, and Vuetify terms always stay in English. Wireframe labels use the working language.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Init flow -->
+    <div class="slide">
+      <div class="slide-label">Process · Setup</div>
+      <h2 style="margin-bottom: 8px;">Init flow — from zero to ready</h2>
+      <p style="font-size: 14px; margin-bottom: 28px; max-width: 680px;">Run <code>claude-pm init --role designer</code> from your product repo. The Figma interview replaces the long PM interview with direct file reading.</p>
+
+      <div style="max-width: 760px;">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Guard checks</h3>
+            <p>Verifies git repo exists. Checks for prior initialization. Warns if Claude Code is not detected.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Global install → ~/.claude/</h3>
+            <p>Copies all 11 skill files (7 designer + 4 shared), 6 commands, design-standard.md output style, and <code>/start-designer-interview</code> command.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Project scaffold → product repo</h3>
+            <p>Copies full <code>policy/</code> tree to <code>claude-workflow/policy/</code>, writes placeholder <code>CLAUDE.md</code>, <code>settings.json</code>, <code>design-agent.md</code>, <code>handoff-agent.md</code>, and 7 <code>context.md</code> placeholders. Creates <code>.claude/outputs/</code>.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Gitignore patch</h3>
+            <p>Adds <code>CLAUDE.local.md</code> and <code>.claude/settings.local.json</code> to <code>.gitignore</code>.</p>
+          </div>
+        </div>
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Run /start-designer-interview in Claude Code</h3>
+            <p>Claude checks Figma MCP access, asks 2 questions, reads your Figma files directly, and generates all 11 context files. Designer approves each write.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 11: Summary -->
+    <div class="slide" style="background: var(--bg-sec);">
+      <div class="slide-label">Summary</div>
+      <h2 style="margin-bottom: 36px;">What this system delivers</h2>
+
+      <div class="grid-3" style="max-width: 960px; margin-bottom: 32px;">
+        <div class="card">
+          <div class="pill pill-purple" style="margin-bottom: 12px;">Figma-native</div>
+          <h3 style="margin-bottom: 8px;">Context from the source</h3>
+          <p style="font-size: 13px;">Context isn't typed in chat — it's extracted from your Figma file. Component inventory, tokens, and variants are always accurate.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-teal" style="margin-bottom: 12px;">Vuetify-aware</div>
+          <h3 style="margin-bottom: 8px;">Every suggestion is implementable</h3>
+          <p style="font-size: 13px;">All design suggestions use Vuetify 3 components with correct props. No suggestions that engineering can't implement with your stack.</p>
+        </div>
+        <div class="card">
+          <div class="pill pill-blue" style="margin-bottom: 12px;">Policy-enforced</div>
+          <h3 style="margin-bottom: 8px;">Rules run automatically</h3>
+          <p style="font-size: 13px;">Policy compliance, state coverage, and authority limits are checked on every response. No manual checklist needed.</p>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px; max-width: 960px;">
+        <div class="stat" style="flex: 1;"><div class="stat-num">11</div><div class="stat-label">Skills available</div></div>
+        <div class="stat" style="flex: 1;"><div class="stat-num">6</div><div class="stat-label">Slash commands</div></div>
+        <div class="stat" style="flex: 1;"><div class="stat-num">5</div><div class="stat-label">Always-active rules</div></div>
+        <div class="stat" style="flex: 1;"><div class="stat-num">11</div><div class="stat-label">Generated context files</div></div>
+      </div>
+    </div>
+
+  </body>
+</html>
