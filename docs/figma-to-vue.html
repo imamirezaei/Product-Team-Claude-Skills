@@ -83,7 +83,7 @@
   .layout { display: flex; min-height: 100vh; padding-top: 44px; }
 
   /* ───────────────── NAV (FIXED) ───────────────── */
-  nav {
+  .doc-nav {
     width: var(--nav-w);
     height: calc(100vh - 44px);
     position: fixed;
@@ -152,7 +152,7 @@
     letter-spacing: 0.09em;
   }
 
-  nav a {
+  .doc-nav a {
     display: block;
     padding: 5px 18px;
     font-size: 12px;
@@ -166,16 +166,16 @@
     text-overflow: ellipsis;
   }
 
-  nav a:hover { background: var(--surface); color: var(--text); }
+  .doc-nav a:hover { background: var(--surface); color: var(--text); }
 
-  nav a.active {
+  .doc-nav a.active {
     color: var(--pm-b);
     background: var(--pm);
     font-weight: 600;
     border-right-color: var(--pm-b);
   }
 
-  [data-lang="fa"] nav a.active { border-right-color: transparent; border-left-color: var(--pm-b); }
+  [data-lang="fa"] .doc-nav a.active { border-right-color: transparent; border-left-color: var(--pm-b); }
 
   /* ───────────────── MAIN ───────────────── */
   main {
@@ -399,16 +399,16 @@
 <body>
 <header class="site-nav">
   <a class="site-nav__brand" href="index.html">Product Team · Claude</a>
-  <nav class="site-nav__links">
+  <div class="site-nav__links">
     <a href="index.html" class="site-nav__link">Context Pipeline</a>
     <a href="presentation.html" class="site-nav__link">PM Workflow</a>
     <a href="figma-to-vue.html" class="site-nav__link site-nav__link--active">Figma → Vue</a>
-  </nav>
+  </div>
 </header>
 <div class="layout" data-lang="en" id="root">
 
 <!-- ══════════════ NAV (FIXED) ══════════════ -->
-<nav>
+<nav class="doc-nav">
   <div class="nav-header">
     <h1>Figma → Vue / Vuetify 3</h1>
     <p class="en">Design ↔ Tech Reference</p>
@@ -1239,13 +1239,13 @@ Figma <span class="num">270°</span> → CSS <span class="num">270deg</span>  <s
 
   // Active nav highlight on scroll
   const sections = document.querySelectorAll('section[id]');
-  const links    = document.querySelectorAll('nav a');
+  const links    = document.querySelectorAll('.doc-nav a');
 
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         links.forEach(l => l.classList.remove('active'));
-        const a = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        const a = document.querySelector(`.doc-nav a[href="#${e.target.id}"]`);
         if (a) a.classList.add('active');
       }
     });
