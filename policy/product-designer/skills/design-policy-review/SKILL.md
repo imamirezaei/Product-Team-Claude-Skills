@@ -39,14 +39,42 @@ When running standalone, deliver a full response (not intermediate format).
 
 ## Workflow
 
-### Step 1: Collect input
+## Figma MCP requirement
 
-Ask the designer to describe or paste:
-- The feature being reviewed
-- The states that have been designed (happy path, empty, error, loading, etc.)
-- Any specific decisions they want checked
+This skill reads the design directly from Figma. Text descriptions are not accepted as a substitute.
 
-If running in chain, inputs come from the `/design-review` command context.
+### Step 0: Connect and read
+
+Before running any other step:
+
+1. Ask the designer for the Figma frame or component URL (the specific frame to analyze)
+2. Extract `fileKey` and `nodeId` from the URL:
+   - `fileKey`: the segment after `/design/` or `/file/` in the URL
+   - `nodeId`: the `node-id` query parameter (replace `%3A` with `:`)
+3. Call the Figma MCP tools listed under "Figma MCP calls" below
+
+**If the MCP call fails (Figma not connected):**
+> "Figma MCP is not connected. This skill requires direct Figma access.
+> Open Claude Code → Settings → MCP Servers → add the Figma MCP → authorize.
+> Once connected, share the frame link and we'll start."
+Stop completely. Do not continue with descriptions.
+
+**If no link is provided:**
+> "Share the Figma frame link to proceed. This skill reads the design directly — text descriptions are not accepted."
+Stop. Do not ask follow-up questions based on descriptions.
+
+### Figma MCP calls (Step 0)
+
+Run both:
+1. `get_design_context(fileKey, nodeId)` — extracts layout, spacing, text layers, component usage, and layer naming
+2. `get_variable_defs(fileKey)` — extracts token usage to verify colors and spacing are tokenized, not hardcoded
+
+From the Figma data, the skill reads:
+- Feature context (from frame name and structure)
+- States present (from layer and variant names)
+- Token usage (from variable references in the design)
+
+The designer may add specific decisions they want checked — but only as a supplementary note **after** the frame link is provided, not as a replacement for the Figma read.
 
 ### Step 2: Run the policy checklist
 
@@ -152,6 +180,7 @@ Step 1 complete. Proceeding to vuetify-constraint-check.
 - Never skip the states coverage table — even if all states are covered
 - Never make design decisions on behalf of the designer — flag conflicts, present options
 - Do not perform deep Vuetify analysis in this skill — that is `vuetify-constraint-check`'s job
+- Never ask the designer to describe the design — read it from Figma. Designers may only add context they want explicitly checked after the frame is read.
 
 ## Context variables (populated from CLAUDE.md)
 

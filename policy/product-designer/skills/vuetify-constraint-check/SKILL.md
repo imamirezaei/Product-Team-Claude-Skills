@@ -25,13 +25,43 @@ When running standalone, deliver a full response.
 
 ## Workflow
 
-### Step 1: Build the component list
+## Figma MCP requirement
 
-Ask the designer to list all UI elements in the design, or extract them from the feature description / Figma summary. For each element, identify:
+This skill reads the design directly from Figma. Text descriptions are not accepted as a substitute.
+
+### Step 0: Connect and read
+
+Before running any other step:
+
+1. Ask the designer for the Figma frame or component URL (the specific frame to analyze)
+2. Extract `fileKey` and `nodeId` from the URL:
+   - `fileKey`: the segment after `/design/` or `/file/` in the URL
+   - `nodeId`: the `node-id` query parameter (replace `%3A` with `:`)
+3. Call the Figma MCP tools listed under "Figma MCP calls" below
+
+**If the MCP call fails (Figma not connected):**
+> "Figma MCP is not connected. This skill requires direct Figma access.
+> Open Claude Code → Settings → MCP Servers → add the Figma MCP → authorize.
+> Once connected, share the frame link and we'll start."
+Stop completely. Do not continue with descriptions.
+
+**If no link is provided:**
+> "Share the Figma frame link to proceed. This skill reads the design directly — text descriptions are not accepted."
+Stop. Do not ask follow-up questions based on descriptions.
+
+### Figma MCP calls (Step 0)
+
+Run both:
+1. `get_design_context(fileKey, nodeId)` — extracts all components, variants, and layers in the frame
+2. `get_screenshot(fileKey, nodeId)` — visual reference for the full frame (used to verify layer extraction is complete)
+
+### Step 1: Extract component list from Figma
+
+Using the `get_design_context` output from Step 0, extract all UI elements present in the frame. Cross-reference against the screenshot from `get_screenshot` to confirm the extraction is complete — flag any visible element not present in the layer data. For each extracted element, identify:
 
 - The element type (button, input, table, chip, dialog, etc.)
 - The intended behavior or variant (primary action, multi-select, paginated, dismissible, etc.)
-- Any custom appearance or behavior requirements
+- Any custom appearance or behavior requirements visible in the frame
 
 ### Step 2: Map to Vuetify 3
 
@@ -120,7 +150,7 @@ Step 1 complete. Proceeding to design-handoff.
 - Never confirm a component as covered without knowing that a Vuetify 3 equivalent exists
 - Never choose between gap options on behalf of the designer — present options and wait
 - Never skip theming compliance — hardcoded hex values in a design are a handoff risk
-- If the designer cannot provide a component list, ask for a screen-by-screen walkthrough
+- Never ask the designer to list components manually — always extract from Figma MCP data
 
 ## Context variables (populated from CLAUDE.md)
 

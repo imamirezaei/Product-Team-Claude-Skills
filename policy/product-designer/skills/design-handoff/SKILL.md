@@ -19,13 +19,52 @@ When running standalone, ask the designer to confirm that Vuetify coverage has b
 
 ---
 
+## Figma MCP requirement
+
+This skill reads the design directly from Figma. Text descriptions are not accepted as a substitute.
+
+### Step 0: Connect and read
+
+Before running any other step:
+
+1. Ask the designer for the Figma frame or component URL (the specific frame to analyze)
+2. Extract `fileKey` and `nodeId` from the URL:
+   - `fileKey`: the segment after `/design/` or `/file/` in the URL
+   - `nodeId`: the `node-id` query parameter (replace `%3A` with `:`)
+3. Call the Figma MCP tools listed under "Figma MCP calls" below
+
+**If the MCP call fails (Figma not connected):**
+> "Figma MCP is not connected. This skill requires direct Figma access.
+> Open Claude Code → Settings → MCP Servers → add the Figma MCP → authorize.
+> Once connected, share the frame link and we'll start."
+Stop completely. Do not continue with descriptions.
+
+**If no link is provided:**
+> "Share the Figma frame link to proceed. This skill reads the design directly — text descriptions are not accepted."
+Stop. Do not ask follow-up questions based on descriptions.
+
+### Figma MCP calls (Step 0)
+
+Run all three:
+1. `get_design_context(fileKey, nodeId)` — extracts full component and layout structure, variants, layer names
+2. `get_screenshot(fileKey, nodeId)` — visual reference (attach to handoff document)
+3. `get_variable_defs(fileKey)` — extracts token values used in the frame for accurate token documentation
+
+From the MCP output, extract:
+- Feature name (from the frame name in `get_design_context`)
+- States present (from variants and layer structure)
+- Component list (from layer hierarchy)
+- Token usage (from variable references in `get_variable_defs`)
+
+---
+
 ## Prerequisite check
 
 Before generating the handoff document, verify:
 
 1. Has `vuetify-constraint-check` been run and passed? (No unresolved Vuetify gaps)
 2. Has `design-policy-review` been run and passed? (No unresolved policy blockers)
-3. Are all required states designed? (Happy path, empty, loading, error)
+3. Are all required states designed? (Happy path, empty, loading, error) — States coverage is verified from Figma data: the skill checks which states are present in the frame directly.
 4. Has the PM approved the wireframe that this design is based on?
 
 If any prerequisite is unmet, flag it and do not proceed until the designer confirms it has been resolved.
@@ -34,13 +73,13 @@ If any prerequisite is unmet, flag it and do not proceed until the designer conf
 
 ## Workflow
 
-### Step 1: Collect design details
+### Step 1: Extract design details from Figma data
 
-Ask the designer to provide:
-- Feature name and brief description
-- Link to Figma file or description of each designed state
-- List of all states covered
-- Any design decisions made during the design phase
+Using the output from Step 0 MCP reads:
+- Identify the feature name from the Figma frame name
+- Enumerate all states present based on variant groups and layer names
+- Build the component list from the layer hierarchy
+- Map token usage from variable references
 
 If `design-policy-review` or `vuetify-constraint-check` were run in this session, pull findings from those results.
 
@@ -130,7 +169,7 @@ Trade-off: [what was given up or deferred]
 - Never omit the prerequisites section — engineering must know the design was validated
 - Never describe visual properties in arbitrary hex values — always use Vuetify theme tokens
 - Never include scope items not present in the PM-approved wireframe
-- If Figma is not available, ask the designer to describe each state in enough detail to proceed
+- Never ask the designer to describe states — read all state information from Figma MCP directly
 
 ## Context variables (populated from CLAUDE.md)
 

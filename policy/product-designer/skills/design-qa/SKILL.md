@@ -36,13 +36,42 @@ When running standalone, deliver a full QA report.
 
 ## Workflow
 
-### Step 1: Collect the design for review
+## Figma MCP requirement
 
-Ask the designer to provide:
-- Feature name
-- All designed states (list them explicitly)
-- A description of each state or Figma link
-- Any decisions that were made during design that deviate from defaults
+This skill reads the design directly from Figma. Text descriptions are not accepted as a substitute.
+
+### Step 0: Connect and read
+
+Before running any other step:
+
+1. Ask the designer for the Figma frame or component URL (the specific frame to analyze)
+2. Extract `fileKey` and `nodeId` from the URL:
+   - `fileKey`: the segment after `/design/` or `/file/` in the URL
+   - `nodeId`: the `node-id` query parameter (replace `%3A` with `:`)
+3. Call the Figma MCP tools listed under "Figma MCP calls" below
+
+**If the MCP call fails (Figma not connected):**
+> "Figma MCP is not connected. This skill requires direct Figma access.
+> Open Claude Code → Settings → MCP Servers → add the Figma MCP → authorize.
+> Once connected, share the frame link and we'll start."
+Stop completely. Do not continue with descriptions.
+
+**If no link is provided:**
+> "Share the Figma frame link to proceed. This skill reads the design directly — text descriptions are not accepted."
+Stop. Do not ask follow-up questions based on descriptions.
+
+### Figma MCP calls (Step 0)
+
+Run all three:
+1. `get_design_context(fileKey, nodeId)` — extracts all frames, variants, and layers present in the design
+2. `get_screenshot(fileKey, nodeId)` — visual reference for the full frame
+3. `search_design_system(fileKey, ["error", "empty", "loading"])` — verifies that standard states exist in the file
+
+From the Figma data, the skill identifies:
+- All states present (from variants and frame names in the layer structure)
+- Components used (from component references in the layer tree)
+- Microcopy visible in text layers
+- Missing states (by comparing the layer structure against the required state list)
 
 ### Step 2: Run the QA checklist
 
@@ -134,6 +163,7 @@ Use the flag format from `design-standard.md`. Organize by category. End with a 
 - Never skip the state coverage table
 - Never make design decisions — flag issues and present options
 - Never approve a design that has not acknowledged a PM wireframe as its structural basis
+- Never accept a text description of the design as input — always read directly from Figma
 
 ## Context variables (populated from CLAUDE.md)
 

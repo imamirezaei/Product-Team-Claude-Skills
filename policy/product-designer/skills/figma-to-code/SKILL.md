@@ -1,11 +1,11 @@
 ---
 name: figma-to-code
-description: "Use this skill to translate a Figma design description into Vue 3 + Vuetify 3 component code. Triggers: 'generate code for this design', 'turn this into Vue code', 'write the Vuetify component for this', 'translate my Figma to code'."
+description: "Use this skill to translate a Figma design into Vue 3 + Vuetify 3 component code. Triggers: 'generate code for this design', 'turn this into Vue code', 'write the Vuetify component for this', 'translate my Figma to code'."
 ---
 
 # Figma to Code
 
-You are a frontend implementation partner. Your job is to translate a designer's Figma design (described in text or summarized from a Figma link) into Vue 3 + Vuetify 3 component code that engineering can use as a starting point.
+You are a frontend implementation partner. Your job is to translate a designer's Figma design — read directly from Figma via MCP — into Vue 3 + Vuetify 3 component code that engineering can use as a starting point.
 
 This skill produces reference code — a high-quality starting point, not production-ready final code. Engineering reviews and adapts the output.
 
@@ -19,11 +19,44 @@ This skill runs standalone. It is typically used after `vuetify-constraint-check
 
 ---
 
+## Figma MCP requirement
+
+This skill reads the design directly from Figma. Text descriptions are not accepted as a substitute.
+
+### Step 0: Connect and read
+
+Before running any other step:
+
+1. Ask the designer for the Figma frame or component URL (the specific frame to analyze)
+2. Extract `fileKey` and `nodeId` from the URL:
+   - `fileKey`: the segment after `/design/` or `/file/` in the URL
+   - `nodeId`: the `node-id` query parameter (replace `%3A` with `:`)
+3. Call the Figma MCP tools listed under "Figma MCP calls" below
+
+**If the MCP call fails (Figma not connected):**
+> "Figma MCP is not connected. This skill requires direct Figma access.
+> Open Claude Code → Settings → MCP Servers → add the Figma MCP → authorize.
+> Once connected, share the frame link and we'll start."
+Stop completely. Do not continue with descriptions.
+
+**If no link is provided:**
+> "Share the Figma frame link to proceed. This skill reads the design directly — text descriptions are not accepted."
+Stop. Do not ask follow-up questions based on descriptions.
+
+### Figma MCP calls (Step 0)
+
+Run all three:
+1. `get_design_context(fileKey, nodeId)` — extracts component structure, layer hierarchy, props, variants
+2. `get_screenshot(fileKey, nodeId)` — visual reference for the frame (used to verify structure extraction)
+3. `get_variable_defs(fileKey)` — extracts design tokens (colors, spacing, typography) for accurate token mapping in generated code
+
+---
+
 ## Prerequisite
 
 Before generating code, confirm:
 - Has `vuetify-constraint-check` confirmed there are no unresolved Vuetify gaps?
-- Are all states to be coded specified? (Do not generate code for a single state when multiple states exist)
+- Are all states to be coded present in the Figma data? Confirm via Figma data: are multiple states visible in the frame? If only one state is present, ask the designer to share links for the remaining states before generating code.
 
 If Vuetify gaps are unresolved, flag them and do not generate code for those components until the gap is resolved.
 
@@ -31,17 +64,19 @@ If Vuetify gaps are unresolved, flag them and do not generate code for those com
 
 ## Workflow
 
-### Step 1: Understand the design
+### Step 1: Parse the Figma structure
 
-Ask the designer to describe:
-- The component or screen to be coded
-- Which state(s) to generate (happy path, empty, loading, error)
-- Any specific behavior or interaction logic
-- Relevant Vuetify components already identified
+Parse the `get_design_context` output to identify:
+- Component hierarchy (parent components, child components, nesting structure)
+- Variants present in the frame
+- Interactive states visible in the frame (hover, focus, disabled, error, loading, empty)
+- Slot structure (where content is injected vs. hardcoded)
+
+Use `get_screenshot` to visually verify the structure extraction matches the rendered design. Use `get_variable_defs` to map Figma token names to Vuetify theme tokens.
 
 ### Step 2: Map design to Vue + Vuetify structure
 
-For each design element:
+For each design element identified in Step 1:
 1. Identify the Vue component structure (single component vs. parent + child)
 2. Map UI elements to Vuetify components with their props
 3. Identify reactive data (`ref`, `computed`) needed for state management
@@ -120,6 +155,7 @@ After the code block, list:
 
 ## Constraints
 
+- Never ask the designer to describe a component — read it from Figma MCP directly
 - Never use hardcoded hex colors — always use Vuetify theme tokens
 - Never use `padding-left`/`padding-right` — use logical CSS or Vuetify spacing utilities
 - Never implement business logic or API calls — flag them in integration notes
