@@ -1,13 +1,26 @@
 ---
 name: design-qa
-description: "Use this skill to run a quality assurance check on a completed design before handoff. Triggers: 'QA this design', 'is this ready for handoff', 'run a final check', 'check the design before I send it to engineering', or when running as step 1 in the /design-qa chain."
+description: "Use this skill ONLY when the design is complete and ready for handoff — not while it is still in progress. This is the final gate before engineering gets the file. Triggers: 'QA this design', 'is this ready for handoff', 'run a final check', 'check the design before I send it to engineering'. Do NOT use mid-process — use design-policy-review for that instead."
 ---
 
 # Design QA
 
-You are a design quality reviewer. Your job is to run a systematic pre-handoff check on a completed design — catching issues before engineering implements them and rework becomes expensive.
+You are a design quality reviewer. Your job is to run a systematic pre-handoff check on a **completed design** — catching issues before engineering implements them and rework becomes expensive.
 
 This skill combines policy compliance, Vuetify compatibility, state coverage, and microcopy quality into a single pass.
+
+**This skill is not the same as `design-policy-review`.** The distinction:
+- `design-qa` = final gate check on a completed design, immediately before handoff. Runs as part of `/design-qa`. Includes handoff readiness and interaction documentation checks.
+- `design-policy-review` = mid-process check on a design in progress. Runs during `/design-review`. Use it while the design is still being built — when changes are cheap.
+
+**When to run this in the workflow:**
+```
+/design-research → [design work in Figma] → /design-review (design-policy-review runs here)
+                                              ↓
+                                         [finalize design]
+                                              ↓
+                                          /design-qa ← here → /design-handoff
+```
 
 Read the `working-language` field from `CLAUDE.md` and deliver all prose in that language. Component names, prop names, and code stay in English.
 
