@@ -148,20 +148,20 @@
       <p class="title-desc">A Figma-powered workflow that turns Claude into a design-aware partner — Vuetify-compatible, policy-enforcing, and context-rich from day one.</p>
       <div class="title-stats">
         <div class="title-stat">
-          <div class="title-stat-num">11</div>
-          <div class="title-stat-label">Skills</div>
+          <div class="title-stat-num">9</div>
+          <div class="title-stat-label">Designer Skills</div>
         </div>
         <div class="title-stat">
           <div class="title-stat-num">6</div>
-          <div class="title-stat-label">Commands</div>
+          <div class="title-stat-label">Shared Skills</div>
         </div>
         <div class="title-stat">
-          <div class="title-stat-num">4</div>
-          <div class="title-stat-label">Context layers</div>
+          <div class="title-stat-num">1</div>
+          <div class="title-stat-label">Chain Command</div>
         </div>
         <div class="title-stat">
-          <div class="title-stat-num">11</div>
-          <div class="title-stat-label">Generated files</div>
+          <div class="title-stat-num">15</div>
+          <div class="title-stat-label">Total Commands</div>
         </div>
       </div>
     </div>
@@ -540,6 +540,360 @@
           <div class="pill pill-gray">1 skill</div>
         </div>
       </div>
+    </div>
+
+    <!-- ── PD SKILL DETAIL SLIDES ── -->
+
+    <!-- design-research -->
+    <div class="slide">
+      <div class="slide-label">Designer Skill · Discovery</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">design-research</h2>
+      <p class="lead" style="margin-bottom: 24px;">Understand the design context before starting visual work — existing patterns, component inventory, and open UX decisions that could affect the design direction.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Designer Skill</span>
+        <span class="pill pill-teal">Discovery Phase</span>
+        <span class="pill pill-gray">Standalone</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"What components are already in use", "what design patterns exist for this", "before I start designing", or picking up a feature for the first time. Typically the first skill a designer runs on a new feature.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">Existing design patterns relevant to the feature, component inventory (available vs. missing), open UX decisions that need to be made, and a starting checklist before running <code>design-policy-review</code>.</p>
+        </div>
+      </div>
+      <div class="callout-purple"><p>Invoke: <code>/design-research [feature or area to research]</code></p></div>
+    </div>
+
+    <!-- design-policy-review -->
+    <div class="slide">
+      <div class="slide-label">Designer Skill · Review · Mid-Process</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">design-policy-review</h2>
+      <p class="lead" style="margin-bottom: 24px;">Check design work-in-progress against <code>design-policy.md</code> while changes are still cheap — before the design is finalized and rework becomes expensive.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Designer Skill</span>
+        <span class="pill pill-amber">Mid-Process Only</span>
+        <span class="pill pill-gray">Step 1 in /design-review</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Check my design direction", "is this RTL-safe", "does this follow our rules", "I'm designing this, does it look right so far". Use WHILE designing — not after. Do NOT use on a completed design; use <code>design-qa</code> for that.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">Policy compliance status with severity flags (🔴 Blocker / 🟡 Important / 🟢 Suggestion). Checks: Vuetify coverage (surface), RTL layout, state coverage, microcopy quality, accessibility baseline.</p>
+        </div>
+      </div>
+      <div class="callout-amber"><p>Not the same as <code>design-qa</code>: policy-review is mid-process; design-qa is the final gate check before handoff.</p></div>
+    </div>
+
+    <!-- vuetify-constraint-check -->
+    <div class="slide">
+      <div class="slide-label">Designer Skill · Compatibility</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">vuetify-constraint-check</h2>
+      <p class="lead" style="margin-bottom: 24px;">Systematically verify that every UI element in a design has a corresponding Vuetify 3 component — flag any gaps before the design goes to engineering.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Designer Skill</span>
+        <span class="pill pill-teal">Vuetify 3</span>
+        <span class="pill pill-gray">Step 1 in /design-handoff</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Check Vuetify compatibility", "can this be built with Vuetify", "verify component coverage", "are there any Vuetify gaps", or as Step 1 in <code>/design-handoff</code> before generating the handoff document.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">A component coverage map: each UI element → Vuetify 3 component + key props + theming compliance. Gaps flagged with options: extend existing component, use a different component, or custom implementation needed.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Runs as Step 2 in <code>/design-review</code> (after policy check) and as Step 1 in <code>/design-handoff</code> (before handoff doc). Ensures every component is implementable.</p></div>
+    </div>
+
+    <!-- design-qa -->
+    <div class="slide">
+      <div class="slide-label">Designer Skill · Quality Gate</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">design-qa</h2>
+      <p class="lead" style="margin-bottom: 24px;">The final gate check before engineering gets the file — policy compliance, Vuetify compatibility, state coverage, and microcopy quality in one pass.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Designer Skill</span>
+        <span class="pill pill-coral">Final Gate Only</span>
+        <span class="pill pill-gray">Pre-Handoff</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"QA this design", "is this ready for handoff", "run a final check", "check the design before I send it to engineering". Use ONLY when the design is complete — not during active design work.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">Combined review: policy compliance + Vuetify coverage + state coverage (all user and system states covered?) + microcopy quality + handoff readiness checklist. All blockers must be resolved before handoff.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Invoke: <code>/design-qa [feature or Figma link]</code> — all 🔴 Blockers must be resolved before proceeding to <code>/design-handoff</code></p></div>
+    </div>
+
+    <!-- design-handoff -->
+    <div class="slide">
+      <div class="slide-label">Designer Skill · Engineering Handoff</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">design-handoff</h2>
+      <p class="lead" style="margin-bottom: 24px;">Generate a complete, implementation-ready handoff document that engineering can act on without needing to ask the designer follow-up questions.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Designer Skill</span>
+        <span class="pill pill-teal">Engineering Handoff</span>
+        <span class="pill pill-gray">Step 2 in /design-handoff</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Prepare the handoff", "write the handoff doc", "I'm ready to hand off this feature", "generate the spec for engineering". Requires <code>vuetify-constraint-check</code> to have been run first.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">Component-level spec: each element with Vuetify component + props + variants + responsive behavior. State matrix showing all UI states. Microcopy table. Token references. Implementation notes and open questions.</p>
+        </div>
+      </div>
+      <div class="callout-purple"><p>Invoke: <code>/design-handoff [feature name or Figma link]</code> — auto-runs <code>vuetify-constraint-check</code> first to ensure full Vuetify coverage before generating the document</p></div>
+    </div>
+
+    <!-- figma-to-code -->
+    <div class="slide">
+      <div class="slide-label">Designer Skill · Code Generation</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">figma-to-code</h2>
+      <p class="lead" style="margin-bottom: 24px;">Translate a Figma design directly into Vue 3 + Vuetify 3 component code — read from Figma via MCP, not from screenshots or descriptions.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Designer Skill</span>
+        <span class="pill pill-teal">Reads Figma via MCP</span>
+        <span class="pill pill-gray">Standalone</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Generate code for this design", "turn this into Vue code", "write the Vuetify component for this", "translate my Figma to code". Typically after <code>vuetify-constraint-check</code> confirms all components are implementable.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">Vue 3 SFC code with correct Vuetify 3 components, props, and responsive behavior. Follows the project's existing component patterns. Marked as reference code — engineering reviews and adapts before production use.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Reads Figma directly via MCP — no screenshots needed. Invoke: <code>/figma-to-code [Figma file link or frame name]</code></p></div>
+    </div>
+
+    <!-- microcopy-writer -->
+    <div class="slide">
+      <div class="slide-label">Designer Skill · Content</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">microcopy-writer</h2>
+      <p class="lead" style="margin-bottom: 24px;">Write clear, consistent, and on-brand UI copy for any product element — following the microcopy standards in <code>design-policy.md</code>.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Designer Skill</span>
+        <span class="pill pill-gray">Standalone</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Write copy for this", "help me write the error message", "what should this button say", "review this microcopy", "write the empty state text". Can be called during design, before handoff, or during QA.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">UI copy for the requested element type: button labels, error messages, empty states, tooltips, confirmation dialogs, placeholder text. Includes alternatives and rationale for each choice.</p>
+        </div>
+      </div>
+      <div class="callout-purple"><p>Invoke: <code>/microcopy-writer [element type + context]</code> — covers buttons, errors, empty states, tooltips, and any in-product text</p></div>
+    </div>
+
+    <!-- implementation-review -->
+    <div class="slide">
+      <div class="slide-label">Designer Skill · Post-Implementation</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">implementation-review</h2>
+      <p class="lead" style="margin-bottom: 24px;">Compare the Figma design against the actual Vue/Vuetify implementation — identify every gap and produce a structured report the designer can act on or escalate.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Designer Skill</span>
+        <span class="pill pill-teal">Reads Figma + Codebase</span>
+        <span class="pill pill-gray">Standalone · Post-Dev</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Does the implementation match the design", "check what was built against Figma", "review the implemented component", "does the code match my design". Run after engineering marks a feature complete, before the designer signs off.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">A gap report comparing Figma spec vs. code: visual gaps (spacing, color, typography), component substitutions, missing states, interaction gaps. Each gap classified as Blocker / Minor / Accepted deviation.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Requires Figma MCP access AND repository access. Does not accept screenshots as substitutes. Invoke: <code>/implementation-review [Figma link + component path]</code></p></div>
+    </div>
+
+    <!-- ── SHARED SKILLS ── -->
+
+    <!-- design-system-check (shared) -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · UI Planning</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">design-system-check</h2>
+      <p class="lead" style="margin-bottom: 24px;">Inventory existing UI components before planning new design work — prevent duplicate components and make sure new requests are truly net-new.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"What components do we have", "do we need to build this UI from scratch", "the designer said we need a new component", "is there already a pattern for this", before starting new UI design work.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">Component inventory: available (can reuse as-is), extensible (needs modification), and net-new (must be built). Flags cases where a new component request could be satisfied by extending an existing one.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Invoke: <code>/design-system-check [describe the UI needs]</code></p></div>
+    </div>
+
+    <!-- wireframe-generator (shared) -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Visualization</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">wireframe-generator</h2>
+      <p class="lead" style="margin-bottom: 24px;">Generate interactive HTML wireframes showing a feature in multiple states and multiple UX pattern variants — a concrete design starting point before high-fidelity work.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-purple">HTML Output</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Show me what this looks like", "generate a wireframe", "I want to see all the states", "what are the different UX options", or as Step 4 in the PM <code>/new-feature</code> chain.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">A self-contained HTML file with clickable state transitions: empty state, loading, success, error, and all edge case states. Multiple UX pattern variants presented side-by-side using existing design system components.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Invoke: <code>/wireframe-generator [feature + states to show]</code></p></div>
+    </div>
+
+    <!-- task-writer (shared) -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Linear Integration</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">task-writer</h2>
+      <p class="lead" style="margin-bottom: 24px;">Convert design decisions, reviews, or fixes into ready-to-paste Linear tasks with the team's standard four-part structure.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-gray">Linear-Ready Output</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Write a Linear task for this design fix", "log this as a task", "create a task from this design-qa finding". Use after any review that produces actionable items that need to be tracked.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">A four-part Linear task: (1) Context, (2) User Story, (3) DOD with clear completion criteria, (4) Out of scope. Ready to paste directly into Linear.</p>
+        </div>
+      </div>
+      <div class="callout-purple"><p>Invoke: <code>/task-writer [describe the task]</code></p></div>
+    </div>
+
+    <!-- meeting-support (shared) -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Meetings</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">meeting-support</h2>
+      <p class="lead" style="margin-bottom: 24px;">Prepare structured agendas before design critiques and team meetings, and extract decisions and action items after them.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-gray">Pre &amp; Post Meeting</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Prepare the agenda for the design critique", "what are the action items from today's review", "summarize the design decisions we made", "log the feedback from the stakeholder review".</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">Pre-meeting: timed agenda, discussion goals, and materials checklist. Post-meeting: structured summary with decisions, action items with owners, and open questions requiring follow-up.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Invoke: <code>/meeting-support [meeting type + context]</code></p></div>
+    </div>
+
+    <!-- presentation-style (shared) -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Communication</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">presentation-style</h2>
+      <p class="lead" style="margin-bottom: 24px;">Generate polished, single-file HTML slide decks following the team's design system — flat-color, no-shadow, scroll-based, publication-ready.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-purple">HTML Output</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Make a presentation", "create slides for this", "I need to present the design to stakeholders". Works for design reviews, system proposals, process documentation, and team updates.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">A self-contained HTML file saved to <code>docs/</code> — title slide, content slides using cards/step rows/arch layers, and a summary slide. Follows the team design system: warm palette, 0.5px borders, font-weight 400–500 only.</p>
+        </div>
+      </div>
+      <div class="callout-purple"><p>Invoke: <code>/presentation-style [topic and content description]</code> — saved to <code>docs/</code> for GitHub Pages</p></div>
+    </div>
+
+    <!-- prompt-optimizer (shared) -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Prompt Engineering</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">prompt-optimizer</h2>
+      <p class="lead" style="margin-bottom: 24px;">Analyze, critique, and rewrite prompts to maximize output quality — for both claude.ai conversations and Claude Code skill invocations.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-gray">Prompt Engineering</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--purple-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">When to use</div>
+          <p style="font-size: 13px;">"Optimize this prompt", "how can I get better results", "review my prompt", paste a prompt and ask for feedback. Works for design descriptions sent to Claude, review requests, and any claude.ai conversation prompts.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 10px; font-weight: 500; color: var(--teal-600); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">What it outputs</div>
+          <p style="font-size: 13px;">A critique (what's vague, missing, or over-constrained), a rewritten prompt with specific improvements, and an explanation of each change and why it improves output quality.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Invoke: <code>/prompt-optimizer [paste your prompt]</code></p></div>
+    </div>
+
+    <!-- /design-review chain -->
+    <div class="slide">
+      <div class="slide-label">Chain Command · Design Review</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">/design-review</h2>
+      <p class="lead" style="margin-bottom: 24px;">A complete design review in one command — policy compliance check followed by Vuetify constraint check, producing a unified review report with all blockers and required actions.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px;">
+        <span class="pill pill-purple">Chain Command</span>
+        <span class="pill pill-gray">2 Skills in Sequence</span>
+        <span class="pill pill-teal">Mid-Process</span>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>design-policy-review</h3>
+            <p style="font-size: 12px;">Check against design-policy.md — Vuetify coverage (surface level), RTL layout, state coverage, microcopy quality, accessibility baseline. Outputs intermediate status before proceeding.</p>
+          </div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>vuetify-constraint-check</h3>
+            <p style="font-size: 12px;">Deep Vuetify 3 component coverage — map each UI element to a component, check theming compliance, flag gaps with implementation options.</p>
+          </div>
+        </div>
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Unified Review Report</h3>
+            <p style="font-size: 12px;">Consolidated findings organized by category (policy / Vuetify / microcopy) with severity flags, required actions (🔴 Blockers), and optional improvements (🟢 Suggestions).</p>
+          </div>
+        </div>
+      </div>
+      <div class="callout-purple"><p>Invoke: <code>/design-review [feature name + states list]</code> — use mid-process while design is still in progress. For completed designs, use <code>/design-qa</code> instead.</p></div>
     </div>
 
     <!-- Slide 9: Rules -->

@@ -1,0 +1,689 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Claude Code for Product Managers</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --blue-50: #e6f1fb; --blue-100: #b5d4f4; --blue-400: #378add;
+        --blue-600: #185fa5; --blue-800: #0c447c; --blue-900: #042c53;
+        --teal-50: #e1f5ee; --teal-100: #9fe1cb; --teal-400: #1d9e75;
+        --teal-600: #0f6e56; --teal-800: #085041;
+        --purple-50: #eeedfe; --purple-100: #cecbf6; --purple-400: #7f77dd;
+        --purple-600: #534ab7; --purple-800: #3c3489;
+        --amber-50: #faeeda; --amber-100: #fac775; --amber-400: #ba7517;
+        --amber-600: #854f0b; --amber-800: #633806;
+        --coral-50: #faece7; --coral-400: #d85a30;
+        --coral-600: #993c1d; --coral-800: #712b13;
+        --gray-50: #f1efe8; --gray-100: #d3d1c7; --gray-200: #b4b2a9;
+        --gray-400: #888780; --gray-600: #5f5e5a; --gray-800: #444441;
+        --text: #1a1a18; --text-sec: #5f5e5a; --text-hint: #888780;
+        --bg: #ffffff; --bg-sec: #f8f7f4; --bg-ter: #f1efe8;
+        --border: rgba(0,0,0,0.1); --border-med: rgba(0,0,0,0.18);
+        --radius: 8px; --radius-lg: 12px;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+
+      /* Nav */
+      .nav { background: var(--bg-sec); border-bottom: 0.5px solid var(--border-med); padding: 12px 72px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; }
+      .nav-links { display: flex; gap: 24px; align-items: center; }
+      .nav-link { font-size: 12px; font-weight: 500; color: var(--blue-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--blue-50); }
+      .nav-link.active { background: var(--blue-600); color: white; }
+      .nav-link.gray { background: var(--gray-50); color: var(--gray-800); }
+      .nav-link:hover { opacity: 0.8; }
+
+      /* Slides */
+      .slide { min-height: 100vh; padding: 60px 72px; display: flex; flex-direction: column; justify-content: center; border-bottom: 1px solid var(--border); }
+      .slide-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+
+      /* Typography */
+      h2 { font-size: 36px; font-weight: 500; color: var(--text); }
+      h3 { font-size: 17px; font-weight: 500; color: var(--text); }
+      p { font-size: 15px; font-weight: 400; color: var(--text-sec); line-height: 1.7; }
+      .lead { font-size: 18px; font-weight: 400; color: var(--text-sec); line-height: 1.6; }
+
+      /* Pills */
+      .pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+      .pill-blue { background: var(--blue-50); color: var(--blue-800); }
+      .pill-teal { background: var(--teal-50); color: var(--teal-800); }
+      .pill-purple { background: var(--purple-50); color: var(--purple-800); }
+      .pill-amber { background: var(--amber-50); color: var(--amber-800); }
+      .pill-gray { background: var(--gray-50); color: var(--gray-800); }
+      .pill-coral { background: var(--coral-50); color: var(--coral-800); }
+
+      /* Cards */
+      .card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 20px 24px; }
+      .card-sec { background: var(--bg-sec); border-radius: var(--radius-lg); padding: 20px 24px; }
+
+      /* Grids */
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+      .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
+
+      /* Arch layers */
+      .arch-layer { border-radius: var(--radius); padding: 14px 20px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+      .arch-arrow { text-align: center; color: var(--gray-400); font-size: 16px; margin: 4px 0; line-height: 1; }
+
+      /* File rows */
+      .file-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+      .file-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
+      .file-name { font-size: 13px; font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; flex: 0 0 auto; }
+      .file-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
+
+      /* Step rows */
+      .step-row { display: flex; gap: 16px; margin-bottom: 20px; }
+      .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--blue-600); color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+      .step-body h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+      .step-body p { font-size: 13px; color: var(--text-sec); }
+
+      /* Cmd rows */
+      .cmd-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+      .cmd-name { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; font-weight: 500; color: var(--blue-800); min-width: 200px; }
+      .cmd-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
+
+      /* Rule rows */
+      .rule-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+      .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-400); margin-top: 8px; flex-shrink: 0; }
+      .rule-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+      .rule-desc { font-size: 12px; color: var(--text-sec); }
+
+      /* Skill cards */
+      .skill-card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 16px 18px; }
+      .skill-card h3 { font-size: 13px; font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; margin-bottom: 6px; }
+      .skill-card p { font-size: 12px; color: var(--text-sec); line-height: 1.5; }
+      .skill-group-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; margin-top: 24px; }
+      .skill-group-label:first-child { margin-top: 0; }
+
+      /* Stats */
+      .stat { text-align: center; padding: 20px; background: var(--bg-sec); border-radius: var(--radius-lg); }
+      .stat-num { font-size: 36px; font-weight: 500; color: var(--text); }
+      .stat-label { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+
+      /* Callouts */
+      .callout-teal { padding: 16px 20px; background: var(--teal-50); border-radius: var(--radius); border-left: 3px solid var(--teal-400); }
+      .callout-teal p { font-size: 13px; color: var(--teal-800); }
+      .callout-amber { padding: 16px 20px; background: var(--amber-50); border-radius: var(--radius); border-left: 3px solid var(--amber-400); }
+      .callout-amber p { font-size: 13px; color: var(--amber-800); }
+      .callout-blue { padding: 16px 20px; background: var(--blue-50); border-radius: var(--radius); border-left: 3px solid var(--blue-400); }
+      .callout-blue p { font-size: 13px; color: var(--blue-800); }
+
+      /* Code */
+      code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--bg-ter); padding: 2px 6px; border-radius: 4px; }
+      .code-block { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--gray-800); color: #e8e6e0; padding: 12px 16px; border-radius: 6px; display: block; line-height: 1.8; }
+
+      /* Divider */
+      .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+      /* Title slide */
+      .slide-title { background: var(--blue-900); color: white; }
+      .title-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); margin-bottom: 48px; }
+      .title-h1 { font-size: 52px; font-weight: 500; color: white; line-height: 1.1; max-width: 700px; margin-bottom: 20px; }
+      .title-desc { font-size: 18px; font-weight: 400; color: rgba(255,255,255,0.55); max-width: 560px; margin-bottom: 56px; }
+      .title-stats { display: flex; gap: 0; }
+      .title-stat { padding: 0 32px 0 0; margin-right: 32px; border-right: 1px solid rgba(255,255,255,0.12); }
+      .title-stat:last-child { border-right: none; }
+      .title-stat-num { font-size: 32px; font-weight: 500; color: white; }
+      .title-stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+
+      /* Skill detail */
+      .skill-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 24px; }
+      .detail-card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 18px 22px; }
+      .detail-label { font-size: 10px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .detail-label.blue { color: var(--blue-600); }
+      .detail-label.teal { color: var(--teal-600); }
+      .detail-label.amber { color: var(--amber-600); }
+      .detail-label.coral { color: var(--coral-600); }
+    </style>
+  </head>
+  <body>
+
+    <nav class="nav">
+      <a href="index.html" class="nav-title">Product Team · Claude Code</a>
+      <div class="nav-links">
+        <a href="presentation-pm.html" class="nav-link active">Product Manager</a>
+        <a href="presentation-pd.html" class="nav-link">Product Designer</a>
+        <a href="presentation.html" class="nav-link gray">Workflow Deck</a>
+        <a href="figma-to-vue.html" class="nav-link gray">Figma → Vue</a>
+      </div>
+    </nav>
+
+    <!-- Slide 1: Title -->
+    <div class="slide slide-title">
+      <div class="title-label">Product Team Claude Skills · 2026</div>
+      <h1 class="title-h1">Claude Code for Product Managers</h1>
+      <p class="title-desc">A structured skill system that turns Claude into a personalized PM partner — context-aware, role-specific, and tailored to your product.</p>
+      <div class="title-stats">
+        <div class="title-stat">
+          <div class="title-stat-num">10</div>
+          <div class="title-stat-label">PM Skills</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">6</div>
+          <div class="title-stat-label">Shared Skills</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">3</div>
+          <div class="title-stat-label">Chain Commands</div>
+        </div>
+        <div class="title-stat">
+          <div class="title-stat-num">19</div>
+          <div class="title-stat-label">Total Commands</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 2: Overview -->
+    <div class="slide">
+      <div class="slide-label">Overview</div>
+      <h2 style="margin-bottom: 8px;">All PM Skills at a Glance</h2>
+      <p style="font-size: 14px; margin-bottom: 32px;">Each skill is a focused, context-loaded workflow that Claude runs on demand. Invoke by command or let chains run them in sequence.</p>
+
+      <div class="skill-group-label">PM-Specific Skills</div>
+      <div class="grid-4" style="margin-bottom: 24px;">
+        <div class="skill-card"><h3>problem-framing</h3><p>Vague idea → engineering-ready DOD</p></div>
+        <div class="skill-card"><h3>feature-prioritization</h3><p>Defensible prioritization with trade-offs</p></div>
+        <div class="skill-card"><h3>feature-dependency</h3><p>Codebase-read dependency analysis</p></div>
+        <div class="skill-card"><h3>edge-case-finder</h3><p>Stress-test a feature definition</p></div>
+        <div class="skill-card"><h3>scope-check</h3><p>Scope creep detection and trimming</p></div>
+        <div class="skill-card"><h3>feature-spec</h3><p>Full team alignment spec document</p></div>
+        <div class="skill-card"><h3>requirement-writer</h3><p>Engineering-precise requirements</p></div>
+        <div class="skill-card"><h3>release-impact</h3><p>Pre-release impact analysis</p></div>
+        <div class="skill-card"><h3>qa-guide</h3><p>Structured test plan from codebase</p></div>
+        <div class="skill-card"><h3>decision-logger</h3><p>Capture product decisions before they're lost</p></div>
+      </div>
+
+      <div class="skill-group-label">Shared Skills (PM + Designer)</div>
+      <div class="grid-4">
+        <div class="skill-card"><h3>design-system-check</h3><p>Inventory existing UI components</p></div>
+        <div class="skill-card"><h3>wireframe-generator</h3><p>Interactive HTML wireframe with all states</p></div>
+        <div class="skill-card"><h3>task-writer</h3><p>Linear task with four-part structure</p></div>
+        <div class="skill-card"><h3>meeting-support</h3><p>Agenda prep and action item extraction</p></div>
+        <div class="skill-card"><h3>presentation-style</h3><p>Polished HTML slide deck generation</p></div>
+        <div class="skill-card"><h3>prompt-optimizer</h3><p>Analyze and rewrite prompts for clarity</p></div>
+      </div>
+    </div>
+
+    <!-- ── PM SKILLS ── -->
+
+    <!-- Slide 3: problem-framing -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Discovery</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">problem-framing</h2>
+      <p class="lead" style="margin-bottom: 24px;">Turn a vague feature request or product idea into a precise, engineering-ready Definition of Done — before the team wastes time building the wrong thing.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-teal">Discovery Phase</span>
+        <span class="pill pill-gray">Step 1 in /new-feature</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"I want to build this", "management asked us to do this", "what's the DOD for this task", or any time a feature idea needs to become a precise deliverable before engineering discussion starts.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A four-part Linear task structure: context, user story, DOD (the most critical part), and out-of-scope list. Preliminary edge cases and dependencies are also surfaced.</p>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Invoke: <code>/problem-framing [describe the feature]</code> — or runs automatically as Step 1 in <code>/new-feature</code></p></div>
+    </div>
+
+    <!-- Slide 4: feature-prioritization -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Strategy</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">feature-prioritization</h2>
+      <p class="lead" style="margin-bottom: 24px;">Make prioritization decisions that are explicit, documented, and defensible — not silent trade-offs that quietly reshape the roadmap without anyone noticing.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-amber">Strategic Decision</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"Which one should we build first", "management wants this feature but it conflicts with our roadmap", "how do I justify not doing this", or any situation where a prioritization decision needs to be made and communicated.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A scoring analysis across strategic alignment, user impact, technical effort, and risk. Clear recommendation with reasoning, what gets deprioritized, and a handoff to decision-logger to capture the choice.</p>
+        </div>
+      </div>
+      <div class="callout-amber"><p>Includes automatic handoff to <code>decision-logger</code> — every prioritization decision gets captured before it's forgotten.</p></div>
+    </div>
+
+    <!-- Slide 5: feature-dependency -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Technical Awareness</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">feature-dependency</h2>
+      <p class="lead" style="margin-bottom: 24px;">Read the codebase directly to identify what modules, services, and components a planned feature will touch — so the PM can have informed conversations with engineering.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-teal">Reads Repository</span>
+        <span class="pill pill-gray">Step 2 in /new-feature</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"Engineering said it has dependencies but I don't know what", "before we start I need to know which modules are affected", or any time a PM needs technical dependency analysis before committing to a feature.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A dependency map of affected files/modules, complexity estimate, cross-team coordination needs, and questions the PM should ask engineering before the sprint begins.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>This skill reads the repository directly — it does not ask the PM to describe the code. Requires Claude Code with repository access.</p></div>
+    </div>
+
+    <!-- Slide 6: edge-case-finder -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Quality</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">edge-case-finder</h2>
+      <p class="lead" style="margin-bottom: 24px;">Stress-test a defined feature before engineering starts — finding the cases the PM hasn't thought of, before engineering finds them mid-sprint or users find them in production.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-coral">Risk Reduction</span>
+        <span class="pill pill-gray">Step 3 in /new-feature</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"What did I miss", "what are the edge cases for this feature", "engineering said we didn't consider this case", or any situation where a feature definition needs to be tested before implementation begins.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A prioritized list of edge cases with risk levels (critical/high/medium), each case's required UI state, and flags for which cases need distinct wireframe states in the next step.</p>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Output feeds directly into <code>wireframe-generator</code> — all states found here must be represented as wireframe states in Step 4.</p></div>
+    </div>
+
+    <!-- Slide 7: scope-check -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Scope Control</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">scope-check</h2>
+      <p class="lead" style="margin-bottom: 24px;">A scope creep intervention tool for features that have grown beyond their original boundaries. Identify what was added, what's essential, and where scope can be trimmed without losing core value.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-amber">Scope Management</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"This feature keeps growing", "engineering said there's too much work", "we keep adding things mid-sprint", "management is adding requirements". Do NOT use for initial scope definition — use <code>problem-framing</code> for that.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">Original scope vs. current scope comparison, categorized additions (essential / nice-to-have / out-of-scope), a trimmed MVP definition, and what to defer to a future iteration.</p>
+        </div>
+      </div>
+      <div class="callout-amber"><p>Use when drift has already started. For initial scope definition before implementation, use <code>/problem-framing</code> instead.</p></div>
+    </div>
+
+    <!-- Slide 8: feature-spec -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Documentation</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">feature-spec</h2>
+      <p class="lead" style="margin-bottom: 24px;">Produce a single comprehensive spec document that serves as the source of truth for a feature — for engineering, design, QA, and stakeholders.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-teal">Team Alignment</span>
+        <span class="pill pill-gray">Step 5 in /new-feature</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"Write the spec for this feature", "I need a document for the team meeting", "the spec needs to be ready before the sprint starts". Use this for whole-team alignment. Use <code>requirement-writer</code> when engineering needs deeper precision.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">Feature overview with business context, user story, design considerations, acceptance criteria for all roles (engineering + design + QA), out-of-scope section, and open questions.</p>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Not the same as <code>requirement-writer</code>: feature-spec is for team alignment; requirement-writer is for engineering precision on error states and validation rules.</p></div>
+    </div>
+
+    <!-- Slide 9: requirement-writer -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Engineering Handoff</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">requirement-writer</h2>
+      <p class="lead" style="margin-bottom: 24px;">Write engineering-ready requirements that leave no ambiguity — every path, every error state, every validation rule — so developers can implement without asking follow-up questions.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-gray">Engineering Document</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"I need engineering to have all the details", "write the technical requirements", "engineering said the requirements are incomplete", "I need to specify every error state and validation rule".</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">Complete flow documentation covering: all user actions, every API call, every error response, all validation rules, business rules, and edge cases. Structured so a developer can implement without guessing.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Use after <code>feature-spec</code> when engineering needs implementation precision. The spec aligns the team; the requirements guide the build.</p></div>
+    </div>
+
+    <!-- Slide 10: release-impact -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Release Management</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">release-impact</h2>
+      <p class="lead" style="margin-bottom: 24px;">Analyze the impact of a feature or change before it goes to production — identifying what else in the system might break or be affected.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-teal">Reads Repository</span>
+        <span class="pill pill-gray">Step 1 in /release-check</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"We want to release this, what might break", "what else does this change affect", "what do we need to check before deploying", or any time a PM needs pre-release impact analysis.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">Affected modules and services, downstream dependencies, regression risk assessment, suggested rollback triggers, and a list of areas that must be verified before release. Feeds directly into <code>qa-guide</code>.</p>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Reads git history and the repository directly. Run as part of <code>/release-check</code> to automatically chain into a full test plan.</p></div>
+    </div>
+
+    <!-- Slide 11: qa-guide -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Quality Assurance</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">qa-guide</h2>
+      <p class="lead" style="margin-bottom: 24px;">Generate a complete, prioritized testing guide from the codebase — so QA knows exactly what to test, in what order, and why.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-teal">Reads Repository</span>
+        <span class="pill pill-gray">Step 2 in /release-check</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"We need to test this, what do we check", "what is the test plan for this feature", "what should QA test", "we changed the payment module and need to make sure nothing broke".</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">Prioritized test cases (P0/P1/P2) with pre-conditions, steps, and expected outcomes. Regression test list for affected modules. Happy path, edge cases, and error state coverage all included.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Works best after <code>release-impact</code> — uses its output to focus test coverage on the right areas. Also runs standalone for any feature QA.</p></div>
+    </div>
+
+    <!-- Slide 12: decision-logger -->
+    <div class="slide">
+      <div class="slide-label">PM Skill · Institutional Memory</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">decision-logger</h2>
+      <p class="lead" style="margin-bottom: 24px;">Capture important product decisions in a structured, retrievable format before they get lost in chat history, meeting memory, or Slack threads.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">PM Skill</span>
+        <span class="pill pill-amber">Institutional Memory</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"We need to write this decision down", "why did we choose this design", "the meeting ended and we decided something but nobody wrote it down", "we reduced scope but never documented why".</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A structured decision record with: decision type, context, options considered, final choice, rationale, who made the call, and date. Appended to the project's decision log. Handles UX, architecture, scope, and prioritization decisions.</p>
+        </div>
+      </div>
+      <div class="callout-amber"><p>Called automatically by <code>feature-prioritization</code> at the end of every session. Also invoke directly after any meeting where an important decision was made.</p></div>
+    </div>
+
+    <!-- ── SHARED SKILLS ── -->
+
+    <!-- Slide 13: design-system-check -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · UI Planning</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">design-system-check</h2>
+      <p class="lead" style="margin-bottom: 24px;">Inventory what UI components already exist in the design system before planning new work — so the team isn't building something that already exists.</p>
+      <div class="skill-meta">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-gray">Step 3.5 in /new-feature</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"What components do we have", "do we need to build this UI from scratch or do we have a component", "the designer said we need a new component" — before requesting design work for UI that may already exist.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">Available components that can be reused as-is, components that need extension, and net-new components that must be built. Feeds into wireframe planning so existing components are used wherever possible.</p>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Invoke: <code>/design-system-check [describe the UI needs]</code></p></div>
+    </div>
+
+    <!-- Slide 14: wireframe-generator -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Visualization</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">wireframe-generator</h2>
+      <p class="lead" style="margin-bottom: 24px;">Generate interactive HTML wireframes showing a feature in multiple states and multiple interaction pattern variants — not just the happy path.</p>
+      <div class="skill-meta">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-blue">Step 4 in /new-feature</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"Show me what this looks like", "generate a wireframe", "I want to see all the states", "show me different ways to implement this", "make a visual prototype of the flow".</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A self-contained HTML file with clickable state transitions: empty state, loading, success, error, edge cases. Multiple UX variants presented side-by-side. Uses existing design system components found by <code>design-system-check</code>.</p>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Invoke: <code>/wireframe-generator [feature description + states to show]</code></p></div>
+    </div>
+
+    <!-- Slide 15: task-writer -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Linear Integration</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">task-writer</h2>
+      <p class="lead" style="margin-bottom: 24px;">Convert any output — a problem framing, a spec, a bug report — into a ready-to-paste Linear task with the team's standard four-part structure.</p>
+      <div class="skill-meta">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-gray">Linear-Ready Output</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"Write a Linear task", "create a task for this", "I need to log this in Linear", or when any other skill explicitly hands off to this one. Use after <code>problem-framing</code> or <code>feature-spec</code>.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A formatted Linear task with four parts: (1) Context — why this matters, (2) User Story — who benefits and how, (3) DOD — precise completion criteria, (4) Out of scope — explicit exclusions. Ready to paste directly into Linear.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Invoke: <code>/task-writer [describe what the task is about]</code></p></div>
+    </div>
+
+    <!-- Slide 16: meeting-support -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Meetings</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">meeting-support</h2>
+      <p class="lead" style="margin-bottom: 24px;">Prepare structured agendas before meetings and extract action items, decisions, and open questions after them.</p>
+      <div class="skill-meta">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-gray">Pre &amp; Post Meeting</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"Prepare the agenda for our sprint planning", "summarize what we decided", "extract action items from this meeting", "log the decisions from today", "what are the open questions from the meeting".</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">Pre-meeting: timed agenda with discussion points, decision goals, and prep questions. Post-meeting: structured summary with decisions made, action items with owners, and open questions that need follow-up.</p>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Invoke: <code>/meeting-support [meeting type + context]</code></p></div>
+    </div>
+
+    <!-- Slide 17: presentation-style -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Communication</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">presentation-style</h2>
+      <p class="lead" style="margin-bottom: 24px;">Generate polished, single-file HTML slide decks following a precise design system — no external dependencies, scroll-based, publication-ready.</p>
+      <div class="skill-meta">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-purple">HTML Output</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"Make a presentation", "create a slide deck", "build a pitch deck", "I need to present this to the team". Trigger on any request for a presentation, deck, or slide document.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A self-contained HTML file saved to <code>docs/</code>. Title slide, content slides (cards, step rows, arch layers, code blocks), and summary slide — all following the team's flat-color, no-shadow design system.</p>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Invoke: <code>/presentation-style [topic and content description]</code> — saved to <code>docs/</code> for GitHub Pages publishing</p></div>
+    </div>
+
+    <!-- Slide 18: prompt-optimizer -->
+    <div class="slide">
+      <div class="slide-label">Shared Skill · Prompt Engineering</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">prompt-optimizer</h2>
+      <p class="lead" style="margin-bottom: 24px;">Analyze, critique, and rewrite prompts to maximize clarity, specificity, and output quality — for both claude.ai and Claude Code.</p>
+      <div class="skill-meta">
+        <span class="pill pill-teal">Shared — PM &amp; Designer</span>
+        <span class="pill pill-gray">Prompt Engineering</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">When to use</div>
+          <p style="font-size: 13px;">"Optimize this prompt", "improve my prompt", "review my prompt", "what's wrong with this prompt", or when you paste a prompt draft and want feedback. Works for both casual claude.ai conversations and Claude Code workflows.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A critique identifying ambiguity, missing context, and vague instructions. A rewritten prompt with specific improvements. An explanation of what changed and why each change improves output quality.</p>
+        </div>
+      </div>
+      <div class="callout-teal"><p>Invoke: <code>/prompt-optimizer [paste your prompt]</code></p></div>
+    </div>
+
+    <!-- ── CHAIN COMMANDS ── -->
+
+    <!-- Slide 19: /new-feature -->
+    <div class="slide">
+      <div class="slide-label">Chain Command · Full Feature Flow</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">/new-feature</h2>
+      <p class="lead" style="margin-bottom: 24px;">A complete end-to-end feature development workflow — from raw idea to spec, wireframe, and Linear task — in one command.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">Chain Command</span>
+        <span class="pill pill-gray">6 Skills in Sequence</span>
+        <span class="pill pill-teal">Wait for Approval</span>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body"><h3>problem-framing</h3><p style="font-size: 12px;">Define the DOD, preliminary edge cases, preliminary dependencies</p></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-body"><h3>feature-dependency</h3><p style="font-size: 12px;">Read the codebase — which modules does this touch?</p></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-body"><h3>edge-case-finder</h3><p style="font-size: 12px;">Prioritized edge cases with risk levels and required UI states</p></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num" style="font-size: 11px;">3.5</div>
+          <div class="step-body"><h3>design-system-check</h3><p style="font-size: 12px;">Inventory available components before wireframing</p></div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-body"><h3>wireframe-generator</h3><p style="font-size: 12px;">HTML wireframe covering all states, using existing components</p></div>
+        </div>
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">5</div>
+          <div class="step-body"><h3>feature-spec</h3><p style="font-size: 12px;">Complete spec consolidating all previous outputs — ready for team handoff</p></div>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Invoke: <code>/new-feature [describe the feature]</code> — Claude waits for PM approval between each step before proceeding</p></div>
+    </div>
+
+    <!-- Slide 20: /release-check -->
+    <div class="slide">
+      <div class="slide-label">Chain Command · Pre-Release</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">/release-check</h2>
+      <p class="lead" style="margin-bottom: 24px;">Analyze the full impact of a release and generate a complete test plan — from codebase and git history — in one command.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">Chain Command</span>
+        <span class="pill pill-gray">2 Skills in Sequence</span>
+        <span class="pill pill-teal">Reads Repository</span>
+      </div>
+      <div style="margin-bottom: 20px;">
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body"><h3>release-impact</h3><p style="font-size: 12px;">Read git diff and codebase — what modules are affected, what could break, what are the regression risks?</p></div>
+        </div>
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">2</div>
+          <div class="step-body"><h3>qa-guide</h3><p style="font-size: 12px;">Prioritized test plan (P0/P1/P2) based on the impact analysis, covering happy path, edge cases, and regressions</p></div>
+        </div>
+      </div>
+      <div class="callout-blue"><p>Invoke: <code>/release-check [feature name or branch]</code> — or omit arguments to use the latest <code>git diff</code></p></div>
+    </div>
+
+    <!-- Slide 21: /sync-spec -->
+    <div class="slide">
+      <div class="slide-label">Chain Command · Spec Maintenance</div>
+      <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">/sync-spec</h2>
+      <p class="lead" style="margin-bottom: 24px;">Compare the feature spec with the current implementation — find where the spec is outdated, where the implementation deviated, and where the PM needs to make a decision.</p>
+      <div class="skill-meta">
+        <span class="pill pill-blue">Chain Command</span>
+        <span class="pill pill-teal">Reads Repository</span>
+        <span class="pill pill-amber">Requires PM Approval</span>
+      </div>
+      <div class="grid-2" style="margin-bottom: 16px;">
+        <div class="detail-card">
+          <div class="detail-label blue">Inputs</div>
+          <p style="font-size: 13px;">Reads the feature spec file from the repository, reads the current implementation source files directly, and checks git history for recent changes — no manual description needed.</p>
+        </div>
+        <div class="detail-card">
+          <div class="detail-label teal">What it outputs</div>
+          <p style="font-size: 13px;">A Spec Drift Report: (1) Spec outdated — impl is correct, update the spec. (2) Implementation deviated — spec is correct, flag for engineering. (3) PM decision needed — unclear which is right.</p>
+        </div>
+      </div>
+      <div class="callout-amber"><p>Never updates any file automatically. Presents proposed changes and waits for PM approval. Invoke: <code>/sync-spec [feature name or spec file path]</code></p></div>
+    </div>
+
+    <!-- Slide 22: Summary -->
+    <div class="slide" style="background: var(--bg-sec);">
+      <div class="slide-label">Summary</div>
+      <h2 style="margin-bottom: 8px;">What This System Delivers</h2>
+      <p style="font-size: 14px; margin-bottom: 36px;">A complete PM workflow system — from first idea to post-release QA — with every step documented, every decision captured, and every artifact structured for the team.</p>
+
+      <div class="grid-3" style="margin-bottom: 32px;">
+        <div class="card">
+          <div class="detail-label blue" style="margin-bottom: 10px;">Discovery to Spec</div>
+          <p style="font-size: 13px;">problem-framing → feature-dependency → edge-case-finder → design-system-check → wireframe-generator → feature-spec</p>
+        </div>
+        <div class="card">
+          <div class="detail-label teal" style="margin-bottom: 10px;">Precision Handoffs</div>
+          <p style="font-size: 13px;">requirement-writer for engineering depth, design-system-check for UI clarity, task-writer for Linear — every handoff structured.</p>
+        </div>
+        <div class="card">
+          <div class="detail-label amber" style="margin-bottom: 10px;">Release Confidence</div>
+          <p style="font-size: 13px;">release-impact + qa-guide automatically chained in /release-check. sync-spec keeps docs aligned with what was actually built.</p>
+        </div>
+      </div>
+
+      <div class="grid-4">
+        <div class="stat"><div class="stat-num">10</div><div class="stat-label">PM Skills</div></div>
+        <div class="stat"><div class="stat-num">6</div><div class="stat-label">Shared Skills</div></div>
+        <div class="stat"><div class="stat-num">3</div><div class="stat-label">Chain Commands</div></div>
+        <div class="stat"><div class="stat-num">19</div><div class="stat-label">Total Commands</div></div>
+      </div>
+    </div>
+
+  </body>
+</html>

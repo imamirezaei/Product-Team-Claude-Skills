@@ -99,3 +99,25 @@ Follow the `working-language` rule. This output style does not override language
 - Open questions section if any decisions are pending
 - Authority flag if any recommendation is outside PM authority
 - Technical decision flag with learning pointers if any technical decision is detected
+
+---
+
+## Output Delivery
+
+When a skill produces a **final deliverable** (spec, requirement, edge case report, QA plan, decision log, feature prioritization output), ask before writing:
+
+> "Save this as **Markdown (.md)** or **HTML (.html)**?"
+
+Then write the file to the output directory:
+
+- Markdown → `outputs/pm/[feature-name]-[skill-name].md`
+- HTML → `outputs/pm/[feature-name]-[skill-name].html`
+
+For HTML output, wrap the content in a clean HTML shell with inline styles — no external dependencies.
+
+**File naming convention:**
+- Use kebab-case
+- Feature name first, then skill name
+- Example: `payment-flow-redesign-feature-spec.md`
+
+This applies to all PM skills. Do not skip this step — outputs that only exist in chat history are lost.
