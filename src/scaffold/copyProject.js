@@ -127,7 +127,12 @@ export function copyProject(cwd, packageVersion, role = 'pm') {
     installed.push(`.claude/skills/${cfg.skillsDir}/ (${skillDirs.length} skills)`);
   }
 
-  // 9. For designer: also copy the extra handoff-agent placeholder
+  // 9. Create .claude/outputs/ directory for saved deliverables
+  const outputsDir = path.join(cwd, '.claude', 'outputs');
+  fs.mkdirSync(outputsDir, { recursive: true });
+  installed.push('.claude/outputs/');
+
+  // 10. For designer: also copy the extra handoff-agent placeholder
   if (role === 'designer') {
     const handoffAgentSrc = path.join(templateDir, '.claude', 'agents', 'handoff-agent.md');
     const handoffAgentDest = path.join(cwd, '.claude', 'agents', 'handoff-agent.md');
