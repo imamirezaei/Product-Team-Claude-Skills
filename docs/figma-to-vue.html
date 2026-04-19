@@ -5,6 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Figma → Vue / Vuetify 3 · Translation Guide</title>
 <style>
+  /* ── SITE TOP NAV ── */
+  .site-nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 44px;
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 0;
+    z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-size: 13px;
+  }
+  .site-nav__brand {
+    font-weight: 600;
+    color: #1a1a18;
+    text-decoration: none;
+    margin-right: 28px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .site-nav__links {
+    display: flex;
+    gap: 4px;
+  }
+  .site-nav__link {
+    padding: 5px 12px;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #5f5e5a;
+    font-weight: 500;
+    transition: background 0.12s, color 0.12s;
+  }
+  .site-nav__link:hover {
+    background: #f1efe8;
+    color: #1a1a18;
+  }
+  .site-nav__link--active {
+    background: #1a1a18;
+    color: #fff !important;
+  }
+
   :root {
     --pm:       #EEEDFE; --pm-b: #534AB7; --pm-t: #3C3489;
     --design:   #E1F5EE; --design-b: #0F6E56; --design-t: #085041;
@@ -36,14 +80,14 @@
   }
 
   /* ───────────────── LAYOUT ───────────────── */
-  .layout { display: flex; min-height: 100vh; }
+  .layout { display: flex; min-height: 100vh; padding-top: 44px; }
 
   /* ───────────────── NAV (FIXED) ───────────────── */
   nav {
     width: var(--nav-w);
-    height: 100vh;
+    height: calc(100vh - 44px);
     position: fixed;
-    top: 0;
+    top: 44px;
     right: 0;
     background: #fff;
     border-left: 1px solid var(--border);
@@ -353,6 +397,14 @@
 </head>
 
 <body>
+<header class="site-nav">
+  <a class="site-nav__brand" href="index.html">Product Team · Claude</a>
+  <nav class="site-nav__links">
+    <a href="index.html" class="site-nav__link">Context Pipeline</a>
+    <a href="presentation.html" class="site-nav__link">PM Workflow</a>
+    <a href="figma-to-vue.html" class="site-nav__link site-nav__link--active">Figma → Vue</a>
+  </nav>
+</header>
 <div class="layout" data-lang="en" id="root">
 
 <!-- ══════════════ NAV (FIXED) ══════════════ -->
