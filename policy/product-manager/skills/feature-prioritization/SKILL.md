@@ -88,7 +88,20 @@ I recommend revisiting in [future timeframe].
 
 ### Step 6: Document the decision
 
-After the PM decides, prompt them to run `/log-decision` to document the trade-off. Do not write the decision log here — that is `decision-logger`'s job.
+After the PM confirms a prioritization decision, hand off to `decision-logger` automatically:
+
+```
+Decision made. Running /log-decision to document the trade-off before it gets lost.
+```
+
+Then run the `decision-logger` skill with the following context pre-filled:
+- Decision type: Type 2 (Scope decision) or Type 3 (Rejected idea), as appropriate
+- What was decided: [the prioritization outcome]
+- Reason: [the scoring rationale from Step 3]
+- Options considered: [the features compared in Step 3]
+- Trade-off: [what was dropped or delayed from Step 4]
+
+Do not ask the PM to repeat this information — it is already available from this session.
 
 ---
 
