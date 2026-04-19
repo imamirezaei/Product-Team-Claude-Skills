@@ -598,21 +598,72 @@ border: 1px solid #534AB7;      /* half inside */
 
 ---
 
+## 21. Naming Convention Reference
+
+> Full naming convention: see `figma-naming-convention.md`
+
+### Quick Reference
+
+| Figma Element | Format | Vue Equivalent |
+|---|---|---|
+| Page | `PascalCase` | Router module folder |
+| Screen (top-level frame) | `PascalCase` | `FeatureScreen.vue` |
+| Custom component | `PascalCase` | `<MyComponent />` |
+| Vuetify primitive | `PascalCase` without `V` prefix | `<v-[name]>` |
+| Variant property name | `Variant` / `Color` / `Size` / `Density` | prop name (exact match) |
+| Variant property value | `outlined` / `primary` / `large` | prop value (exact match) |
+| Boolean property | `Disabled` / `Loading` / `Error` | `:disabled` / `:loading` / `:error` |
+| Slot layer | `prepend` / `append` / `title` / `actions` | `#prepend` / `#append` / `#title` / `#actions` |
+| Structural layer inside screen | `kebab-case` semantic name | div or named section in template |
+| Token — color | `color/primary/default` | `color="primary"` / `class="bg-primary"` |
+| Token — spacing | `spacing/4` (= 16px) | `pa-4` / `ma-4` |
+| Token — radius | `radius/lg` (= 8px) | `rounded-lg` |
+| Token — elevation | `elevation/2` | `elevation-2` |
+
+### Layer names inside components: Vuetify slot names first
+
+```
+prepend · append · title · subtitle · text · actions
+placeholder · loader · header · item · default
+```
+
+If no Vuetify slot matches, use semantic names:
+
+```
+label · icon · content · header · footer
+badge · avatar · thumbnail · description · metadata
+```
+
+Never: `Frame 1234` · `Group 8` · `Rectangle 5` · `blue-box` · `left-icon` · `wrapper-div`
+
+---
+
 ## Handoff Checklist
 
 Before sending a design to the Tech team, verify:
 
+**Naming**
+- [ ] All top-level frames (screens) use PascalCase matching their Vue component name
+- [ ] All custom components use PascalCase matching their Vue component name
+- [ ] No layer has a default Figma name (`Frame`, `Group`, `Rectangle` + number)
+- [ ] Variant property names match Vue prop names exactly
+- [ ] Layers inside components use Vuetify slot names or semantic names
+
+**Values & Tokens**
 - [ ] All spacing values are multiples of 4px
 - [ ] Font sizes match the Vuetify type scale
 - [ ] Colors reference design tokens (not raw hex values)
+- [ ] Border radius values match Vuetify scale (0/2/4/6/8/12px)
+- [ ] Elevation values match Vuetify scale (0/1/2/4/8/12/16/24)
+
+**Layout**
 - [ ] Auto Layout direction (H/V) and gap are clearly marked
 - [ ] Padding is explicitly shown on every frame
 - [ ] Responsive frames exist (mobile / tablet / desktop)
-- [ ] All states are designed (hover / disabled / error / loading)
+- [ ] Clip content is set on overflow frames
+
+**States & Content**
+- [ ] All states are designed (hover / disabled / error / loading / empty)
 - [ ] Stroke position is specified (inside / outside / center)
 - [ ] Image fill mode is specified (cover / contain / crop)
-- [ ] Component variants map to props
 - [ ] Icons are from MDI library or their names are specified
-- [ ] Border radius values match Vuetify scale (0/2/4/6/8/12px)
-- [ ] Elevation values match Vuetify scale (0/1/2/4/8/12/16/24)
-- [ ] Clip content is set on overflow frames
