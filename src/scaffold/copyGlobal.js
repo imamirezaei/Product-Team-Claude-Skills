@@ -106,7 +106,7 @@ After completing all 14 output files, write each file directly to its specified 
 
   // ── /start-designer-interview ─────────────────────────────────────────────
   const startDesignerInterviewContent = `---
-description: Start Designer onboarding — connects Figma MCP, reads the Figma file, and generates all 11 context files
+description: Start Designer onboarding — connects Figma MCP, reads the Figma file, and generates all 12 context files
 ---
 
 Read the file at \`./claude-workflow/interview/designer-interview.md\` and immediately start the onboarding flow.
