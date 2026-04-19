@@ -466,11 +466,37 @@ Before generating any handoff document, confirm:
 
 ---
 
+### File 12: .claude/skills/product-designer/implementation-review/context.md
+
+```markdown
+# Context: Implementation Review — [Product Name]
+
+## Repository status
+[Has repository / No repository — this skill is blocked in documentation-only mode]
+
+## Component mapping
+[Key Figma frame name → Vue component file path mappings observed from the file and codebase]
+
+## Token naming convention
+[Token names from get_variable_defs — used to verify token compliance in code]
+
+## RTL requirement
+[RTL-safe layout required / LTR only — determines whether RTL compliance is checked in code]
+
+## Known implementation risks
+[Components or patterns that are complex to implement and likely to have deviations — flagged during file read]
+
+## State baseline
+[States that must be present in every implementation before the designer can sign off]
+```
+
+---
+
 ## Final step
 
-After generating all 11 files, tell the designer in the selected language:
+After generating all 12 files, tell the designer in the selected language:
 
-> "Your design context is ready. All 11 files have been generated from your Figma file.
+> "Your design context is ready. All 12 files have been generated from your Figma file.
 >
 > **Next steps:**
 > 1. Put `CLAUDE.md` in the project root
