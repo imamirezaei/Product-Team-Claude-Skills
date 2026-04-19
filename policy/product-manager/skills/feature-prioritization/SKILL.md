@@ -86,22 +86,34 @@ Adding it would require [what we'd lose].
 I recommend revisiting in [future timeframe].
 ```
 
-### Step 6: Document the decision
+### Step 6: Document the decision (mandatory — runs automatically)
 
-After the PM confirms a prioritization decision, hand off to `decision-logger` automatically:
+After the PM confirms the prioritization decision, do not wait for them to ask. Immediately run `decision-logger` with context pre-filled from this session.
+
+Announce the handoff first:
 
 ```
-Decision made. Running /log-decision to document the trade-off before it gets lost.
+Decision confirmed. Logging the trade-off now so it doesn't get lost.
 ```
 
-Then run the `decision-logger` skill with the following context pre-filled:
-- Decision type: Type 2 (Scope decision) or Type 3 (Rejected idea), as appropriate
-- What was decided: [the prioritization outcome]
-- Reason: [the scoring rationale from Step 3]
-- Options considered: [the features compared in Step 3]
-- Trade-off: [what was dropped or delayed from Step 4]
+Then invoke `decision-logger` with the following pre-filled context — do not ask the PM to repeat anything:
 
-Do not ask the PM to repeat this information — it is already available from this session.
+- **Decision type:** Type 2 (Scope decision) if something was delayed or dropped; Type 3 (Rejected idea) if a feature was declined entirely
+- **What was decided:** the prioritization outcome from Step 5
+- **Reason:** the scoring rationale from Step 3
+- **Options considered:** the features compared in Step 3
+- **Trade-off:** what was explicitly dropped or delayed from Step 4
+- **Decision maker:** infer from `CLAUDE.md` (PM role, or senior manager if external pressure was noted in Step 2)
+- **Date:** today's date
+
+If the PM says "we'll log it later" or tries to skip this step, respond:
+
+```
+Undocumented trade-offs are the most common cause of roadmap drift — six months from now nobody will remember why this was dropped.
+This takes 30 seconds. Proceeding with the log.
+```
+
+Then proceed anyway.
 
 ---
 
@@ -110,7 +122,7 @@ Do not ask the PM to repeat this information — it is already available from th
 - Never make the prioritization decision for the PM — present the analysis, not the verdict
 - Never ignore the trade-off — if something must be dropped, say it explicitly, never silently
 - Never use complex frameworks (RICE, ICE, WSJF) unless the PM asks — keep it fast and practical
-- Always end with a prompt to run `/log-decision` — undocumented trade-offs are the root cause of roadmap drift
+- Never skip Step 6 — always run `decision-logger` automatically after the PM confirms. Do not treat it as optional or wait to be asked. Undocumented trade-offs are the root cause of roadmap drift.
 
 ## Context variables (populated from CLAUDE.md)
 
