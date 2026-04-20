@@ -1,8 +1,15 @@
 {
-  "name": "product-team-claude-skills",
+  "name": "@imamirezaei/product-team-claude-skills",
   "version": "1.0.3",
-  "description": "Claude Code setup for product teams — skills, commands, and onboarding interviews for PMs and Designers.",
+  "description": "Claude Code setup for product teams — skills, commands, and onboarding interviews for Product Managers and Product Designers.",
   "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imamirezaei/Product-Team-Claude-Skills.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
   "bin": {
     "claude-pm": "bin/cli.js"
   },
