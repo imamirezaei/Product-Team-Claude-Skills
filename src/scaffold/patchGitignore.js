@@ -6,8 +6,8 @@ const ENTRIES = [
   '.claude/settings.local.json',
 ];
 
-const MARKER_START = '# claude-pm';
-const MARKER_END = '# end claude-pm';
+const MARKER_START = '# claude-team';
+const MARKER_END = '# end claude-team';
 
 /**
  * Idempotently adds asam-pm private file entries to .gitignore.

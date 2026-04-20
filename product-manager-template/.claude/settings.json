@@ -22,7 +22,7 @@
     ],
     "defaultMode": "plan"
   },
-  "outputStyle": "pm-standard",
+  "outputStyle": "product-manager-standard",
   "effortLevel": "high",
   "env": {
     "CLAUDE_AUTOCOMPACT_PCT_OVERRIDE": "75"

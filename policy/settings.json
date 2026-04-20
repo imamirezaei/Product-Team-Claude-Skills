@@ -21,7 +21,7 @@
     ],
     "defaultMode": "plan"
   },
-  "outputStyle": "pm-standard",
+  "outputStyle": "product-manager-standard",
   "effortLevel": "high",
   "env": {
     "CLAUDE_CODE_DISABLE_GIT_INSTRUCTIONS": "0",

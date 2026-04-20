@@ -2,22 +2,19 @@
 
 [![npm version](https://img.shields.io/npm/v/product-team-claude-skills)](https://www.npmjs.com/package/product-team-claude-skills)
 
-Claude Code setup for product teams. This package installs role-specific skills, commands, output styles, and onboarding flows for:
+Claude Code setup for product teams. Installs role-specific skills, commands, output styles, and onboarding flows for:
 
 - Product Managers
 - Product Designers
 
 The current repository ships:
 
-- 10 PM skill definitions
+- 10 Product Manager skill definitions
 - 8 Product Designer skill definitions
 - 6 shared skill definitions
-- 19 PM command files
-- 15 Designer command files
+- 19 Product Manager command files
+- 15 Product Designer command files
 - 2 onboarding interviews in `interview/`
-- 8 documentation pages in `docs/`
-
-The published CLI command is still `claude-pm`.
 
 ---
 
@@ -43,67 +40,77 @@ Requirements:
 
 ## Quick Start
 
-### Product Manager
-
 ```bash
 cd /path/to/your-product-repo
 claude-pm init
 ```
 
-After Claude opens, run:
+The CLI will ask which role to set up:
 
-```text
-/start-interview
+```
+  What is your role?
+  1. Product Manager
+  2. Product Designer
+
+  Enter 1 or 2:
 ```
 
-### Product Designer
+After Claude opens, run the matching interview command:
+
+| Role | Command |
+|---|---|
+| Product Manager | `/start-interview` |
+| Product Designer | `/start-designer-interview` |
+
+### Options
 
 ```bash
-cd /path/to/your-product-repo
-claude-pm init --role designer
+claude-pm init --role pm        # skip the prompt, set up as Product Manager
+claude-pm init --role designer  # skip the prompt, set up as Product Designer
+claude-pm init --force          # re-run even if already initialized
 ```
 
-After Claude opens, run:
+### What `claude-pm init` does
 
-```text
-/start-designer-interview
+1. Checks prerequisites (Node.js version, Claude Code)
+2. Installs global files into `~/.claude/`
+3. Scaffolds role-specific project files into the current repo
+4. Patches `.gitignore` for private Claude files
+5. Opens Claude Code automatically if available
+
+---
+
+## Other Commands
+
+```bash
+claude-pm update       # refresh policy layer without touching personal files
+claude-pm doctor       # health check — shows what's installed and what's missing
+claude-pm list-skills  # list all skills available in this repo
 ```
-
-Useful options:
-
-- `claude-pm init --role pm`
-- `claude-pm init --role designer`
-- `claude-pm init --force`
-
-What `claude-pm init` does:
-
-1. Installs global files into `~/.claude/`
-2. Scaffolds project files into the current repo
-3. Patches `.gitignore` for private Claude files
-4. Opens Claude Code if `claude` is available in `PATH`
 
 ---
 
 ## Update
 
-Refresh the policy layer for an already initialized repo:
+Refresh the policy layer for an already-initialized repo:
 
 ```bash
 npm update -g product-team-claude-skills
 claude-pm update
 ```
 
-`claude-pm update` refreshes:
+`claude-pm update` refreshes only role-specific policy files:
 
-- `claude-workflow/policy/`
+- `claude-workflow/policy/shared/`
+- `claude-workflow/policy/<your-role>/`
 - `claude-workflow/interview/`
 - global files in `~/.claude/`
 
-It does not rerun onboarding and does not overwrite generated context files such as:
+It never touches generated context files:
 
 - `CLAUDE.md`
 - `.claude/skills/.../context.md`
-- `.claude/agents/...`
+- `.claude/agents/`
 - `CLAUDE.local.md`
 - `.claude/settings.local.json`
 
@@ -113,59 +120,63 @@ It does not rerun onboarding and does not overwrite generated context files such
 
 ### Global files in `~/.claude/`
 
-| Path                                             | Contents                          |
-| ------------------------------------------------ | --------------------------------- |
-| `~/.claude/skills/shared/`                       | 6 shared `SKILL.md` files         |
-| `~/.claude/skills/product-manager/`              | 10 PM `SKILL.md` files            |
-| `~/.claude/skills/product-designer/`             | 8 Designer `SKILL.md` files       |
-| `~/.claude/commands/product-manager/`            | 19 PM command files               |
-| `~/.claude/commands/product-designer/`           | 15 Designer command files         |
-| `~/.claude/commands/start-interview.md`          | PM onboarding entry command       |
-| `~/.claude/commands/start-designer-interview.md` | Designer onboarding entry command |
-| `~/.claude/output-styles/pm-standard.md`         | PM output style                   |
-| `~/.claude/output-styles/design-standard.md`     | Designer output style             |
+| Path | Contents |
+|---|---|
+| `~/.claude/skills/shared/` | 6 shared `SKILL.md` files |
+| `~/.claude/skills/product-manager/` | 10 Product Manager `SKILL.md` files |
+| `~/.claude/skills/product-designer/` | 8 Product Designer `SKILL.md` files |
+| `~/.claude/commands/product-manager/` | 19 Product Manager command files |
+| `~/.claude/commands/product-designer/` | 15 Product Designer command files |
+| `~/.claude/commands/start-interview.md` | Product Manager onboarding entry point |
+| `~/.claude/commands/start-designer-interview.md` | Product Designer onboarding entry point |
+| `~/.claude/output-styles/product-manager-standard.md` | Product Manager output style |
+| `~/.claude/output-styles/design-standard.md` | Product Designer output style |
 
-### Project scaffold for PM repos
+### Project scaffold — Product Manager
 
-| Path                                          | Contents                                      |
-| --------------------------------------------- | --------------------------------------------- |
-| `claude-workflow/policy/`                     | Full policy copy used by the repo             |
-| `claude-workflow/interview/`                  | `pm-interview.md` and `designer-interview.md` |
-| `claude-workflow/.claude-pm-version`          | Installed package version marker              |
-| `CLAUDE.md`                                   | PM context root file                          |
-| `.claude/settings.json`                       | Claude Code repo settings                     |
-| `.claude/output-styles/pm-standard.md`        | PM output style inside the repo               |
-| `.claude/agents/product-agent.md`             | PM agent placeholder                          |
-| `.claude/skills/product-manager/*/context.md` | PM context placeholders                       |
+| Path | Contents |
+|---|---|
+| `claude-workflow/policy/shared/` | Shared rules, skills, assets |
+| `claude-workflow/policy/product-manager/` | Product Manager rules, skills, commands |
+| `claude-workflow/interview/product-manager-interview.md` | Onboarding interview |
+| `claude-workflow/.claude-setup` | Installed version and role |
+| `CLAUDE.md` | Context root file (placeholder until interview runs) |
+| `.claude/settings.json` | Claude Code repo settings |
+| `.claude/output-styles/product-manager-standard.md` | Output style inside the repo |
+| `.claude/agents/product-agent.md` | Product Manager agent placeholder |
+| `.claude/skills/product-manager/*/context.md` | Skill context placeholders |
+| `.claude/outputs/html/` | HTML deliverables directory |
+| `.claude/outputs/md/` | Markdown deliverables directory |
 
-### Project scaffold for Designer repos
+### Project scaffold — Product Designer
 
-| Path                                           | Contents                                      |
-| ---------------------------------------------- | --------------------------------------------- |
-| `claude-workflow/policy/`                      | Full policy copy used by the repo             |
-| `claude-workflow/interview/`                   | `pm-interview.md` and `designer-interview.md` |
-| `claude-workflow/.claude-pm-version`           | Installed package version marker              |
-| `CLAUDE.md`                                    | Designer context root file                    |
-| `.claude/settings.json`                        | Claude Code repo settings                     |
-| `.claude/output-styles/design-standard.md`     | Designer output style inside the repo         |
-| `.claude/agents/design-agent.md`               | Designer agent placeholder                    |
-| `.claude/agents/handoff-agent.md`              | Handoff agent placeholder                     |
-| `.claude/skills/product-designer/*/context.md` | Designer context placeholders                 |
+| Path | Contents |
+|---|---|
+| `claude-workflow/policy/shared/` | Shared rules, skills, assets |
+| `claude-workflow/policy/product-designer/` | Product Designer rules, skills, commands |
+| `claude-workflow/interview/designer-interview.md` | Onboarding interview |
+| `claude-workflow/.claude-setup` | Installed version and role |
+| `CLAUDE.md` | Context root file (placeholder until interview runs) |
+| `.claude/settings.json` | Claude Code repo settings |
+| `.claude/output-styles/design-standard.md` | Output style inside the repo |
+| `.claude/agents/design-agent.md` | Product Designer agent placeholder |
+| `.claude/agents/handoff-agent.md` | Handoff agent placeholder |
+| `.claude/skills/product-designer/*/context.md` | Skill context placeholders |
+| `.claude/outputs/html/` | HTML deliverables directory |
+| `.claude/outputs/md/` | Markdown deliverables directory |
 
-### Private files
+### Private files (added to `.gitignore`)
 
-These are added to `.gitignore`:
-
-| Path                          | Purpose                  |
-| ----------------------------- | ------------------------ |
-| `CLAUDE.local.md`             | Private notes            |
+| Path | Purpose |
+|---|---|
+| `CLAUDE.local.md` | Private notes |
 | `.claude/settings.local.json` | Personal local overrides |
 
 ---
 
 ## Skills
 
-### Product Manager skills
+### Product Manager
 
 - `decision-logger`
 - `edge-case-finder`
@@ -178,7 +189,7 @@ These are added to `.gitignore`:
 - `requirement-writer`
 - `scope-check`
 
-### Product Designer skills
+### Product Designer
 
 - `design-handoff`
 - `design-policy-review`
@@ -189,7 +200,7 @@ These are added to `.gitignore`:
 - `microcopy-writer`
 - `vuetify-constraint-check`
 
-### Shared skills
+### Shared
 
 - `design-system-check`
 - `meeting-support`
@@ -202,47 +213,41 @@ These are added to `.gitignore`:
 
 ## Onboarding Flows
 
-### PM onboarding
+### Product Manager
 
-Source: [interview/pm-interview.md](interview/pm-interview.md)
-
-Current repo version:
+Source: [interview/product-manager-interview.md](interview/product-manager-interview.md)
 
 - Structured multi-section interview
-- Starts by asking working language
-- Generates PM context files in English
+- Starts by asking working language (Persian or English)
+- Generates context files in English
 - Supports repo and no-repo modes
-- Targets 14 generated output files
+- Produces 14 output files
 
-### Designer onboarding
+### Product Designer
 
 Source: [interview/designer-interview.md](interview/designer-interview.md)
 
-Current repo version:
-
-- Figma-first onboarding
+- Figma-first onboarding — reads the Figma file directly instead of asking questions
 - Verifies Figma MCP access first
-- Asks two short setup questions
-- Reads one or two Figma files
-- Generates Designer context files in English
-- Targets 11 generated output files per the onboarding spec
+- Asks two short setup questions (language + repo status)
+- Reads one or two Figma files via MCP
+- Produces 11 output files
 
 ---
 
-## Documentation
+## Output Files
 
-The repository currently includes these HTML docs in [`docs/`](docs/):
+All deliverables produced by skills are saved into:
 
-| File                                                   | Purpose                         |
-| ------------------------------------------------------ | ------------------------------- |
-| [docs/index.html](docs/index.html)                     | Overview / landing page                  |
-| [docs/pipeline.html](docs/pipeline.html)               | Context Pipeline deep-dive               |
-| [docs/presentation.html](docs/presentation.html)       | General team presentation                |
-| [docs/presentation-pm.html](docs/presentation-pm.html) | Product Manager presentation             |
-| [docs/presentation-pd.html](docs/presentation-pd.html) | Product Designer presentation            |
-| [docs/pm-presentation.html](docs/pm-presentation.html) | PM presentation (alternate layout)       |
-| [docs/pd-presentation.html](docs/pd-presentation.html) | Designer presentation (alternate layout) |
-| [docs/figma-to-vue.html](docs/figma-to-vue.html)       | Figma → Vue / Vuetify reference          |
+```
+.claude/outputs/
+  html/    ← styled single-file HTML documents
+  md/      ← clean Markdown documents
+```
+
+File naming follows the pattern: `{topic}-{jalali-date}.{ext}`
+
+Example: `payment-gateway-spec-14050131.md`
 
 ---
 
@@ -255,12 +260,20 @@ product-team-claude-skills/
 ├── src/
 │   ├── commands/
 │   │   ├── init.js
-│   │   └── update.js
+│   │   ├── update.js
+│   │   ├── doctor.js
+│   │   └── listSkills.js
 │   ├── scaffold/
 │   │   ├── copyGlobal.js
 │   │   ├── copyProject.js
 │   │   └── patchGitignore.js
 │   └── utils/
+│       ├── checkPrereqs.js
+│       ├── detectClaude.js
+│       ├── detectGitRepo.js
+│       ├── detectRole.js
+│       ├── isPlaceholder.js
+│       └── packageRoot.js
 ├── policy/
 │   ├── product-manager/
 │   │   ├── commands/
@@ -277,18 +290,9 @@ product-team-claude-skills/
 │       ├── rules/
 │       └── skills/
 ├── interview/
-│   ├── designer-interview.md
-│   └── pm-interview.md
-├── pm-template/
+│   ├── product-manager-interview.md
+│   └── designer-interview.md
+├── product-manager-template/
 ├── designer-template/
-├── docs/
-│   ├── index.html
-│   ├── pipeline.html
-│   ├── presentation.html
-│   ├── presentation-pm.html
-│   ├── presentation-pd.html
-│   ├── pm-presentation.html
-│   ├── pd-presentation.html
-│   └── figma-to-vue.html
 └── README.md
 ```

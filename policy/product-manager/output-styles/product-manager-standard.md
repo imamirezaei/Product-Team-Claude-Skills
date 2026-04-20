@@ -1,8 +1,8 @@
 ---
-name: pm-standard
+name: product-manager-standard
 ---
 
-# PM Standard Output Style
+# Product Manager Standard Output Style
 
 Apply this output style to all responses in the PM workflow.
 
@@ -110,8 +110,8 @@ When a skill produces a **final deliverable** (spec, requirement, edge case repo
 
 Then write the file to the output directory:
 
-- Markdown → `outputs/pm/[feature-name]-[skill-name].md`
-- HTML → `outputs/pm/[feature-name]-[skill-name].html`
+- Markdown → `.claude/outputs/md/[feature-name]-[skill-name]-[jalali-date].md`
+- HTML → `.claude/outputs/html/[feature-name]-[skill-name]-[jalali-date].html`
 
 For HTML output, wrap the content in a clean HTML shell with inline styles — no external dependencies.
 

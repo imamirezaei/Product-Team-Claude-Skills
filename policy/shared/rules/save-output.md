@@ -8,18 +8,25 @@ Wait for the user's answer before writing the file.
 
 ## File naming
 
-Use a short, descriptive kebab-case name based on the feature or topic.
+Use a short, descriptive kebab-case name based on the feature or topic, followed by the current date in **Jalali (Shamsi) calendar** formatted as `YYYYMMDD`.
+
+Pattern: `{topic-slug}-{jalali-date}.{ext}`
 
 Examples:
-- `payment-gateway-spec.md`
-- `user-profile-edge-cases.html`
-- `auth-flow-decision.md`
+- `payment-gateway-spec-14050131.md`
+- `user-profile-edge-cases-14050215.html`
+- `auth-flow-decision-14050312.md`
+
+To determine today's Jalali date, read it from the `currentDate` field in the session context (provided as a Gregorian date) and convert to Jalali. If conversion is not possible, ask the user for today's Jalali date before saving.
 
 ## Save location
 
-Save all output files to `.claude/outputs/` in the product repo root.
+Save files to `.claude/outputs/` in the product repo root, routed by format:
 
-This directory is created during `claude-pm init` and is safe to write to.
+| Format | Save path |
+|---|---|
+| `md` | `.claude/outputs/md/` |
+| `html` | `.claude/outputs/html/` |
 
 ## Format behavior
 

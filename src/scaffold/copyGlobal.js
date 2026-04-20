@@ -51,7 +51,7 @@ function copyCommandsFrom(policySub, destSubdir) {
  * Installs global Claude Code files to ~/.claude/:
  *   - skills/shared/, skills/product-manager/, skills/product-designer/
  *   - commands/product-manager/, commands/product-designer/
- *   - output-styles/pm-standard.md, output-styles/design-standard.md
+ *   - output-styles/product-manager-standard.md, output-styles/design-standard.md
  *   - commands/start-interview.md, commands/start-designer-interview.md
  *
  * Returns array of installed paths for display.
@@ -75,9 +75,9 @@ export function copyGlobal() {
   const stylesDest = path.join(GLOBAL_CLAUDE_DIR, 'output-styles');
   fs.mkdirSync(stylesDest, { recursive: true });
 
-  const pmStyle = path.join(stylesSrc, 'product-manager', 'output-styles', 'pm-standard.md');
+  const pmStyle = path.join(stylesSrc, 'product-manager', 'output-styles', 'product-manager-standard.md');
   if (fs.existsSync(pmStyle)) {
-    fs.copyFileSync(pmStyle, path.join(stylesDest, 'pm-standard.md'));
+    fs.copyFileSync(pmStyle, path.join(stylesDest, 'product-manager-standard.md'));
   }
 
   const designStyle = path.join(stylesSrc, 'product-designer', 'output-styles', 'design-standard.md');
@@ -91,7 +91,7 @@ export function copyGlobal() {
 description: Start the PM onboarding interview
 ---
 
-Read the file at \`./claude-workflow/interview/pm-interview.md\` and immediately start the interview.
+Read the file at \`./claude-workflow/interview/product-manager-interview.md\` and immediately start the interview.
 
 Your first question must ask which language the PM wants: Persian or English.
 Use the selected language for all interview questions and PM-facing guidance during the interview.
@@ -106,7 +106,7 @@ After completing all 14 output files, write each file directly to its specified 
 
   // ── /start-designer-interview ─────────────────────────────────────────────
   const startDesignerInterviewContent = `---
-description: Start Designer onboarding — connects Figma MCP, reads the Figma file, and generates all 12 context files
+description: Start Product Designer onboarding — connects Figma MCP, reads the Figma file, and generates all 11 context files
 ---
 
 Read the file at \`./claude-workflow/interview/designer-interview.md\` and immediately start the onboarding flow.

@@ -113,8 +113,8 @@ When a skill produces a **final deliverable** (design policy report, Vuetify con
 
 Then write the file to the output directory:
 
-- Markdown → `outputs/pd/[feature-name]-[skill-name].md`
-- HTML → `outputs/pd/[feature-name]-[skill-name].html`
+- Markdown → `.claude/outputs/md/[feature-name]-[skill-name]-[jalali-date].md`
+- HTML → `.claude/outputs/html/[feature-name]-[skill-name]-[jalali-date].html`
 
 For HTML output, wrap the content in a clean HTML shell with inline styles — no external dependencies.
 

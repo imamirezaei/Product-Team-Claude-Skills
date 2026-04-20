@@ -10,7 +10,7 @@
     "bin/",
     "src/",
     "policy/",
-    "pm-template/",
+    "product-manager-template/",
     "designer-template/",
     "interview/"
   ],

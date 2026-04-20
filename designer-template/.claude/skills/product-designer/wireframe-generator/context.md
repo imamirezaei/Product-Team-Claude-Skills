@@ -1,6 +1,6 @@
 # Context: wireframe-generator — [Product Name]
 
-> This file is populated by the Designer Interview engine. Replace the placeholders below with product-specific values after running the interview.
+> This file is populated by the Product Designer Interview engine. Replace the placeholders below with product-specific values after running the interview.
 
 ---
 

@@ -1,6 +1,6 @@
 # Rule: Always Include DOD
 
-Every output that defines, specifies, or refines a feature must include a DOD section. This rule is the single source of truth for DOD requirements — other files (e.g. `pm-standard`) reference this rule rather than redefining it.
+Every output that defines, specifies, or refines a feature must include a DOD section. This rule is the single source of truth for DOD requirements — other files (e.g. `product-manager-standard`) reference this rule rather than redefining it.
 
 ## When DOD is mandatory
 

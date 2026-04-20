@@ -16,7 +16,6 @@ function copyDirRecursive(src, dest) {
     if (entry.isDirectory()) {
       copyDirRecursive(srcPath, destPath);
     } else {
-      // Never overwrite files that have been filled in (non-placeholder)
       if (fs.existsSync(destPath) && !isPlaceholder(destPath)) {
         continue;
       }
@@ -27,10 +26,10 @@ function copyDirRecursive(src, dest) {
 
 const ROLE_CONFIG = {
   pm: {
-    templateDir: 'pm-template',
+    templateDir: 'product-manager-template',
     skillsDir: 'product-manager',
-    outputStyleSrc: path.join('policy', 'product-manager', 'output-styles', 'pm-standard.md'),
-    outputStyleDest: path.join('.claude', 'output-styles', 'pm-standard.md'),
+    outputStyleSrc: path.join('policy', 'product-manager', 'output-styles', 'product-manager-standard.md'),
+    outputStyleDest: path.join('.claude', 'output-styles', 'product-manager-standard.md'),
     agentSrc: path.join('.claude', 'agents', 'product-agent.md'),
     agentDest: path.join('.claude', 'agents', 'product-agent.md'),
   },
@@ -48,29 +47,51 @@ const ROLE_CONFIG = {
 // Writes to: claude-workflow/policy/, claude-workflow/interview/,
 // CLAUDE.md, .claude/settings.json, .claude/output-styles/,
 // .claude/agents/, .claude/skills/<role>/*/context.md,
-// and claude-workflow/.claude-pm-version.
+// and claude-workflow/.claude-setup.
 // Returns array of installed paths for display.
 export function copyProject(cwd, packageVersion, role = 'pm') {
   const installed = [];
   const cfg = ROLE_CONFIG[role] ?? ROLE_CONFIG.pm;
   const templateDir = path.join(PACKAGE_ROOT, cfg.templateDir);
 
-  // 1. Policy layer → ./claude-workflow/policy/
-  const policySrc = path.join(PACKAGE_ROOT, 'policy');
+  // 1. Policy layer → ./claude-workflow/policy/ (shared + role-specific only)
   const policyDest = path.join(cwd, 'claude-workflow', 'policy');
-  copyDirRecursive(policySrc, policyDest);
+  const policySubdirs = ['shared', cfg.skillsDir];
+  for (const subdir of policySubdirs) {
+    const subdirSrc = path.join(PACKAGE_ROOT, 'policy', subdir);
+    if (fs.existsSync(subdirSrc)) {
+      copyDirRecursive(subdirSrc, path.join(policyDest, subdir));
+    }
+  }
+  // Copy root-level policy files (e.g. settings.json)
+  const policyRoot = path.join(PACKAGE_ROOT, 'policy');
+  for (const entry of fs.readdirSync(policyRoot, { withFileTypes: true })) {
+    if (!entry.isDirectory()) {
+      fs.mkdirSync(policyDest, { recursive: true });
+      fs.copyFileSync(path.join(policyRoot, entry.name), path.join(policyDest, entry.name));
+    }
+  }
   installed.push('claude-workflow/policy/');
 
-  // 2. Interview → ./claude-workflow/interview/
-  const interviewSrc = path.join(PACKAGE_ROOT, 'interview');
+  // 2. Interview (role-specific only) → ./claude-workflow/interview/
   const interviewDest = path.join(cwd, 'claude-workflow', 'interview');
-  copyDirRecursive(interviewSrc, interviewDest);
+  const interviewFileMap = {
+    pm: 'product-manager-interview.md',
+    designer: 'designer-interview.md',
+  };
+  const interviewFile = interviewFileMap[role] ?? interviewFileMap.pm;
+  const interviewSrc = path.join(PACKAGE_ROOT, 'interview', interviewFile);
+  if (fs.existsSync(interviewSrc)) {
+    fs.mkdirSync(interviewDest, { recursive: true });
+    fs.copyFileSync(interviewSrc, path.join(interviewDest, interviewFile));
+  }
   installed.push('claude-workflow/interview/');
 
-  // 3. Version file
-  const versionFile = path.join(cwd, 'claude-workflow', '.claude-pm-version');
-  fs.writeFileSync(versionFile, packageVersion, 'utf8');
-  installed.push('claude-workflow/.claude-pm-version');
+  // 3. Setup file (version + role)
+  const setupFile = path.join(cwd, 'claude-workflow', '.claude-setup');
+  fs.mkdirSync(path.dirname(setupFile), { recursive: true });
+  fs.writeFileSync(setupFile, JSON.stringify({ version: packageVersion, role }, null, 2), 'utf8');
+  installed.push('claude-workflow/.claude-setup');
 
   // 4. CLAUDE.md placeholder (skip if already generated)
   const claudeMdDest = path.join(cwd, 'CLAUDE.md');
@@ -127,10 +148,11 @@ export function copyProject(cwd, packageVersion, role = 'pm') {
     installed.push(`.claude/skills/${cfg.skillsDir}/ (${skillDirs.length} skills)`);
   }
 
-  // 9. Create .claude/outputs/ directory for saved deliverables
-  const outputsDir = path.join(cwd, '.claude', 'outputs');
-  fs.mkdirSync(outputsDir, { recursive: true });
-  installed.push('.claude/outputs/');
+  // 9. Create .claude/outputs/{html,md}/ directories for saved deliverables
+  for (const fmt of ['html', 'md']) {
+    fs.mkdirSync(path.join(cwd, '.claude', 'outputs', fmt), { recursive: true });
+  }
+  installed.push('.claude/outputs/html/', '.claude/outputs/md/');
 
   // 10. For designer: also copy the extra handoff-agent placeholder
   if (role === 'designer') {
