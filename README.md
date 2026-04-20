@@ -292,9 +292,3 @@ product-team-claude-skills/
 │   └── figma-to-vue.html
 └── README.md
 ```
-
----
-
-## License
-
-UNLICENSED
