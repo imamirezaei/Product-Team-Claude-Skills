@@ -1,6 +1,6 @@
 ---
 name: prompt-optimizer
-description: "Analyze, critique, and rewrite user prompts to maximize clarity, specificity, and output quality for Claude (both claude.ai and Claude Code). Use this skill whenever the user says \"بهینه کن\", \"prompt رو بهتر کن\", \"این prompt خوبه؟\", \"optimize this prompt\", \"improve my prompt\", \"review my prompt\", \"critique this prompt\", \"rewrite this prompt\", \"پرامپتم رو ببین\", \"نقد کن\", \"چطور بهترش کنم\", or pastes a prompt and asks for feedback. Also trigger when the user shares a prompt draft and asks \"what's wrong with this\" or \"how can I get better results\". Even if the user just pastes a prompt without explicit instruction but the context suggests they want improvement, use this skill."
+description: 'Analyze, critique, and rewrite user prompts to maximize clarity, specificity, and output quality for Claude (both claude.ai and Claude Code). Use this skill whenever the user says "بهینه کن", "prompt رو بهتر کن", "این prompt خوبه؟", "optimize this prompt", "improve my prompt", "review my prompt", "critique this prompt", "rewrite this prompt", "پرامپتم رو ببین", "نقد کن", "چطور بهترش کنم", or pastes a prompt and asks for feedback. Also trigger when the user shares a prompt draft and asks "what''s wrong with this" or "how can I get better results". Even if the user just pastes a prompt without explicit instruction but the context suggests they want improvement, use this skill.'
 ---
 
 # Prompt Optimizer
@@ -29,17 +29,16 @@ Determine which category the prompt falls into, as each has different optimizati
 Before producing the analysis and rewrite, check if there are critical ambiguities in the prompt that would lead to significantly different optimized versions. If so, ask the user targeted questions first. This step is about precision, not thoroughness for its own sake.
 
 **Ask when:**
+
 - The prompt's target output could be interpreted in fundamentally different ways (e.g., "build a dashboard" — is it a React app? An HTML artifact? A Figma mockup?)
 - The intended audience is unclear and would change the tone/depth of the optimized prompt
 - The prompt could target either claude.ai or Claude Code and the optimization strategy would differ
 - A key constraint is missing that would make or break the output (e.g., language, framework, file format)
-
-**Do NOT ask when:**
+  **Do NOT ask when:**
 - The ambiguity is minor and you can make a reasonable default assumption (state your assumption in the analysis instead)
 - The prompt is simple enough that over-questioning would be annoying
 - Context from the conversation already answers the question
-
-**How to ask:**
+  **How to ask:**
 - Maximum 3 questions per prompt. If you have more, pick the 3 most impactful ones.
 - Be specific: not "what do you want?" but "this prompt could produce a React component or a plain HTML file — which one do you need?"
 - After receiving answers, proceed to Step 3 with full context.
@@ -66,6 +65,7 @@ The output MUST follow this exact structure:
 Write the complete, ready-to-use improved prompt in English. This is not a suggestion list. This is the full rewritten prompt the user can copy-paste and use immediately.
 
 Rules for the optimized prompt:
+
 - Must preserve the user's original intent completely
 - Must be in English regardless of the original prompt's language
 - Must add structure where the original was flat

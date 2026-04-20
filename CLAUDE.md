@@ -2,90 +2,72 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## What This Repo Is
-
-A Node.js CLI package (`claude-pm`) that scaffolds Claude Code for product teams. It installs structured workflows (skills, commands, rules) into both `~/.claude/` (global) and a target product repository. Two roles are supported: **product-manager** and **product-designer**.
-
 ## Commands
 
 ```bash
-# Run the CLI locally
-node bin/cli.js --help
-node bin/cli.js init --role pm
-node bin/cli.js init --role designer --force
-node bin/cli.js update
-
-# Smoke test (only test defined in package.json)
+# Test (runs --help against the CLI)
 npm test
+
+# Run the CLI locally (from a target product repo)
+node /path/to/this-repo/bin/cli.js init
+node /path/to/this-repo/bin/cli.js init --role designer
+node /path/to/this-repo/bin/cli.js update
+
+# Publish to npm
+npm publish
 ```
 
-No build step — this is plain ESM JavaScript (Node ≥ 18, `"type": "module"`).
+## Architecture
 
-## Architecture: 4-Layer Context Assembly
+This is an **npm CLI package** (`claude-pm`) that installs Claude Code skills, commands, and structured context for product managers and designers into their product repos.
+
+### 4-Layer context model
 
 ```
-Policy Layer    → policy/          Fixed SKILL.md, rules, commands — updated via `claude-pm update`
-Interview Layer → interview/       647-line PM interview or Figma-based designer interview (run once)
-Dynamic Layer   → pm-template/     Generated per-product: CLAUDE.md + context.md per skill + agent
-Personal Layer  → (git-ignored)    CLAUDE.local.md + settings.local.json — never committed
+Policy Layer      policy/                         → maintainer owns, updated via npm
+Interview Engine  interview/pm-interview.md       → run once per PM/designer
+Dynamic Layer     CLAUDE.md + context.md files    → output of interview, never overwritten by update
+Personal Layer    CLAUDE.local.md + settings.local.json → gitignored, PM-owned
 ```
 
-The **policy layer** is identical for all users. When a new version ships, `claude-pm update` overwrites `policy/` and `interview/` but never touches the dynamic or personal layers.
+### Key directories
 
-The **interview engine** generates 14 files (PM) or 11 files (Designer) — one `CLAUDE.md`, one agent definition, and one `context.md` per skill. These are the only files that carry project-specific knowledge.
-
-## Key Directories
-
-| Path | Purpose |
+| Directory | Purpose |
 |---|---|
-| `bin/cli.js` | CLI entry point — `init` and `update` commands |
-| `src/commands/` | `init.js` and `update.js` — orchestrate the full flow |
-| `src/scaffold/` | `copyGlobal.js`, `copyProject.js`, `patchGitignore.js` |
-| `src/utils/` | Guards: detectClaude, detectGitRepo, detectRole, isPlaceholder |
-| `policy/shared/` | Skills and rules shared by both roles |
-| `policy/product-manager/` | 11 PM skills, 9 commands, 4 rules, 1 output style |
-| `policy/product-designer/` | 7 designer skills, 6 commands, 3 rules, 1 output style |
-| `pm-template/` | Placeholder files scaffolded into product repos |
-| `designer-template/` | Same for designers |
-| `interview/` | `pm-interview.md` (647 lines) and `designer-interview.md` |
+| `bin/cli.js` | CLI entry point. Two commands: `init` and `update`. |
+| `src/commands/` | `init.js` and `update.js` — orchestrate the setup steps |
+| `src/scaffold/copyGlobal.js` | Copies skills/commands/output-styles to `~/.claude/` |
+| `src/scaffold/copyProject.js` | Copies policy + templates into the user's product repo |
+| `src/scaffold/patchGitignore.js` | Adds entries to protect personal files |
+| `src/utils/isPlaceholder.js` | Detects unmodified template files by sentinel string |
+| `policy/` | Role-specific rules, commands, skills (SKILL.md), output styles |
+| `pm-template/` | Placeholder files copied to the user's product repo on PM init |
+| `designer-template/` | Placeholder files copied to the user's product repo on designer init |
+| `interview/` | Interview markdown files for PM and designer onboarding |
 
-## Skill File Convention
+### Two roles
 
-Every skill lives at `policy/<role>/skills/<name>/SKILL.md`. The file contains:
-- YAML frontmatter: `name` and `description` (used for skill dispatch)
-- Full instructions for that skill
-- References to the output style and working-language rule
+`init` accepts `--role pm` (default) or `--role designer`. Role drives which template directory, skill set, agent file, and output style are used. See `ROLE_CONFIG` in `src/scaffold/copyProject.js`.
 
-When a PM runs `/new-feature`, commands chain multiple skills in sequence (problem-framing → feature-dependency → edge-case-finder → design-system-check → wireframe-generator → feature-spec).
+### Placeholder sentinel
 
-## Init Flow
+Files containing `"Replace this file with the interview engine output."` are considered placeholders. `isPlaceholder()` in `src/utils/isPlaceholder.js` is used throughout `copyProject.js` to decide whether to overwrite. This protects generated (post-interview) files from being reset on re-init.
 
-1. Guard checks: Claude Code installed? Git repo? Already initialized?
-2. `copyGlobal()` — install skills/commands/output-styles to `~/.claude/`
-3. `copyProject()` — scaffold `claude-workflow/policy/`, placeholders, version file
-4. `patchGitignore()` — protect `CLAUDE.local.md` and `settings.local.json`
-5. Print prompt to open Claude Code and run `/start-interview`
+### Update vs Init
 
-`isPlaceholder()` gates all file writes — existing user-edited files are never overwritten.
+- `init`: full setup — global files + project scaffold + gitignore. Guarded by presence of `claude-workflow/` (use `--force` to override).
+- `update`: only refreshes `claude-workflow/policy/`, `claude-workflow/interview/`, global `~/.claude/` files, and output styles. Never touches `CLAUDE.md`, context files, agents, or settings.
 
-## Update Flow
+### What gets installed where
 
-1. Read `claude-workflow/.claude-pm-version` to verify initialization and compare versions
-2. Overwrite `claude-workflow/policy/` and `claude-workflow/interview/` from current package
-3. Reinstall to `~/.claude/` (no downgrade)
-4. Protected files that are **never** touched: `CLAUDE.md`, all `context.md` files, `product-agent.md`, `settings.json`, `CLAUDE.local.md`, `settings.local.json`
+**Global (`~/.claude/`)** — shared across all user projects:
+- `skills/shared/`, `skills/product-manager/`, `skills/product-designer/`
+- `commands/product-manager/`, `commands/product-designer/`
+- `commands/start-interview.md`, `commands/start-designer-interview.md` (written inline in `copyGlobal.js`)
+- `output-styles/pm-standard.md`, `output-styles/design-standard.md`
 
-## Hard Rules (Always Active)
-
-These rules are enforced regardless of skill:
-- **flag-authority-limits** — mark decisions outside the user's authority with ⚠️
-- **working-language** — output in user's language; technical terms stay in English
-- **always-include-dod** (PM) — every feature output includes a Definition of Done
-- **no-technical-decisions** (PM) — Claude flags but never makes technical choices
-
-## Adding a New Skill
-
-1. Create `policy/<role>/skills/<skill-name>/SKILL.md`
-2. Add a corresponding placeholder at `pm-template/.claude/skills/product-manager/<skill-name>/context.md`
-3. Reference the skill in the relevant command file if it belongs in a chain
-4. Add a question block to `interview/pm-interview.md` that maps to the new `context.md`
+**Project-level** — inside the user's product repo:
+- `claude-workflow/policy/` — full policy copy for `@file` imports
+- `claude-workflow/interview/` — interview markdown
+- `claude-workflow/.claude-pm-version` — tracks installed version
+- `CLAUDE.md`, `.claude/settings.json`, `.claude/agents/`, `.claude/skills/<role>/*/context.md`

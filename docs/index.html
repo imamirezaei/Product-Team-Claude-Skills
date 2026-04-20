@@ -1,521 +1,594 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Product Team · Claude Skills</title>
-  <style>
-    /* ── SITE TOP NAV ── */
-    .site-nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      height: 44px;
-      background: #fff;
-      border-bottom: 1px solid rgba(0,0,0,0.1);
-      display: flex;
-      align-items: center;
-      padding: 0 24px;
-      gap: 0;
-      z-index: 9999;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      font-size: 13px;
-    }
-    .site-nav__brand {
-      font-weight: 600;
-      color: #1a1a18;
-      text-decoration: none;
-      margin-right: 28px;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .site-nav__links {
-      display: flex;
-      gap: 4px;
-    }
-    .site-nav__link {
-      padding: 5px 12px;
-      border-radius: 6px;
-      text-decoration: none;
-      color: #5f5e5a;
-      font-weight: 500;
-      transition: background 0.12s, color 0.12s;
-    }
-    .site-nav__link:hover {
-      background: #f1efe8;
-      color: #1a1a18;
-    }
-    .site-nav__link--active {
-      background: #1a1a18;
-      color: #fff !important;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product Team · Claude Code — Complete Reference</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --blue-50: #e6f1fb; --blue-100: #b5d4f4; --blue-400: #378add;
+        --blue-600: #185fa5; --blue-800: #0c447c; --blue-900: #042c53;
+        --teal-50: #e1f5ee; --teal-100: #9fe1cb; --teal-400: #1d9e75;
+        --teal-600: #0f6e56; --teal-800: #085041;
+        --purple-50: #eeedfe; --purple-100: #cecbf6; --purple-400: #7f77dd;
+        --purple-600: #534ab7; --purple-800: #3c3489;
+        --amber-50: #faeeda; --amber-100: #fac775; --amber-400: #ba7517;
+        --amber-600: #854f0b; --amber-800: #633806;
+        --coral-50: #faece7; --coral-400: #d85a30;
+        --coral-600: #993c1d; --coral-800: #712b13;
+        --gray-50: #f1efe8; --gray-100: #d3d1c7; --gray-200: #b4b2a9;
+        --gray-400: #888780; --gray-600: #5f5e5a; --gray-800: #444441;
+        --text: #1a1a18; --text-sec: #5f5e5a; --text-hint: #888780;
+        --bg: #ffffff; --bg-sec: #f8f7f4; --bg-ter: #f1efe8;
+        --border: rgba(0,0,0,0.1); --border-med: rgba(0,0,0,0.18);
+        --radius: 8px; --radius-lg: 12px;
+        --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+      body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; padding-top: 44px; }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      /* ── SITE TOP NAV ── */
+      .site-nav { position: fixed; top: 0; left: 0; right: 0; height: 44px; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; padding: 0 24px; gap: 0; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; }
+      .site-nav__brand { font-weight: 600; color: #1a1a18; text-decoration: none; margin-right: 28px; white-space: nowrap; flex-shrink: 0; }
+      .site-nav__links { display: flex; gap: 4px; }
+      .site-nav__link { padding: 5px 12px; border-radius: 6px; text-decoration: none; color: #5f5e5a; font-weight: 500; transition: background 0.12s, color 0.12s; }
+      .site-nav__link:hover { background: #f1efe8; color: #1a1a18; }
+      .site-nav__link--active { background: #1a1a18; color: #fff !important; }
 
-    :root {
-      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      --mono: "SF Mono", "Fira Code", "Cascadia Mono", monospace;
-      --text: #1a1a18;
-      --text2: #5f5e5a;
-      --text3: #888780;
-      --bg: #faf9f7;
-      --bg2: #f1efe8;
-      --surface: #ffffff;
-      --border: rgba(0,0,0,0.08);
-      --border2: rgba(0,0,0,0.14);
-      --blue: #185fa5;
-      --blue-bg: #e6f1fb;
-      --purple: #534ab7;
-      --purple-bg: #eeedfe;
-      --teal: #0f6e56;
-      --teal-bg: #e1f5ee;
-    }
+      /* Layout */
+      .section { padding: 72px; border-bottom: 0.5px solid var(--border-med); }
+      .section:last-child { border-bottom: none; }
+      .section-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
+      .content { max-width: 960px; }
 
-    body {
-      font-family: var(--sans);
-      background: var(--bg);
-      color: var(--text);
-      padding-top: 44px;
-      -webkit-font-smoothing: antialiased;
-    }
+      /* Hero */
+      .hero { padding: 80px 72px; background: var(--blue-900); color: white; }
+      .hero-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.45); margin-bottom: 32px; }
+      .hero-h1 { font-size: 48px; font-weight: 500; color: white; line-height: 1.1; max-width: 700px; margin-bottom: 20px; }
+      .hero-desc { font-size: 18px; font-weight: 400; color: rgba(255,255,255,0.6); max-width: 600px; margin-bottom: 48px; line-height: 1.6; }
+      .hero-stats { display: flex; gap: 0; }
+      .hero-stat { padding: 0 32px 0 0; margin-right: 32px; border-right: 1px solid rgba(255,255,255,0.12); }
+      .hero-stat:last-child { border-right: none; }
+      .hero-stat-num { font-size: 32px; font-weight: 500; color: white; }
+      .hero-stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 2px; }
 
-    /* ── HERO ── */
-    .hero {
-      max-width: 760px;
-      margin: 0 auto;
-      padding: 72px 24px 56px;
-      text-align: center;
-    }
-    .hero-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-      color: var(--text3);
-      background: var(--bg2);
-      border: 1px solid var(--border2);
-      border-radius: 999px;
-      padding: 4px 12px;
-      margin-bottom: 28px;
-    }
-    .hero h1 {
-      font-size: 44px;
-      font-weight: 600;
-      line-height: 1.1;
-      letter-spacing: -0.8px;
-      color: var(--text);
-      margin-bottom: 16px;
-    }
-    .hero h1 span {
-      color: var(--text3);
-    }
-    .hero p {
-      font-size: 17px;
-      color: var(--text2);
-      line-height: 1.65;
-      max-width: 520px;
-      margin: 0 auto 40px;
-    }
-    .hero-cta {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 9px 20px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: opacity 0.15s, transform 0.1s;
-    }
-    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
-    .btn-primary { background: #1a1a18; color: #fff; }
-    .btn-secondary { background: var(--surface); color: var(--text2); border: 1px solid var(--border2); }
+      /* Cards */
+      .card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 20px 24px; }
+      .card-sec { background: var(--bg-sec); border-radius: var(--radius-lg); padding: 20px 24px; }
 
-    /* ── FLOW DIAGRAM ── */
-    .flow-section {
-      max-width: 520px;
-      margin: 0 auto 80px;
-      padding: 0 24px;
-    }
-    .flow-label {
-      text-align: center;
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text3);
-      margin-bottom: 28px;
-    }
-    .flow-nodes {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0;
-    }
-    .flow-node {
-      width: 100%;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 10px;
-      padding: 14px 20px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-      opacity: 0;
-      transform: translateY(12px);
-      transition: opacity 0.45s ease, transform 0.45s ease, box-shadow 0.2s;
-    }
-    .flow-node.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .flow-node:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.09);
-    }
-    .flow-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 17px;
-      flex-shrink: 0;
-    }
-    .flow-node-body { flex: 1; }
-    .flow-node-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 2px;
-    }
-    .flow-node-desc {
-      font-size: 11.5px;
-      color: var(--text3);
-      line-height: 1.4;
-    }
-    .flow-node-tag {
-      font-size: 10px;
-      font-weight: 600;
-      font-family: var(--mono);
-      padding: 2px 8px;
-      border-radius: 4px;
-      flex-shrink: 0;
-    }
-    .flow-arrow {
-      width: 1px;
-      height: 24px;
-      background: var(--border2);
-      position: relative;
-      margin: 4px 0;
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    .flow-arrow.visible { opacity: 1; }
-    .flow-arrow::after {
-      content: '';
-      position: absolute;
-      bottom: -4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 0; height: 0;
-      border-left: 4px solid transparent;
-      border-right: 4px solid transparent;
-      border-top: 5px solid var(--border2);
-    }
+      /* Grids */
+      .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+      .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+      .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 
-    /* node color variants */
-    .node-skill .flow-icon { background: var(--purple-bg); color: var(--purple); }
-    .node-skill .flow-node-tag { background: var(--purple-bg); color: var(--purple); }
-    .node-context .flow-icon { background: var(--blue-bg); color: var(--blue); }
-    .node-context .flow-node-tag { background: var(--blue-bg); color: var(--blue); }
-    .node-claude .flow-icon { background: #fff3e0; color: #e65100; }
-    .node-claude .flow-node-tag { background: #fff3e0; color: #e65100; }
-    .node-request .flow-icon { background: var(--bg2); color: var(--text2); }
-    .node-request .flow-node-tag { background: var(--bg2); color: var(--text2); }
-    .node-output .flow-icon { background: var(--teal-bg); color: var(--teal); }
-    .node-output .flow-node-tag { background: var(--teal-bg); color: var(--teal); }
+      /* Typography */
+      h2 { font-size: 32px; font-weight: 500; color: var(--text); margin-bottom: 8px; }
+      h3 { font-size: 17px; font-weight: 500; color: var(--text); }
+      p { font-size: 15px; font-weight: 400; color: var(--text-sec); line-height: 1.7; }
 
-    /* ── ROLE CARDS ── */
-    .cards-section {
-      max-width: 760px;
-      margin: 0 auto 80px;
-      padding: 0 24px;
-    }
-    .section-title {
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--text3);
-      margin-bottom: 16px;
-      text-align: center;
-    }
-    .cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-    @media (max-width: 640px) { .cards-grid { grid-template-columns: 1fr; } }
-    .role-card {
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 12px;
-      padding: 24px;
-      text-decoration: none;
-      color: inherit;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      transition: box-shadow 0.18s, transform 0.15s;
-    }
-    .role-card:hover {
-      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
-    }
-    .role-card-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-    }
-    .role-card-icon-pm { background: var(--blue-bg); }
-    .role-card-icon-pd { background: var(--purple-bg); }
-    .role-card h3 {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .role-card p {
-      font-size: 13px;
-      color: var(--text2);
-      line-height: 1.55;
-    }
-    .role-card-meta {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin-top: auto;
-    }
-    .meta-pill {
-      font-size: 11px;
-      font-weight: 500;
-      padding: 3px 10px;
-      border-radius: 999px;
-      background: var(--bg2);
-      color: var(--text3);
-    }
-    .role-card-arrow {
-      font-size: 16px;
-      color: var(--text3);
-      align-self: flex-end;
-      transition: transform 0.15s;
-    }
-    .role-card:hover .role-card-arrow { transform: translateX(3px); }
+      /* Pills */
+      .pill { display: inline-block; font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 20px; }
+      .pill-blue { background: var(--blue-50); color: var(--blue-800); }
+      .pill-teal { background: var(--teal-50); color: var(--teal-800); }
+      .pill-purple { background: var(--purple-50); color: var(--purple-800); }
+      .pill-amber { background: var(--amber-50); color: var(--amber-800); }
+      .pill-gray { background: var(--gray-50); color: var(--gray-800); }
+      .pill-coral { background: var(--coral-50); color: var(--coral-800); }
 
-    /* ── LINKS ROW ── */
-    .links-section {
-      max-width: 760px;
-      margin: 0 auto 80px;
-      padding: 0 24px;
-    }
-    .links-row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-    .doc-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border2);
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text2);
-      transition: background 0.12s, color 0.12s;
-    }
-    .doc-link:hover {
-      background: var(--bg2);
-      color: var(--text);
-    }
+      /* Arch layers */
+      .arch-layer { border-radius: var(--radius); padding: 14px 20px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+      .arch-arrow { text-align: center; color: var(--gray-400); font-size: 16px; margin: 4px 0; line-height: 1; }
 
-    /* ── FOOTER ── */
-    .footer {
-      border-top: 1px solid var(--border);
-      padding: 24px;
-      text-align: center;
-      font-size: 12px;
-      color: var(--text3);
-    }
-  </style>
-</head>
-<body>
+      /* Step rows */
+      .step-row { display: flex; gap: 16px; margin-bottom: 20px; }
+      .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--blue-600); color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+      .step-body h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
+      .step-body p { font-size: 13px; color: var(--text-sec); }
 
-  <header class="site-nav">
-    <a class="site-nav__brand" href="index.html">Product Team · Claude</a>
-    <nav class="site-nav__links">
-      <a href="index.html" class="site-nav__link site-nav__link--active">Home</a>
-      <a href="pipeline.html" class="site-nav__link">Context Pipeline</a>
-      <a href="pm-presentation.html" class="site-nav__link">For PM</a>
-      <a href="pd-presentation.html" class="site-nav__link">For PD</a>
-      <a href="figma-to-vue.html" class="site-nav__link">Figma → Vue</a>
-    </nav>
-  </header>
+      /* Callouts */
+      .callout-teal { padding: 16px 20px; background: var(--teal-50); border-radius: var(--radius); border-left: 3px solid var(--teal-400); }
+      .callout-teal p { font-size: 13px; color: var(--teal-800); }
+      .callout-amber { padding: 16px 20px; background: var(--amber-50); border-radius: var(--radius); border-left: 3px solid var(--amber-400); }
+      .callout-amber p { font-size: 13px; color: var(--amber-800); }
+      .callout-blue { padding: 16px 20px; background: var(--blue-50); border-radius: var(--radius); border-left: 3px solid var(--blue-400); }
+      .callout-blue p { font-size: 13px; color: var(--blue-800); }
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="hero-badge">v2.1 · April 2026</div>
-    <h1>Claude Code<br><span>for Product Teams</span></h1>
-    <p>Structured workflows, role-aware skills, and product context — assembled automatically every time Claude opens.</p>
-    <div class="hero-cta">
-      <a href="pm-presentation.html" class="btn btn-primary">For Product Managers →</a>
-      <a href="pd-presentation.html" class="btn btn-secondary">For Product Designers</a>
+      /* Stats */
+      .stat { text-align: center; padding: 20px; background: var(--bg-sec); border-radius: var(--radius-lg); }
+      .stat-num { font-size: 36px; font-weight: 500; color: var(--text); }
+      .stat-label { font-size: 12px; color: var(--text-sec); margin-top: 4px; }
+
+      /* Code */
+      code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--bg-ter); padding: 2px 6px; border-radius: 4px; }
+
+      /* Skill card */
+      .skill-card { background: var(--bg); border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); padding: 14px 16px; }
+      .skill-card h3 { font-size: 13px; font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; margin-bottom: 4px; }
+      .skill-card p { font-size: 12px; color: var(--text-sec); line-height: 1.4; }
+
+      /* Workflow diagram */
+      .workflow-diagram { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0; border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); overflow: hidden; }
+      .workflow-zone { padding: 20px; }
+      .workflow-zone + .workflow-zone { border-left: 0.5px solid var(--border-med); }
+      .zone-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 0.5px solid var(--border); }
+      .phase-block { margin-bottom: 16px; padding: 10px 12px; border-radius: var(--radius); }
+      .phase-label { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+      .skill-pill { display: inline-block; font-size: 11px; font-weight: 500; font-family: 'SF Mono','Fira Code',monospace; padding: 2px 8px; border-radius: 4px; margin: 2px 2px 2px 0; }
+      .collab-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-top: 0.5px dashed var(--border-med); font-size: 12px; color: var(--text-sec); }
+      .collab-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+      /* Quick link cards */
+      .doc-link { display: block; padding: 20px 24px; border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); text-decoration: none; color: inherit; }
+      .doc-link:hover { background: var(--bg-sec); }
+      .doc-link-label { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+      .doc-link h3 { font-size: 16px; font-weight: 500; margin-bottom: 4px; }
+      .doc-link p { font-size: 13px; color: var(--text-sec); }
+    </style>
+  </head>
+  <body>
+
+    <header class="site-nav">
+      <a class="site-nav__brand" href="index.html">Product Team · Claude</a>
+      <nav class="site-nav__links">
+        <a href="index.html" class="site-nav__link site-nav__link--active">Home</a>
+        <a href="presentation.html" class="site-nav__link">Context Pipeline</a>
+        <a href="presentation-pm.html" class="site-nav__link">For PM</a>
+        <a href="presentation-pd.html" class="site-nav__link">For PD</a>
+        <a href="figma-to-vue.html" class="site-nav__link">Figma → Vue</a>
+      </nav>
+    </header>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-label">Product Team · Claude Code Skills · 2026</div>
+      <h1 class="hero-h1">A complete workflow system for product teams</h1>
+      <p class="hero-desc">Structured skills, commands, and context files that turn Claude Code into a context-aware partner for Product Managers and Product Designers — personalized to your product, enforced by policy.</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-num">16</div>
+          <div class="hero-stat-label">PM Skills (10 + 6 shared)</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">15</div>
+          <div class="hero-stat-label">Designer Skills (9 + 6 shared)</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">4</div>
+          <div class="hero-stat-label">Chain Commands</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-num">4</div>
+          <div class="hero-stat-label">Context Layers</div>
+        </div>
+      </div>
     </div>
-  </section>
 
-  <!-- Request Flow Diagram -->
-  <section class="flow-section">
-    <div class="flow-label">How a request works</div>
-    <div class="flow-nodes" id="flowNodes">
-
-      <div class="flow-node node-skill" data-delay="0">
-        <div class="flow-icon">📄</div>
-        <div class="flow-node-body">
-          <div class="flow-node-title">Skill definition</div>
-          <div class="flow-node-desc">Role-specific behavior rules — what Claude can and cannot do</div>
+    <!-- Quick links -->
+    <div class="section" style="background: var(--bg-sec);">
+      <div class="content">
+        <div class="grid-4">
+          <a class="doc-link" href="presentation-pm.html">
+            <div class="doc-link-label" style="color: var(--blue-600);">PM Guide</div>
+            <h3>Product Manager</h3>
+            <p>10 PM skills, 6 shared, 3 chain commands — all explained slide by slide</p>
+          </a>
+          <a class="doc-link" href="presentation-pd.html">
+            <div class="doc-link-label" style="color: var(--purple-600);">Designer Guide</div>
+            <h3>Product Designer</h3>
+            <p>9 designer skills, 6 shared, Figma-powered onboarding — deep dive</p>
+          </a>
+          <a class="doc-link" href="presentation.html">
+            <div class="doc-link-label" style="color: var(--gray-600);">Workflow Deck</div>
+            <h3>PM Workflow</h3>
+            <p>Full PM workflow presentation — architecture, context layers, setup process</p>
+          </a>
+          <a class="doc-link" href="figma-to-vue.html">
+            <div class="doc-link-label" style="color: var(--gray-600);">Reference</div>
+            <h3>Figma → Vue</h3>
+            <p>Complete Figma-to-Vuetify translation reference — bilingual EN/FA</p>
+          </a>
         </div>
-        <div class="flow-node-tag">SKILL.md</div>
       </div>
-
-      <div class="flow-arrow" data-delay="150"></div>
-
-      <div class="flow-node node-context" data-delay="200">
-        <div class="flow-icon">🗂️</div>
-        <div class="flow-node-body">
-          <div class="flow-node-title">Product context</div>
-          <div class="flow-node-desc">Your product, team, and decisions — captured once, reused always</div>
-        </div>
-        <div class="flow-node-tag">context.md</div>
-      </div>
-
-      <div class="flow-arrow" data-delay="350"></div>
-
-      <div class="flow-node node-claude" data-delay="400">
-        <div class="flow-icon">⚙️</div>
-        <div class="flow-node-body">
-          <div class="flow-node-title">Context assembly</div>
-          <div class="flow-node-desc">Claude assembles all layers into a prioritized context window</div>
-        </div>
-        <div class="flow-node-tag">CLAUDE.md</div>
-      </div>
-
-      <div class="flow-arrow" data-delay="550"></div>
-
-      <div class="flow-node node-request" data-delay="600">
-        <div class="flow-icon">💬</div>
-        <div class="flow-node-body">
-          <div class="flow-node-title">Your request</div>
-          <div class="flow-node-desc">A skill command or a free-form question — context-aware from the start</div>
-        </div>
-        <div class="flow-node-tag">/command</div>
-      </div>
-
-      <div class="flow-arrow" data-delay="750"></div>
-
-      <div class="flow-node node-output" data-delay="800">
-        <div class="flow-icon">✅</div>
-        <div class="flow-node-body">
-          <div class="flow-node-title">Structured output</div>
-          <div class="flow-node-desc">PM specs, PD briefs, tasks — in the right format, every time</div>
-        </div>
-        <div class="flow-node-tag">Output</div>
-      </div>
-
     </div>
-  </section>
 
-  <!-- Role Cards -->
-  <section class="cards-section">
-    <div class="section-title">Choose your role</div>
-    <div class="cards-grid">
+    <!-- What this is -->
+    <div class="section">
+      <div class="content">
+        <div class="section-label">What this package is</div>
+        <h2 style="margin-bottom: 16px;">Not prompts. A workflow system.</h2>
+        <p style="max-width: 640px; margin-bottom: 36px;">Prompts are single-use instructions. This package installs a full context system — skills, commands, rules, and project-specific knowledge — that Claude loads on every session, so you never have to re-explain your product.</p>
 
-      <a href="pm-presentation.html" class="role-card">
-        <div class="role-card-icon role-card-icon-pm">📋</div>
+        <div class="grid-3" style="margin-bottom: 36px;">
+          <div class="card">
+            <div class="pill pill-blue" style="margin-bottom: 12px;">Policy Layer</div>
+            <h3 style="margin-bottom: 8px;">Skills &amp; Commands</h3>
+            <p style="font-size: 13px;">Skill files define <em>how</em> Claude works. Command files chain skills into workflows. Rules enforce boundaries. Output styles standardize responses. These are identical for everyone.</p>
+          </div>
+          <div class="card">
+            <div class="pill pill-amber" style="margin-bottom: 12px;">Dynamic Layer</div>
+            <h3 style="margin-bottom: 8px;">Your Product Context</h3>
+            <p style="font-size: 13px;">Generated once from an interview (PM) or from Figma directly (Designer). Contains your product's specific decisions, design system, component inventory, and team conventions. Never committed to the policy layer.</p>
+          </div>
+          <div class="card">
+            <div class="pill pill-gray" style="margin-bottom: 12px;">Personal Layer</div>
+            <h3 style="margin-bottom: 8px;">Private &amp; gitignored</h3>
+            <p style="font-size: 13px;"><code>CLAUDE.local.md</code> and <code>settings.local.json</code> are gitignored. Personal notes, preferences, and local overrides never leave your machine.</p>
+          </div>
+        </div>
+
+        <div class="callout-teal">
+          <p><strong>The key principle:</strong> Claude Code reads <code>CLAUDE.md</code> automatically on every session. That file contains your product context. Skills read their companion <code>context.md</code> files for deeper knowledge. No re-explaining. No copy-pasting. Context is always loaded.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4-Layer Architecture -->
+    <div class="section" style="background: var(--bg-sec);">
+      <div class="content">
+        <div class="section-label">Architecture</div>
+        <h2 style="margin-bottom: 8px;">4-Layer Context Assembly</h2>
+        <p style="max-width: 600px; margin-bottom: 32px;">Every Claude request draws from four layers, merged in order. The deeper the layer, the more specific to your product.</p>
+
+        <div style="max-width: 780px;">
+          <div class="arch-layer" style="background: var(--blue-50);">
+            <div>
+              <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-600);">Layer 1 · Policy</span>
+              <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">Skills, commands, rules, output styles</div>
+              <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;"><code>~/.claude/</code> and <code>claude-workflow/policy/</code> — updated via <code>claude-pm update</code></div>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+              <span class="pill pill-blue">Identical for all users</span>
+              <span class="pill pill-gray">npm update</span>
+            </div>
+          </div>
+          <div class="arch-arrow">↕</div>
+          <div class="arch-layer" style="background: var(--teal-50);">
+            <div>
+              <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal-600);">Layer 2 · Interview</span>
+              <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">PM: 647-line interview · Designer: Figma-based automated onboarding</div>
+              <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;">Run once. Generates all context files in Layer 3.</div>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+              <span class="pill pill-teal">Run once</span>
+              <span class="pill pill-gray">/start-interview</span>
+            </div>
+          </div>
+          <div class="arch-arrow">↕</div>
+          <div class="arch-layer" style="background: var(--amber-50);">
+            <div>
+              <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--amber-600);">Layer 3 · Dynamic</span>
+              <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">CLAUDE.md + context.md files + agent definitions</div>
+              <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;">PM: 14 files · Designer: 11 files · Unique per user and product</div>
+            </div>
+            <div style="display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end;">
+              <span class="pill pill-amber">Generated · never overwritten</span>
+            </div>
+          </div>
+          <div class="arch-arrow">↕</div>
+          <div class="arch-layer" style="background: var(--gray-50);">
+            <div>
+              <span style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gray-600);">Layer 4 · Personal</span>
+              <div style="font-size: 14px; font-weight: 500; margin-top: 4px;">CLAUDE.local.md + settings.local.json</div>
+              <div style="font-size: 12px; color: var(--text-sec); margin-top: 2px;">Gitignored · never committed · private notes and local overrides</div>
+            </div>
+            <div>
+              <span class="pill pill-gray">Gitignored · private</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workflow Diagram -->
+    <div class="section">
+      <div class="content" style="max-width: 960px;">
+        <div class="section-label">Product Workflow</div>
+        <h2 style="margin-bottom: 8px;">6 Phases · 3 Zones · Collaboration Points</h2>
+        <p style="max-width: 640px; margin-bottom: 32px;">The PM and Designer work in parallel across 6 phases. Skills are mapped to the phase where they're most useful. Tech provides input and receives handoffs at defined collaboration points.</p>
+
+        <!-- PM Zone + Designer Zone + Tech Zone diagram -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 200px; gap: 0; border: 0.5px solid var(--border-med); border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 28px;">
+
+          <!-- PM Zone -->
+          <div style="padding: 20px; border-right: 0.5px solid var(--border-med);">
+            <div class="zone-label" style="color: var(--blue-600); border-bottom-color: var(--blue-100);">PM Zone (Blue)</div>
+
+            <div class="phase-block" style="background: var(--blue-50);">
+              <div class="phase-label" style="color: var(--blue-600);">Phase 1 · Discovery &amp; Scoping</div>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">problem-framing</span>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">feature-prioritization</span>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">decision-logger</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--blue-50);">
+              <div class="phase-label" style="color: var(--blue-600);">Phase 2 · Refinement &amp; Edge Cases</div>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">edge-case-finder</span>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">scope-check</span>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">feature-dependency</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--gray-50);">
+              <div class="phase-label" style="color: var(--gray-600);">Phase 3 · Design Execution</div>
+              <span style="font-size: 12px; color: var(--text-hint); font-style: italic;">PM monitors — Design leads</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--blue-50);">
+              <div class="phase-label" style="color: var(--blue-600);">Phase 4 · Spec &amp; Handoff</div>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">requirement-writer</span>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">feature-spec</span>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">release-impact</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--blue-50);">
+              <div class="phase-label" style="color: var(--blue-600);">Phase 5 · Implementation</div>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">qa-guide</span>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">release-impact</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--blue-50); margin-bottom: 0;">
+              <div class="phase-label" style="color: var(--blue-600);">Phase 6 · Post-Release</div>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">decision-logger</span>
+              <span class="skill-pill" style="background: var(--blue-100); color: var(--blue-800);">qa-guide</span>
+            </div>
+          </div>
+
+          <!-- Designer Zone -->
+          <div style="padding: 20px; border-right: 0.5px solid var(--border-med);">
+            <div class="zone-label" style="color: var(--purple-600); border-bottom-color: var(--purple-100);">Designer Zone (Purple)</div>
+
+            <div class="phase-block" style="background: var(--purple-50);">
+              <div class="phase-label" style="color: var(--purple-600);">Phase 1 · Discovery &amp; Scoping</div>
+              <span class="skill-pill" style="background: var(--teal-100); color: var(--teal-800);">design-system-check</span>
+              <span style="font-size: 11px; color: var(--text-hint); margin-left: 4px;">(shared)</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--purple-50);">
+              <div class="phase-label" style="color: var(--purple-600);">Phase 2 · Refinement</div>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">vuetify-constraint-check</span>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">design-research</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--purple-50);">
+              <div class="phase-label" style="color: var(--purple-600);">Phase 3 · Design Execution</div>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">design-policy-review</span>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">microcopy-writer</span>
+              <span class="skill-pill" style="background: var(--teal-100); color: var(--teal-800);">wireframe-generator</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--purple-50);">
+              <div class="phase-label" style="color: var(--purple-600);">Phase 4 · Spec &amp; Handoff</div>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">design-qa</span>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">design-handoff</span>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">figma-to-code</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--purple-50);">
+              <div class="phase-label" style="color: var(--purple-600);">Phase 5 · Implementation</div>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">implementation-review</span>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">design-qa</span>
+            </div>
+
+            <div class="phase-block" style="background: var(--purple-50); margin-bottom: 0;">
+              <div class="phase-label" style="color: var(--purple-600);">Phase 6 · Post-Release</div>
+              <span class="skill-pill" style="background: var(--purple-100); color: var(--purple-800);">design-policy-review</span>
+              <span style="font-size: 11px; color: var(--text-hint);">policy updates</span>
+            </div>
+          </div>
+
+          <!-- Tech Zone -->
+          <div style="padding: 20px; background: var(--bg-sec);">
+            <div class="zone-label" style="color: var(--gray-600); border-bottom-color: var(--gray-100);">Tech Zone</div>
+
+            <div class="phase-block" style="background: var(--gray-50); margin-bottom: 8px;">
+              <div class="phase-label" style="color: var(--gray-600);">Ph.1</div>
+              <span style="font-size: 11px; color: var(--text-sec);">Sprint planning, backlog input</span>
+            </div>
+            <div class="phase-block" style="background: var(--gray-50); margin-bottom: 8px;">
+              <div class="phase-label" style="color: var(--gray-600);">Ph.2</div>
+              <span style="font-size: 11px; color: var(--text-sec);">Feasibility input</span>
+            </div>
+            <div class="phase-block" style="background: var(--gray-50); margin-bottom: 8px;">
+              <div class="phase-label" style="color: var(--gray-600);">Ph.3</div>
+              <span style="font-size: 11px; color: var(--text-sec);">Parallel dev work</span>
+            </div>
+            <div class="phase-block" style="background: var(--gray-50); margin-bottom: 8px;">
+              <div class="phase-label" style="color: var(--gray-600);">Ph.4</div>
+              <span style="font-size: 11px; color: var(--text-sec);">Receives handoffs</span>
+            </div>
+            <div class="phase-block" style="background: var(--gray-50); margin-bottom: 8px;">
+              <div class="phase-label" style="color: var(--gray-600);">Ph.5</div>
+              <span style="font-size: 11px; color: var(--text-sec);">Implements, fixes</span>
+            </div>
+            <div class="phase-block" style="background: var(--gray-50); margin-bottom: 0;">
+              <div class="phase-label" style="color: var(--gray-600);">Ph.6</div>
+              <span style="font-size: 11px; color: var(--text-sec);">Monitoring, incidents</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Collaboration points -->
+        <div style="padding: 16px 20px; border: 0.5px solid var(--border-med); border-radius: var(--radius); margin-bottom: 16px;">
+          <div style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-hint); margin-bottom: 12px;">Collaboration Points</div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;">
+            <div style="font-size: 12px; color: var(--text-sec);"><span style="font-weight: 500; color: var(--text);">Phase 1→2:</span> PM hands problem framing to Designer for design-system-check</div>
+            <div style="font-size: 12px; color: var(--text-sec);"><span style="font-weight: 500; color: var(--text);">Phase 2→3:</span> Designer gets edge cases from PM to inform state coverage</div>
+            <div style="font-size: 12px; color: var(--text-sec);"><span style="font-weight: 500; color: var(--text);">Phase 3→4:</span> PM runs /new-feature while Designer runs /design-review</div>
+            <div style="font-size: 12px; color: var(--text-sec);"><span style="font-weight: 500; color: var(--text);">Phase 4→5:</span> requirement-writer + design-handoff go to Tech simultaneously</div>
+            <div style="font-size: 12px; color: var(--text-sec);"><span style="font-weight: 500; color: var(--text);">Phase 5:</span> implementation-review connects Designer to built component</div>
+            <div style="font-size: 12px; color: var(--text-sec);"><span style="font-weight: 500; color: var(--text);">Phase 6:</span> decision-logger captures post-release learnings for future features</div>
+          </div>
+        </div>
+
+        <!-- Gaps callout -->
+        <div class="callout-amber">
+          <p><strong>Identified gaps:</strong> brief format requests (task-writer handles this), design review feedback loops (decision-logger captures design decisions), handoff checklist verification (design-qa + design-handoff chain), developer confusion after handoff (figma-to-code produces reference code), QA triage process (qa-guide generates prioritized test plans).</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chain Commands -->
+    <div class="section" style="background: var(--bg-sec);">
+      <div class="content">
+        <div class="section-label">Chain Commands</div>
+        <h2 style="margin-bottom: 8px;">Multi-skill workflows in one command</h2>
+        <p style="max-width: 600px; margin-bottom: 32px;">Chain commands run multiple skills in sequence, wait for approval between steps, and produce a combined output. They represent the most common full-workflow paths.</p>
+
+        <div class="grid-2" style="max-width: 860px;">
+          <div class="card">
+            <div class="pill pill-blue" style="margin-bottom: 12px;">PM Chain</div>
+            <h3 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 15px; margin-bottom: 8px;">/new-feature</h3>
+            <p style="font-size: 13px; margin-bottom: 12px;">Complete end-to-end feature definition: problem framing → dependencies → edge cases → design system check → wireframe → spec. Six skills, one command, PM approves each step.</p>
+            <div style="font-size: 12px; color: var(--text-hint);">problem-framing → feature-dependency → edge-case-finder → design-system-check → wireframe-generator → feature-spec</div>
+          </div>
+          <div class="card">
+            <div class="pill pill-blue" style="margin-bottom: 12px;">PM Chain</div>
+            <h3 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 15px; margin-bottom: 8px;">/release-check</h3>
+            <p style="font-size: 13px; margin-bottom: 12px;">Pre-release impact analysis and test plan from the codebase and git history. Reads changes, maps affected modules, generates prioritized test cases.</p>
+            <div style="font-size: 12px; color: var(--text-hint);">release-impact → qa-guide</div>
+          </div>
+          <div class="card">
+            <div class="pill pill-blue" style="margin-bottom: 12px;">PM Chain</div>
+            <h3 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 15px; margin-bottom: 8px;">/sync-spec</h3>
+            <p style="font-size: 13px; margin-bottom: 12px;">Compare spec against implementation. Finds where the spec is outdated, where code deviated, and where the PM must decide which is right. Never auto-updates files.</p>
+            <div style="font-size: 12px; color: var(--text-hint);">Reads spec file + codebase + git history → drift report</div>
+          </div>
+          <div class="card">
+            <div class="pill pill-purple" style="margin-bottom: 12px;">Designer Chain</div>
+            <h3 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 15px; margin-bottom: 8px;">/design-review</h3>
+            <p style="font-size: 13px; margin-bottom: 12px;">Full design review — policy compliance check then deep Vuetify constraint check. Produces a unified report with blockers, important findings, and optional improvements.</p>
+            <div style="font-size: 12px; color: var(--text-hint);">design-policy-review → vuetify-constraint-check → unified report</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- All Skills Reference -->
+    <div class="section">
+      <div class="content">
+        <div class="section-label">Skills Reference</div>
+        <h2 style="margin-bottom: 8px;">All 25 skills at a glance</h2>
+        <p style="max-width: 600px; margin-bottom: 32px;">Each skill has a dedicated command with the same name. Invoke directly or let chain commands run them in sequence.</p>
+
+        <div style="margin-bottom: 28px;">
+          <div style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--blue-600); margin-bottom: 12px;">PM Skills — 10 unique</div>
+          <div class="grid-4" style="margin-bottom: 16px;">
+            <div class="skill-card"><h3>problem-framing</h3><p>Vague idea → engineering-ready DOD</p></div>
+            <div class="skill-card"><h3>feature-prioritization</h3><p>Defensible prioritization with trade-offs</p></div>
+            <div class="skill-card"><h3>feature-dependency</h3><p>Codebase dependency analysis</p></div>
+            <div class="skill-card"><h3>edge-case-finder</h3><p>Stress-test feature definitions</p></div>
+            <div class="skill-card"><h3>scope-check</h3><p>Scope creep detection and trimming</p></div>
+            <div class="skill-card"><h3>feature-spec</h3><p>Team alignment spec document</p></div>
+            <div class="skill-card"><h3>requirement-writer</h3><p>Engineering-precise requirements</p></div>
+            <div class="skill-card"><h3>release-impact</h3><p>Pre-release impact analysis</p></div>
+            <div class="skill-card"><h3>qa-guide</h3><p>Prioritized test plan from codebase</p></div>
+            <div class="skill-card"><h3>decision-logger</h3><p>Capture product decisions</p></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 28px;">
+          <div style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--purple-600); margin-bottom: 12px;">Designer Skills — 9 unique</div>
+          <div class="grid-4" style="margin-bottom: 16px;">
+            <div class="skill-card"><h3>design-research</h3><p>Research context before designing</p></div>
+            <div class="skill-card"><h3>design-policy-review</h3><p>Mid-process policy compliance check</p></div>
+            <div class="skill-card"><h3>vuetify-constraint-check</h3><p>Vuetify 3 component coverage</p></div>
+            <div class="skill-card"><h3>design-qa</h3><p>Final gate check before handoff</p></div>
+            <div class="skill-card"><h3>design-handoff</h3><p>Complete engineering handoff doc</p></div>
+            <div class="skill-card"><h3>figma-to-code</h3><p>Figma → Vue + Vuetify 3 code</p></div>
+            <div class="skill-card"><h3>microcopy-writer</h3><p>UI copy following product voice</p></div>
+            <div class="skill-card"><h3>implementation-review</h3><p>Figma vs. code gap analysis</p></div>
+            <div class="skill-card" style="opacity: 0.4;"><h3>+1 open slot</h3><p>Design system documentation</p></div>
+          </div>
+        </div>
+
         <div>
-          <h3>Product Manager</h3>
-          <p>Feature specs, prioritization, edge cases, release checks — all with full product context and authority-aware flags.</p>
+          <div style="font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--teal-600); margin-bottom: 12px;">Shared Skills — 6 (available to both PM and Designer)</div>
+          <div class="grid-4">
+            <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+              <h3 style="color: var(--teal-800);">design-system-check</h3>
+              <p style="color: var(--teal-700);">Inventory existing UI components</p>
+            </div>
+            <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+              <h3 style="color: var(--teal-800);">wireframe-generator</h3>
+              <p style="color: var(--teal-700);">Interactive HTML wireframe</p>
+            </div>
+            <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+              <h3 style="color: var(--teal-800);">task-writer</h3>
+              <p style="color: var(--teal-700);">Linear task with four-part structure</p>
+            </div>
+            <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+              <h3 style="color: var(--teal-800);">meeting-support</h3>
+              <p style="color: var(--teal-700);">Agenda prep and action items</p>
+            </div>
+            <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+              <h3 style="color: var(--teal-800);">presentation-style</h3>
+              <p style="color: var(--teal-700);">HTML slide deck generation</p>
+            </div>
+            <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+              <h3 style="color: var(--teal-800);">prompt-optimizer</h3>
+              <p style="color: var(--teal-700);">Analyze and rewrite prompts</p>
+            </div>
+          </div>
         </div>
-        <div class="role-card-meta">
-          <span class="meta-pill">15 Skills</span>
-          <span class="meta-pill">9 Commands</span>
-          <span class="meta-pill">4 Rules</span>
-        </div>
-        <div class="role-card-arrow">→</div>
-      </a>
+      </div>
+    </div>
 
-      <a href="pd-presentation.html" class="role-card">
-        <div class="role-card-icon role-card-icon-pd">🎨</div>
+    <!-- Setup -->
+    <div class="section" style="background: var(--bg-sec);">
+      <div class="content">
+        <div class="section-label">Getting Started</div>
+        <h2 style="margin-bottom: 8px;">Setup in 3 steps</h2>
+        <p style="max-width: 600px; margin-bottom: 32px;">Install takes under 5 minutes. The interview or Figma scan generates all context files automatically.</p>
+
+        <div style="max-width: 720px; margin-bottom: 32px;">
+          <div class="step-row">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <h3>Install the package</h3>
+              <p>Run <code>npm install -g claude-pm</code> then <code>cd your-product-repo &amp;&amp; claude-pm init --role pm</code> (or <code>--role designer</code>). Installs skills globally and scaffolds the project.</p>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <h3>Run the interview</h3>
+              <p>Open Claude Code in your product repo and run <code>/start-interview</code> (PM) or <code>/start-designer-interview</code> (Designer). Answer questions (PM) or provide Figma links (Designer). Claude generates all context files.</p>
+            </div>
+          </div>
+          <div class="step-row" style="margin-bottom: 0;">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <h3>Start using skills</h3>
+              <p>Every skill is now available as a slash command. Run <code>/new-feature [describe it]</code> for a PM-led feature flow, or <code>/design-review</code> for a designer-led review. Claude reads your product context automatically.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="max-width: 720px;">
+          <div class="callout-teal">
+            <p><strong>Update the policy layer:</strong> Run <code>claude-pm update</code> to pull the latest skills and commands. Your context files (CLAUDE.md, context.md files) are never overwritten.</p>
+          </div>
+          <div class="callout-amber">
+            <p><strong>Add personal context:</strong> Edit <code>CLAUDE.local.md</code> for private notes. It loads alongside <code>CLAUDE.md</code> on every session and is gitignored.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="padding: 40px 72px; background: var(--blue-900); color: white;">
+      <div style="display: flex; align-items: center; justify-content: space-between; max-width: 960px;">
         <div>
-          <h3>Product Designer</h3>
-          <p>Figma-first workflows, Vuetify constraints, design QA, implementation review — grounded in your design system.</p>
+          <div style="font-size: 13px; font-weight: 500; color: white; margin-bottom: 4px;">Product Team · Claude Code Skills</div>
+          <div style="font-size: 12px; color: rgba(255,255,255,0.45);">claude-pm package · MIT License · 2026</div>
         </div>
-        <div class="role-card-meta">
-          <span class="meta-pill">8 Skills</span>
-          <span class="meta-pill">6 Commands</span>
-          <span class="meta-pill">3 Rules</span>
+        <div style="display: flex; gap: 20px; align-items: center;">
+          <a href="presentation-pm.html" style="font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none;">PM Guide</a>
+          <a href="presentation-pd.html" style="font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none;">Designer Guide</a>
+          <a href="presentation.html" style="font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none;">Workflow Deck</a>
+          <a href="figma-to-vue.html" style="font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.7); text-decoration: none;">Figma → Vue</a>
         </div>
-        <div class="role-card-arrow">→</div>
-      </a>
-
+      </div>
     </div>
-  </section>
 
-  <!-- Docs links -->
-  <section class="links-section">
-    <div class="section-title">Documentation</div>
-    <div class="links-row">
-      <a href="pipeline.html" class="doc-link">🔍 Context Pipeline</a>
-      <a href="figma-to-vue.html" class="doc-link">🔗 Figma → Vue Guide</a>
-    </div>
-  </section>
-
-  <footer class="footer">
-    Product Team · Claude Skills &nbsp;·&nbsp; v2.1.92 · April 2026
-  </footer>
-
-  <script>
-    const nodes = document.querySelectorAll('.flow-node, .flow-arrow');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const el = entry.target;
-          const delay = parseInt(el.dataset.delay || 0);
-          setTimeout(() => el.classList.add('visible'), delay);
-          observer.unobserve(el);
-        }
-      });
-    }, { threshold: 0.2 });
-
-    nodes.forEach(n => observer.observe(n));
-  </script>
-
-</body>
+  </body>
 </html>

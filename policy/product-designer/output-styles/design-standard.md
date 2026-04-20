@@ -102,3 +102,25 @@ Every design review output must include a state coverage table:
 - Never approve a design that has unresolved blockers — the summary must reflect the true status
 - Never skip the state coverage summary in a design review output
 - Never suggest adding scope beyond what the PM approved in the wireframe
+
+---
+
+## Output Delivery
+
+When a skill produces a **final deliverable** (design policy report, Vuetify constraint check, QA report, handoff document, implementation review, generated code), ask before writing:
+
+> "Save this as **Markdown (.md)** or **HTML (.html)**?"
+
+Then write the file to the output directory:
+
+- Markdown → `outputs/pd/[feature-name]-[skill-name].md`
+- HTML → `outputs/pd/[feature-name]-[skill-name].html`
+
+For HTML output, wrap the content in a clean HTML shell with inline styles — no external dependencies.
+
+**File naming convention:**
+- Use kebab-case
+- Feature name first, then skill name
+- Example: `checkout-redesign-design-handoff.md`
+
+This applies to all designer skills. Do not skip this step — outputs that only exist in chat history are lost.

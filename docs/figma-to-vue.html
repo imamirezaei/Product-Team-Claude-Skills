@@ -6,50 +6,19 @@
 <title>Figma → Vue / Vuetify 3 · Translation Guide</title>
 <style>
   /* ── SITE TOP NAV ── */
-  .site-nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 44px;
-    background: #fff;
-    border-bottom: 1px solid rgba(0,0,0,0.1);
-    display: flex;
-    align-items: center;
-    padding: 0 24px;
-    gap: 0;
-    z-index: 9999;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    font-size: 13px;
-  }
-  .site-nav__brand {
-    font-weight: 600;
-    color: #1a1a18;
-    text-decoration: none;
-    margin-right: 28px;
-    white-space: nowrap;
-    flex-shrink: 0;
-  }
-  .site-nav__links {
-    display: flex;
-    gap: 4px;
-  }
-  .site-nav__link {
-    padding: 5px 12px;
-    border-radius: 6px;
-    text-decoration: none;
-    color: #5f5e5a;
-    font-weight: 500;
-    transition: background 0.12s, color 0.12s;
-  }
-  .site-nav__link:hover {
-    background: #f1efe8;
-    color: #1a1a18;
-  }
-  .site-nav__link--active {
-    background: #1a1a18;
-    color: #fff !important;
-  }
+  .site-nav { position: fixed; top: 0; left: 0; right: 0; height: 44px; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; padding: 0 24px; gap: 0; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; }
+  .site-nav__brand { font-weight: 600; color: #1a1a18; text-decoration: none; margin-right: 28px; white-space: nowrap; flex-shrink: 0; }
+  .site-nav__links { display: flex; gap: 4px; }
+  .site-nav__link { padding: 5px 12px; border-radius: 6px; text-decoration: none; color: #5f5e5a; font-weight: 500; transition: background 0.12s, color 0.12s; }
+  .site-nav__link:hover { background: #f1efe8; color: #1a1a18; }
+  .site-nav__link--active { background: #1a1a18; color: #fff !important; }
 
   :root {
+    --blue-50:  #E6F1FB; --blue-600: #185FA5; --blue-800: #0C447C;
+    --purple-50:#EEEDFE; --purple-600: #534AB7;
+    --gray-50:  #F1EFE8; --gray-800: #444441;
+    --bg-sec:   #F8F7F4;
+    --border-med: rgba(0,0,0,0.18);
     --pm:       #EEEDFE; --pm-b: #534AB7; --pm-t: #3C3489;
     --design:   #E1F5EE; --design-b: #0F6E56; --design-t: #085041;
     --tech:     #E6F1FB; --tech-b: #185FA5; --tech-t: #0C447C;
@@ -77,13 +46,14 @@
     color: var(--text);
     font-size: 14px;
     line-height: 1.65;
+    padding-top: 44px;
   }
 
   /* ───────────────── LAYOUT ───────────────── */
-  .layout { display: flex; min-height: 100vh; padding-top: 44px; }
+  .layout { display: flex; min-height: 100vh; }
 
   /* ───────────────── NAV (FIXED) ───────────────── */
-  nav {
+  .doc-nav {
     width: var(--nav-w);
     height: calc(100vh - 44px);
     position: fixed;
@@ -152,7 +122,7 @@
     letter-spacing: 0.09em;
   }
 
-  nav a {
+  .doc-nav a {
     display: block;
     padding: 5px 18px;
     font-size: 12px;
@@ -166,16 +136,16 @@
     text-overflow: ellipsis;
   }
 
-  nav a:hover { background: var(--surface); color: var(--text); }
+  .doc-nav a:hover { background: var(--surface); color: var(--text); }
 
-  nav a.active {
+  .doc-nav a.active {
     color: var(--pm-b);
     background: var(--pm);
     font-weight: 600;
     border-right-color: var(--pm-b);
   }
 
-  [data-lang="fa"] nav a.active { border-right-color: transparent; border-left-color: var(--pm-b); }
+  [data-lang="fa"] .doc-nav a.active { border-right-color: transparent; border-left-color: var(--pm-b); }
 
   /* ───────────────── MAIN ───────────────── */
   main {
@@ -380,8 +350,8 @@
   [data-lang="fa"] .en { display: none; }
   [data-lang="fa"] { direction: rtl; }
   [data-lang="fa"] main { margin-right: 0; margin-left: var(--nav-w); }
-  [data-lang="fa"] nav  { right: auto; left: 0; border-left: none; border-right: 1px solid var(--border); }
-  [data-lang="fa"] nav a { border-right: 2px solid transparent; border-left: 2px solid transparent; }
+  [data-lang="fa"] .doc-nav  { right: auto; left: 0; border-left: none; border-right: 1px solid var(--border); }
+  [data-lang="fa"] .doc-nav a { border-right: 2px solid transparent; border-left: 2px solid transparent; }
 
   /* ───────────────── SCROLLBAR ───────────────── */
   .nav-body::-webkit-scrollbar { width: 4px; }
@@ -389,7 +359,7 @@
   .nav-body::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
   @media (max-width: 800px) {
-    nav { display: none; }
+    .doc-nav { display: none; }
     main { margin-right: 0; margin-left: 0; padding: 24px 20px; }
     [data-lang="fa"] main { margin-left: 0; }
   }
@@ -401,16 +371,16 @@
   <a class="site-nav__brand" href="index.html">Product Team · Claude</a>
   <nav class="site-nav__links">
     <a href="index.html" class="site-nav__link">Home</a>
-    <a href="pipeline.html" class="site-nav__link">Context Pipeline</a>
-    <a href="pm-presentation.html" class="site-nav__link">For PM</a>
-    <a href="pd-presentation.html" class="site-nav__link">For PD</a>
+    <a href="presentation.html" class="site-nav__link">Context Pipeline</a>
+    <a href="presentation-pm.html" class="site-nav__link">For PM</a>
+    <a href="presentation-pd.html" class="site-nav__link">For PD</a>
     <a href="figma-to-vue.html" class="site-nav__link site-nav__link--active">Figma → Vue</a>
   </nav>
 </header>
 <div class="layout" data-lang="en" id="root">
 
 <!-- ══════════════ NAV (FIXED) ══════════════ -->
-<nav>
+<nav class="doc-nav">
   <div class="nav-header">
     <h1>Figma → Vue / Vuetify 3</h1>
     <p class="en">Design ↔ Tech Reference</p>
@@ -1241,13 +1211,13 @@ Figma <span class="num">270°</span> → CSS <span class="num">270deg</span>  <s
 
   // Active nav highlight on scroll
   const sections = document.querySelectorAll('section[id]');
-  const links    = document.querySelectorAll('nav a');
+  const links    = document.querySelectorAll('.doc-nav a');
 
   const io = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
         links.forEach(l => l.classList.remove('active'));
-        const a = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        const a = document.querySelector(`.doc-nav a[href="#${e.target.id}"]`);
         if (a) a.classList.add('active');
       }
     });
