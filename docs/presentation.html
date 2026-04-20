@@ -5,15 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PM Workflow — Presentation</title>
     <style>
-      /* Nav */
-      .nav { background: var(--bg-sec); border-bottom: 0.5px solid var(--border-med); padding: 12px 72px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; }
-      .nav-links { display: flex; gap: 24px; align-items: center; }
-      .nav-link { font-size: 12px; font-weight: 500; color: var(--blue-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--blue-50); }
-      .nav-link.active { background: var(--blue-600); color: white; }
-      .nav-link.gray { background: var(--gray-50); color: var(--gray-800); }
-      .nav-link:hover { opacity: 0.8; }
-
       * {
         margin: 0;
         padding: 0;
@@ -63,6 +54,17 @@
         --radius-lg: 12px;
         --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
+
+      /* Nav */
+      .nav { background: var(--bg-sec); border-bottom: 0.5px solid var(--border-med); padding: 12px 72px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; }
+      .nav-links { display: flex; gap: 24px; align-items: center; }
+      .nav-link { font-size: 12px; font-weight: 500; color: var(--blue-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--blue-50); }
+      .nav-link.active { background: var(--blue-600); color: white; }
+      .nav-link.gray { background: var(--gray-50); color: var(--gray-800); }
+      .nav-link.purple { background: var(--purple-50); color: var(--purple-600); }
+      .nav-link:hover { opacity: 0.8; }
+
       body {
         font-family: var(--sans);
         background: var(--bg);
@@ -422,8 +424,9 @@
   <nav class="nav">
     <a href="index.html" class="nav-title">Product Team · Claude Code</a>
     <div class="nav-links">
+      <a href="index.html" class="nav-link gray">Overview</a>
       <a href="presentation-pm.html" class="nav-link">Product Manager</a>
-      <a href="presentation-pd.html" class="nav-link">Product Designer</a>
+      <a href="presentation-pd.html" class="nav-link purple">Product Designer</a>
       <a href="presentation.html" class="nav-link active">Workflow Deck</a>
       <a href="figma-to-vue.html" class="nav-link gray">Figma → Vue</a>
     </div>

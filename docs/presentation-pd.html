@@ -29,10 +29,12 @@
 
       /* Nav */
       .nav { background: var(--bg-sec); border-bottom: 0.5px solid var(--border-med); padding: 12px 72px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); }
+      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; }
       .nav-links { display: flex; gap: 24px; align-items: center; }
       .nav-link { font-size: 12px; font-weight: 500; color: var(--purple-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--purple-50); }
       .nav-link.active { background: var(--purple-600); color: white; }
+      .nav-link.gray { background: var(--gray-50); color: var(--gray-800); }
+      .nav-link.blue { background: var(--blue-50); color: var(--blue-600); }
       .nav-link:hover { opacity: 0.8; }
 
       /* Slides */
@@ -74,8 +76,16 @@
       .file-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
 
       /* Step rows */
-      .step-row { display: flex; gap: 16px; margin-bottom: 20px; }
+      .step-row { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
       .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--purple-600); color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+      .step-cmd { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--gray-800); color: #e8e6e0; padding: 8px 14px; border-radius: 6px; margin-top: 8px; display: block; line-height: 1.7; }
+      .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--bg-ter); padding: 2px 6px; border-radius: 4px; color: var(--text); }
+      .tree-line { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; line-height: 2; color: var(--text-sec); }
+      .tree-line .hl-purple { color: var(--purple-600); font-weight: 500; }
+      .tree-line .hl-teal { color: var(--teal-600); font-weight: 500; }
+      .tree-line .hl-amber { color: var(--amber-600); font-weight: 500; }
+      .tree-line .hl-gray { color: var(--gray-400); }
+      .tree-line .comment { color: var(--gray-400); font-style: italic; }
       .step-body h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
       .step-body p { font-size: 13px; color: var(--text-sec); }
 
@@ -132,12 +142,13 @@
   <body>
 
     <nav class="nav">
-      <a href="index.html" class="nav-title" style="text-decoration:none; color: inherit;">Product Team · Claude Code</a>
+      <a href="index.html" class="nav-title">Product Team · Claude Code</a>
       <div class="nav-links">
-        <a href="presentation-pm.html" class="nav-link">Product Manager</a>
+        <a href="index.html" class="nav-link gray">Overview</a>
+        <a href="presentation-pm.html" class="nav-link blue">Product Manager</a>
         <a href="presentation-pd.html" class="nav-link active">Product Designer</a>
-        <a href="presentation.html" class="nav-link" style="background: var(--gray-50); color: var(--gray-800);">Workflow Deck</a>
-        <a href="figma-to-vue.html" class="nav-link" style="background: var(--gray-50); color: var(--gray-800);">Figma → Vue</a>
+        <a href="presentation.html" class="nav-link gray">Workflow Deck</a>
+        <a href="figma-to-vue.html" class="nav-link gray">Figma → Vue</a>
       </div>
     </nav>
 
@@ -258,12 +269,12 @@
           <div class="file-row">
             <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">SK</div>
             <div class="file-name" style="min-width: 200px;">skills/product-designer/*/SKILL.md</div>
-            <div class="file-desc">7 files · design review, Figma-to-code, constraint check, microcopy, handoff, research, policy review</div>
+            <div class="file-desc">8 files · design review, Figma-to-code, constraint check, microcopy, handoff, research, policy review, implementation review</div>
           </div>
           <div class="file-row">
             <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">SK</div>
             <div class="file-name" style="min-width: 200px;">skills/shared/*/SKILL.md</div>
-            <div class="file-desc">4 files · wireframe-generator, design-system-check, task-writer, presentation-style</div>
+            <div class="file-desc">6 files · wireframe-generator, design-system-check, task-writer, presentation-style, meeting-support, prompt-optimizer</div>
           </div>
           <div class="file-row">
             <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">CM</div>
@@ -441,7 +452,7 @@
     <!-- Slide 7: Skills -->
     <div class="slide">
       <div class="slide-label">Layer 1 · Policy</div>
-      <h2 style="margin-bottom: 8px;">11 skills — 7 designer · 4 shared</h2>
+      <h2 style="margin-bottom: 8px;">14 skills — 8 designer · 6 shared</h2>
       <p style="font-size: 14px; margin-bottom: 28px;">Shared skills are available to both the PM and the Designer. Designer-specific skills cover the full design workflow from research to handoff.</p>
 
       <div style="max-width: 960px;">
@@ -477,12 +488,20 @@
           </div>
         </div>
 
-        <div class="skill-group-label">Research + Shared</div>
-        <div class="grid-4">
+        <div class="skill-group-label">Research + Post-Implementation</div>
+        <div class="grid-3" style="margin-bottom: 20px;">
           <div class="skill-card">
             <h3>design-research</h3>
             <p>Structures research questions, synthesizes user feedback, and surfaces insights in a format PMs can act on.</p>
           </div>
+          <div class="skill-card">
+            <h3>implementation-review</h3>
+            <p>Compares Figma design against the built Vue/Vuetify component — identifies gaps and produces a structured report.</p>
+          </div>
+        </div>
+
+        <div class="skill-group-label">Shared (PM + Designer)</div>
+        <div class="grid-3">
           <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
             <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
             <h3 style="color: var(--teal-800);">design-system-check</h3>
@@ -495,8 +514,23 @@
           </div>
           <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
             <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">task-writer</h3>
+            <p style="color: var(--teal-600);">Converts design decisions or review findings into ready-to-paste Linear tasks with four-part structure.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
             <h3 style="color: var(--teal-800);">presentation-style</h3>
             <p style="color: var(--teal-600);">Generates polished single-file HTML slide decks following the product design system.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">meeting-support</h3>
+            <p style="color: var(--teal-600);">Prepares structured agendas and extracts decisions and action items from design critiques.</p>
+          </div>
+          <div class="skill-card" style="border-color: var(--teal-100); background: var(--teal-50);">
+            <div class="pill pill-teal" style="margin-bottom: 8px; font-size: 10px;">Shared</div>
+            <h3 style="color: var(--teal-800);">prompt-optimizer</h3>
+            <p style="color: var(--teal-600);">Analyzes and rewrites prompts to improve Claude output quality for design reviews and requests.</p>
           </div>
         </div>
       </div>
@@ -941,52 +975,169 @@
       </div>
     </div>
 
-    <!-- Slide 10: Init flow -->
+    <!-- Slide 10: Designer Onboarding -->
     <div class="slide">
-      <div class="slide-label">Process · Setup</div>
-      <h2 style="margin-bottom: 8px;">Init flow — from zero to ready</h2>
-      <p style="font-size: 14px; margin-bottom: 28px; max-width: 680px;">Run <code>claude-pm init --role designer</code> from your product repo. The Figma interview replaces the long PM interview with direct file reading.</p>
+      <div class="slide-label">Process · Onboarding</div>
+      <h2 style="margin-bottom: 8px;">Designer Onboarding — Figma does the work</h2>
+      <p style="font-size: 14px; margin-bottom: 32px; max-width: 680px;">Two commands, two questions, and your Figma links. The design system context is extracted automatically — no copy-pasting component lists, no manual descriptions.</p>
 
       <div style="max-width: 760px;">
+
+        <div style="padding: 14px 20px; background: var(--bg-sec); border-radius: var(--radius); border: 0.5px solid var(--border-med); margin-bottom: 28px;">
+          <div style="font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px;">Prerequisites</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px 32px;">
+            <span style="font-size: 12px; color: var(--text-sec);">Claude Code CLI installed</span>
+            <span style="font-size: 12px; color: var(--text-sec);">Figma MCP connected in Claude Code settings</span>
+            <span style="font-size: 12px; color: var(--text-sec);">Node.js 18+ &amp; npm</span>
+            <span style="font-size: 12px; color: var(--text-sec);">Figma design system file URL + product screen URLs</span>
+          </div>
+        </div>
+
         <div class="step-row">
           <div class="step-num">1</div>
           <div class="step-body">
-            <h3>Guard checks</h3>
-            <p>Verifies git repo exists. Checks for prior initialization. Warns if Claude Code is not detected.</p>
+            <h3>Install the package globally</h3>
+            <p>One command. Installs the <code>claude-pm</code> CLI on your machine.</p>
+            <code class="step-cmd">npm install -g claude-pm</code>
           </div>
         </div>
+
         <div class="step-row">
           <div class="step-num">2</div>
           <div class="step-body">
-            <h3>Global install → ~/.claude/</h3>
-            <p>Copies all 11 skill files (7 designer + 4 shared), 6 commands, design-standard.md output style, and <code>/start-designer-interview</code> command.</p>
+            <h3>Run init inside your product repo</h3>
+            <p>Installs all designer skills to <code>~/.claude/</code> globally, and scaffolds the policy tree, placeholder context files, two design agents, and an <code>outputs/</code> folder for deliverables.</p>
+            <code class="step-cmd">cd your-product-repo<br>claude-pm init --role designer</code>
           </div>
         </div>
+
         <div class="step-row">
           <div class="step-num">3</div>
           <div class="step-body">
-            <h3>Project scaffold → product repo</h3>
-            <p>Copies full <code>policy/</code> tree to <code>claude-workflow/policy/</code>, writes placeholder <code>CLAUDE.md</code>, <code>settings.json</code>, <code>design-agent.md</code>, <code>handoff-agent.md</code>, and 7 <code>context.md</code> placeholders. Creates <code>.claude/outputs/</code>.</p>
+            <h3>Open Claude Code at repo root</h3>
+            <p>Launch Claude Code inside the product repo. The interview command checks Figma MCP access automatically and provides setup instructions if Figma is not yet connected.</p>
           </div>
         </div>
+
         <div class="step-row">
           <div class="step-num">4</div>
           <div class="step-body">
-            <h3>Gitignore patch</h3>
-            <p>Adds <code>CLAUDE.local.md</code> and <code>.claude/settings.local.json</code> to <code>.gitignore</code>.</p>
+            <h3>Run the designer interview</h3>
+            <p>Type <code>/start-designer-interview</code>. Claude verifies Figma MCP access, then asks two questions: your working language (Persian or English) and whether to connect an existing git repository.</p>
+            <code class="step-cmd">/start-designer-interview</code>
           </div>
         </div>
-        <div class="step-row" style="margin-bottom: 0;">
+
+        <div class="step-row">
           <div class="step-num">5</div>
           <div class="step-body">
-            <h3>Run /start-designer-interview in Claude Code</h3>
-            <p>Claude checks Figma MCP access, asks 2 questions, reads your Figma files directly, and generates all 11 context files. Designer approves each write.</p>
+            <h3>Provide your Figma file links</h3>
+            <p>When prompted, paste your Figma design system file URL and one or more product screen URLs. Claude reads the files directly via MCP — components, tokens, variants, and flows are extracted automatically.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h3>Review and approve the 11 generated files</h3>
+            <p>Claude shows each file before writing. Review <code>CLAUDE.md</code> (your designer profile), the 7 skill <code>context.md</code> files, and both design agents. Approve each write before Claude saves it.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num">7</div>
+          <div class="step-body">
+            <h3>Commit to the repo</h3>
+            <code class="step-cmd">git add CLAUDE.md .claude/ .gitignore &amp;&amp; git commit -m "feat: add designer workflow context"</code>
+          </div>
+        </div>
+
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">8</div>
+          <div class="step-body">
+            <h3>Run your first command</h3>
+            <p>The design system context is loaded on every session. Start with a review or use <code>/figma-to-code</code> on an existing screen to verify the context is accurate.</p>
+            <code class="step-cmd">/design-review [feature name or Figma link]</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="gap: 16px; max-width: 760px; margin-top: 28px;">
+        <div class="callout-purple">
+          <p><strong>Refreshing context:</strong> When your Figma design system changes significantly, re-run <code>/start-designer-interview</code> to refresh context files. The interview only updates what changed.</p>
+        </div>
+        <div class="callout-teal">
+          <p><strong>Updating policy:</strong> Run <code>claude-pm update</code> to pull the latest skills and rules. Your Figma-generated context files are never overwritten.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Update Flow -->
+    <div class="slide">
+      <div class="slide-label">Process</div>
+      <h2 style="margin-bottom: 8px;">Receiving updates — one command</h2>
+      <p style="color: var(--text-sec); margin-bottom: 40px; font-size: 14px;">Policy Layer updates from the supervisor never touch your CLAUDE.md or context files. No re-interview, no merge conflicts.</p>
+
+      <div class="grid-2" style="gap: 32px; max-width: 880px; align-items: start;">
+        <div>
+          <h3 style="margin-bottom: 16px;">When supervisor updates a skill or rule</h3>
+          <div style="padding: 20px; background: var(--bg-sec); border-radius: var(--radius-lg);">
+            <p style="font-size: 13px; color: var(--text-sec); margin-bottom: 16px;">Supervisor pushes to <span class="mono">product-team-claude-skills</span> repo. Designer runs:</p>
+            <code class="step-cmd">cd claude-workflow &amp;&amp; git pull &amp;&amp; cd ..</code>
+            <p style="font-size: 12px; color: var(--text-hint); margin-top: 12px;">That is the entire update process. Nothing else required.</p>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <h3 style="margin-bottom: 12px; font-size: 15px;">What changes</h3>
+            <div class="file-row">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--teal-400); flex-shrink: 0;"></div>
+              <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">claude-workflow/policy/skills/product-designer/*/SKILL.md</div>
+              <span class="pill pill-teal">updated</span>
+            </div>
+            <div class="file-row">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--teal-400); flex-shrink: 0;"></div>
+              <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">claude-workflow/policy/rules/*.md</div>
+              <span class="pill pill-teal">updated</span>
+            </div>
+            <div class="file-row">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--teal-400); flex-shrink: 0;"></div>
+              <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">claude-workflow/policy/commands/product-designer/*.md</div>
+              <span class="pill pill-teal">updated</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="margin-bottom: 16px;">What never changes</h3>
+          <div class="file-row">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--amber-400); flex-shrink: 0;"></div>
+            <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">CLAUDE.md</div>
+            <span class="pill pill-amber">untouched</span>
+          </div>
+          <div class="file-row">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--amber-400); flex-shrink: 0;"></div>
+            <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">.claude/skills/product-designer/*/context.md</div>
+            <span class="pill pill-amber">untouched</span>
+          </div>
+          <div class="file-row">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--amber-400); flex-shrink: 0;"></div>
+            <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">.claude/agents/design-agent.md</div>
+            <span class="pill pill-amber">untouched</span>
+          </div>
+          <div class="file-row">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--gray-400); flex-shrink: 0;"></div>
+            <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">CLAUDE.local.md</div>
+            <span class="pill pill-gray">private · gitignored</span>
+          </div>
+
+          <div class="callout-teal" style="margin-top: 24px;">
+            <p>Context files extracted from Figma are designer-owned — the supervisor never touches them. Policy files and context files live in separate directory trees, so <strong>git pull never creates a merge conflict</strong>.</p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Slide 11: Summary -->
+    <!-- Slide 12: Summary -->
     <div class="slide" style="background: var(--bg-sec);">
       <div class="slide-label">Summary</div>
       <h2 style="margin-bottom: 36px;">What this system delivers</h2>

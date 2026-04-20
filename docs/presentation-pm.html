@@ -34,10 +34,12 @@
       .nav-link { font-size: 12px; font-weight: 500; color: var(--blue-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--blue-50); }
       .nav-link.active { background: var(--blue-600); color: white; }
       .nav-link.gray { background: var(--gray-50); color: var(--gray-800); }
+      .nav-link.purple { background: var(--purple-50); color: var(--purple-600); }
       .nav-link:hover { opacity: 0.8; }
 
       /* Slides */
       .slide { min-height: 100vh; padding: 60px 72px; display: flex; flex-direction: column; justify-content: center; border-bottom: 1px solid var(--border); }
+      .slide:last-child { border-bottom: none; }
       .slide-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 16px; }
 
       /* Typography */
@@ -66,27 +68,35 @@
 
       /* Arch layers */
       .arch-layer { border-radius: var(--radius); padding: 14px 20px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between; }
+      .arch-layer-label { font-size: 13px; font-weight: 500; }
+      .arch-layer-sub { font-size: 12px; opacity: 0.75; }
+      .arch-layer-tag { font-size: 11px; font-weight: 500; opacity: 0.8; }
       .arch-arrow { text-align: center; color: var(--gray-400); font-size: 16px; margin: 4px 0; line-height: 1; }
 
       /* File rows */
       .file-row { display: flex; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 0.5px solid var(--border); }
+      .file-row:last-child { border-bottom: none; }
       .file-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; flex-shrink: 0; }
       .file-name { font-size: 13px; font-weight: 500; font-family: 'SF Mono', 'Fira Code', monospace; flex: 0 0 auto; }
       .file-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
 
       /* Step rows */
-      .step-row { display: flex; gap: 16px; margin-bottom: 20px; }
+      .step-row { display: flex; gap: 16px; margin-bottom: 20px; align-items: flex-start; }
       .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--blue-600); color: white; font-size: 13px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
       .step-body h3 { font-size: 15px; font-weight: 500; margin-bottom: 4px; }
       .step-body p { font-size: 13px; color: var(--text-sec); }
+      .step-cmd { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--gray-800); color: #e8e6e0; padding: 8px 14px; border-radius: 6px; margin-top: 8px; display: block; line-height: 1.7; }
 
       /* Cmd rows */
       .cmd-row { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+      .cmd-row:last-child { border-bottom: none; }
       .cmd-name { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; font-weight: 500; color: var(--blue-800); min-width: 200px; }
+      .cmd-flow { font-size: 12px; color: var(--text-hint); flex: 1; }
       .cmd-desc { font-size: 12px; color: var(--text-sec); flex: 1; }
 
       /* Rule rows */
       .rule-row { display: flex; gap: 12px; align-items: flex-start; padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+      .rule-row:last-child { border-bottom: none; }
       .rule-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-400); margin-top: 8px; flex-shrink: 0; }
       .rule-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
       .rule-desc { font-size: 12px; color: var(--text-sec); }
@@ -113,7 +123,7 @@
 
       /* Code */
       code { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--bg-ter); padding: 2px 6px; border-radius: 4px; }
-      .code-block { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--gray-800); color: #e8e6e0; padding: 12px 16px; border-radius: 6px; display: block; line-height: 1.8; }
+      .mono { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; background: var(--bg-ter); padding: 2px 6px; border-radius: 4px; color: var(--text); }
 
       /* Divider */
       .divider { height: 1px; background: var(--border); margin: 28px 0; }
@@ -137,6 +147,15 @@
       .detail-label.teal { color: var(--teal-600); }
       .detail-label.amber { color: var(--amber-600); }
       .detail-label.coral { color: var(--coral-600); }
+
+      /* Tree view */
+      .tree-line { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; line-height: 2; color: var(--text-sec); }
+      .tree-line .hl-blue { color: var(--blue-600); font-weight: 500; }
+      .tree-line .hl-teal { color: var(--teal-600); font-weight: 500; }
+      .tree-line .hl-purple { color: var(--purple-600); font-weight: 500; }
+      .tree-line .hl-amber { color: var(--amber-600); font-weight: 500; }
+      .tree-line .hl-gray { color: var(--gray-400); }
+      .tree-line .comment { color: var(--gray-400); font-style: italic; }
     </style>
   </head>
   <body>
@@ -144,8 +163,9 @@
     <nav class="nav">
       <a href="index.html" class="nav-title">Product Team · Claude Code</a>
       <div class="nav-links">
+        <a href="index.html" class="nav-link gray">Overview</a>
         <a href="presentation-pm.html" class="nav-link active">Product Manager</a>
-        <a href="presentation-pd.html" class="nav-link">Product Designer</a>
+        <a href="presentation-pd.html" class="nav-link purple">Product Designer</a>
         <a href="presentation.html" class="nav-link gray">Workflow Deck</a>
         <a href="figma-to-vue.html" class="nav-link gray">Figma → Vue</a>
       </div>
@@ -166,8 +186,8 @@
           <div class="title-stat-label">Shared Skills</div>
         </div>
         <div class="title-stat">
-          <div class="title-stat-num">3</div>
-          <div class="title-stat-label">Chain Commands</div>
+          <div class="title-stat-num">4</div>
+          <div class="title-stat-label">Architecture Layers</div>
         </div>
         <div class="title-stat">
           <div class="title-stat-num">19</div>
@@ -176,7 +196,453 @@
       </div>
     </div>
 
-    <!-- Slide 2: Overview -->
+    <!-- Slide 2: Pain Points -->
+    <div class="slide">
+      <div class="slide-label">Context</div>
+      <h2 style="margin-bottom: 24px;">What we observed</h2>
+      <div class="grid-2" style="gap: 24px; max-width: 900px;">
+        <div class="card">
+          <div style="font-size: 13px; font-weight: 500; color: var(--coral-600); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em;">Pain point 1</div>
+          <h3>Decisions disappear</h3>
+          <p style="font-size: 13px; margin-top: 6px;">Important product decisions — UX choices, scope trade-offs, rejected ideas — get made in meetings and Slack but never written down. Six months later, nobody knows why something was built a certain way.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 13px; font-weight: 500; color: var(--coral-600); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em;">Pain point 2</div>
+          <h3>Silent scope trade-offs</h3>
+          <p style="font-size: 13px; margin-top: 6px;">When a manager adds a new request, PMs accept it by quietly dropping something else from the roadmap. The trade-off is never explicit and never visible to the team.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 13px; font-weight: 500; color: var(--coral-600); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em;">Pain point 3</div>
+          <h3>Requirements miss edge cases</h3>
+          <p style="font-size: 13px; margin-top: 6px;">PMs define the happy path well. But edge cases — what happens when a payment is pending, when a user has no permissions, when a service is down — get discovered by engineering mid-implementation.</p>
+        </div>
+        <div class="card">
+          <div style="font-size: 13px; font-weight: 500; color: var(--coral-600); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.06em;">Pain point 4</div>
+          <h3>No awareness of technical cost</h3>
+          <p style="font-size: 13px; margin-top: 6px;">PMs can't easily see what a feature touches in the codebase. They don't know which modules are affected, which shared services are involved, or what might break when something changes.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: 4-Layer Architecture -->
+    <div class="slide">
+      <div class="slide-label">Design Principle</div>
+      <h2 style="margin-bottom: 12px;">One system, two separations</h2>
+      <p class="lead" style="margin-bottom: 40px; max-width: 640px;">The system separates what is fixed from what is personal — and separates Claude's instructions from Claude's knowledge of the product.</p>
+
+      <div style="max-width: 720px;">
+        <div class="arch-layer" style="background: var(--blue-50);">
+          <div>
+            <div class="arch-layer-label" style="color: var(--blue-800);">Policy Layer — fixed for all PMs</div>
+            <div class="arch-layer-sub" style="color: var(--blue-600);">rules · commands · output format · skill logic</div>
+          </div>
+          <div class="arch-layer-tag" style="color: var(--blue-600);">Supervisor defines · git pull to update</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--teal-50);">
+          <div>
+            <div class="arch-layer-label" style="color: var(--teal-800);">Interview Engine — run once per PM</div>
+            <div class="arch-layer-sub" style="color: var(--teal-600);">structured interview → 13 personalized files</div>
+          </div>
+          <div class="arch-layer-tag" style="color: var(--teal-600);">One session · generates everything</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--amber-50);">
+          <div>
+            <div class="arch-layer-label" style="color: var(--amber-800);">Dynamic Layer — unique per PM</div>
+            <div class="arch-layer-sub" style="color: var(--amber-600);">CLAUDE.md · 11 context files · product agent</div>
+          </div>
+          <div class="arch-layer-tag" style="color: var(--amber-600);">Output of interview · committed to repo</div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer" style="background: var(--gray-50);">
+          <div>
+            <div class="arch-layer-label" style="color: var(--gray-800);">Personal Layer — private</div>
+            <div class="arch-layer-sub" style="color: var(--gray-600);">CLAUDE.local.md · settings.local.json</div>
+          </div>
+          <div class="arch-layer-tag" style="color: var(--gray-600);">PM only · gitignored · never shared</div>
+        </div>
+      </div>
+
+      <div style="margin-top: 32px; padding: 16px 20px; background: var(--bg-sec); border-radius: var(--radius); max-width: 720px;">
+        <p style="font-size: 13px; color: var(--text-sec);">
+          <strong style="color: var(--text);">The key insight:</strong> When the supervisor updates a skill or rule, only the Policy Layer changes. Each PM's CLAUDE.md and context files stay untouched. No merge conflicts. No re-interview.
+        </p>
+      </div>
+    </div>
+
+    <!-- Slide 4: Repository Structure -->
+    <div class="slide">
+      <div class="slide-label">Layer 1</div>
+      <h2 style="margin-bottom: 8px;">Repository structure</h2>
+      <p style="color: var(--text-sec); margin-bottom: 36px; font-size: 14px;">Every file has a defined owner and a defined purpose. Nothing is ad-hoc.</p>
+
+      <div class="grid-2" style="gap: 32px; align-items: start; max-width: 960px;">
+        <div>
+          <div style="font-size: 12px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px;">Supervisor owns</div>
+          <div class="tree-line">
+            <div><span class="hl-blue">policy/</span></div>
+            <div>&nbsp;&nbsp;├── <span class="hl-blue">rules/</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 6 hard rules</span></div>
+            <div>&nbsp;&nbsp;├── <span class="hl-blue">commands/</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# slash commands</span></div>
+            <div>&nbsp;&nbsp;├── <span class="hl-blue">output-styles/</span><span class="comment">&nbsp;&nbsp;&nbsp;# output format</span></div>
+            <div>&nbsp;&nbsp;├── <span class="hl-blue">settings.json</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;# team settings</span></div>
+            <div>&nbsp;&nbsp;└── <span class="hl-blue">skills/</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├── shared/<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 6 shared skills</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── product-manager/<span class="comment">&nbsp;# 10 PM SKILL.md</span></div>
+            <div style="margin-top: 12px;"><span class="hl-blue">interview/</span></div>
+            <div>&nbsp;&nbsp;└── <span class="hl-blue">pm-interview.md</span></div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size: 12px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px;">PM owns (in their product repo)</div>
+          <div class="tree-line">
+            <div><span class="hl-amber">CLAUDE.md</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# from interview</span></div>
+            <div><span class="hl-gray">CLAUDE.local.md</span><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# private, gitignored</span></div>
+            <div><span class="hl-amber">.claude/</span></div>
+            <div>&nbsp;&nbsp;├── settings.json<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# from pm-template</span></div>
+            <div>&nbsp;&nbsp;├── agents/<span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# from interview</span></div>
+            <div>&nbsp;&nbsp;└── <span class="hl-amber">skills/product-manager/</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-amber">├── problem-framing/</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-amber">│&nbsp;&nbsp;&nbsp;├── SKILL.md</span><span class="comment">&nbsp;&nbsp;&nbsp;# from supervisor</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-amber">│&nbsp;&nbsp;&nbsp;└── context.md</span><span class="comment">&nbsp;# from interview</span></div>
+            <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="hl-amber">└── ... (9 more)</span></div>
+            <div style="margin-top: 12px;"><span class="hl-gray">claude-workflow/</span><span class="comment">&nbsp;&nbsp;&nbsp;# this repo (git clone)</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 5: How Skills Work -->
+    <div class="slide">
+      <div class="slide-label">Layer 1 + Layer 3</div>
+      <h2 style="margin-bottom: 8px;">How a skill produces personalized output</h2>
+      <p style="color: var(--text-sec); margin-bottom: 36px; font-size: 14px;">Three inputs combine at runtime. Each is maintained separately.</p>
+
+      <div style="display: flex; align-items: center; gap: 0; max-width: 960px;">
+        <div class="card" style="flex: 1; border-color: var(--blue-100);">
+          <div class="pill pill-blue" style="margin-bottom: 10px;">From supervisor</div>
+          <h3 style="font-family: monospace; font-size: 13px;">SKILL.md</h3>
+          <p style="font-size: 12px; margin-top: 6px;">Fixed logic. Defines the workflow, decision rules, output format, and quality constraints. Never changes per PM.</p>
+          <div style="margin-top: 12px; font-size: 11px; font-family: monospace; color: var(--text-hint); line-height: 1.8;">
+            workflow steps<br>output structure<br>hard constraints<br>quality checks
+          </div>
+        </div>
+        <div style="padding: 0 12px; font-size: 24px; color: var(--gray-200);">+</div>
+        <div class="card" style="flex: 1; border-color: var(--amber-100);">
+          <div class="pill pill-amber" style="margin-bottom: 10px;">From interview</div>
+          <h3 style="font-family: monospace; font-size: 13px;">context.md</h3>
+          <p style="font-size: 12px; margin-top: 6px;">Product-specific knowledge. Makes the skill aware of this PM's product, team, and constraints. Different per PM.</p>
+          <div style="margin-top: 12px; font-size: 11px; font-family: monospace; color: var(--text-hint); line-height: 1.8;">
+            business rules<br>team conventions<br>known constraints<br>historical context
+          </div>
+        </div>
+        <div style="padding: 0 12px; font-size: 24px; color: var(--gray-200);">+</div>
+        <div class="card" style="flex: 1; border-color: var(--teal-100);">
+          <div class="pill pill-teal" style="margin-bottom: 10px;">From interview</div>
+          <h3 style="font-family: monospace; font-size: 13px;">CLAUDE.md</h3>
+          <p style="font-size: 12px; margin-top: 6px;">PM profile. Defines authority, communication style, technical depth, and behavioral instructions for Claude.</p>
+          <div style="margin-top: 12px; font-size: 11px; font-family: monospace; color: var(--text-hint); line-height: 1.8;">
+            PM authority limits<br>preferred output format<br>technical depth<br>what Claude must flag
+          </div>
+        </div>
+        <div style="padding: 0 12px; font-size: 24px; color: var(--gray-200);">=</div>
+        <div class="card" style="flex: 1.2; background: var(--blue-900); border-color: var(--blue-900);">
+          <div style="font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.45); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.07em;">Output</div>
+          <h3 style="color: white; font-size: 14px;">Personalized for this PM and this product</h3>
+          <p style="font-size: 12px; color: rgba(255,255,255,0.55); margin-top: 6px;">Same skill logic, but the output references the right modules, business rules, team conventions, and authority limits specific to this PM.</p>
+        </div>
+      </div>
+
+      <div style="margin-top: 32px; max-width: 960px;">
+        <p style="font-size: 13px; color: var(--text-sec);">
+          <strong style="color: var(--text);">Example:</strong> The <span class="mono">edge-case-finder</span> skill runs identical logic for every PM. But for a fintech PM, it checks payment gateway timeouts, account verification states, and financial compliance limits — because those are in their <span class="mono">context.md</span>. For a content PM, it checks a completely different set of constraints.
+        </p>
+      </div>
+    </div>
+
+    <!-- Slide 6: The Interview Engine -->
+    <div class="slide">
+      <div class="slide-label">Layer 2</div>
+      <h2 style="margin-bottom: 8px;">The interview engine</h2>
+      <p style="color: var(--text-sec); margin-bottom: 36px; font-size: 14px;">One structured conversation generates 13 files. Every question maps to a specific output. Nothing is collected without purpose.</p>
+
+      <div class="grid-2" style="gap: 32px; max-width: 960px; align-items: start;">
+        <div>
+          <div style="font-size: 12px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 16px;">10 interview sections</div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800);">A</div>
+            <div><div class="file-name" style="font-family: var(--sans);">Product &amp; Business</div><div class="file-desc">mission, business logic, external dependencies</div></div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800);">B</div>
+            <div><div class="file-name" style="font-family: var(--sans);">Team Structure</div><div class="file-desc">engineering size, design involvement, roles</div></div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800);">C</div>
+            <div><div class="file-name" style="font-family: var(--sans);">Decision Architecture</div><div class="file-desc">who has authority over what</div></div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800);">D</div>
+            <div><div class="file-name" style="font-family: var(--sans);">Feature Workflow</div><div class="file-desc">idea to production, artifacts, approvals</div></div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800);">E–G</div>
+            <div><div class="file-name" style="font-family: var(--sans);">Requirements · Roadmap · Docs</div><div class="file-desc">handoff patterns, OKRs, documentation tools</div></div>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">H</div>
+            <div><div class="file-name" style="font-family: var(--sans);">Technical Context</div><div class="file-desc">module structure, design system, QA process</div></div>
+          </div>
+          <div class="file-row" style="border-bottom: none;">
+            <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">J</div>
+            <div><div class="file-name" style="font-family: var(--sans);">PM Profile</div><div class="file-desc">technical depth, output preferences, red flags</div></div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size: 12px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 16px;">13 files generated</div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--amber-50); color: var(--amber-800);">md</div>
+            <div><div class="file-name">CLAUDE.md</div><div class="file-desc">PM profile + product context + instructions for Claude</div></div>
+            <span class="pill pill-amber">root</span>
+          </div>
+          <div class="file-row">
+            <div class="file-icon" style="background: var(--teal-50); color: var(--teal-800);">×11</div>
+            <div><div class="file-name">context.md</div><div class="file-desc">one per skill — product-specific knowledge</div></div>
+            <span class="pill pill-teal">skills/</span>
+          </div>
+          <div class="file-row" style="border-bottom: none;">
+            <div class="file-icon" style="background: var(--purple-50); color: var(--purple-800);">ag</div>
+            <div><div class="file-name">product-agent.md</div><div class="file-desc">specialized agent with product persona</div></div>
+            <span class="pill pill-purple">agents/</span>
+          </div>
+
+          <div style="margin-top: 20px; padding: 16px; background: var(--bg-sec); border-radius: var(--radius);">
+            <div style="font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 8px;">Interview format</div>
+            <p style="font-size: 12px; color: var(--text-sec); line-height: 1.6;">Questions are in Persian. Each question includes selectable options. AI uses conversation history to skip things it already knows. Vague answers trigger one targeted follow-up before moving on.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 7: PM Onboarding -->
+    <div class="slide">
+      <div class="slide-label">Process · Onboarding</div>
+      <h2 style="margin-bottom: 8px;">PM Onboarding — up and running in 15 minutes</h2>
+      <p style="color: var(--text-sec); margin-bottom: 32px; font-size: 14px;">Two commands to install, one interview to personalize. Everything runs from inside Claude Code — no manual file editing required.</p>
+
+      <div style="max-width: 760px; margin-bottom: 32px;">
+
+        <div style="padding: 14px 20px; background: var(--bg-sec); border-radius: var(--radius); border: 0.5px solid var(--border-med); margin-bottom: 28px;">
+          <div style="font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px;">Prerequisites</div>
+          <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+            <span style="font-size: 12px; color: var(--text-sec);">Claude Code CLI installed</span>
+            <span style="font-size: 12px; color: var(--text-sec);">Node.js 18+ &amp; npm</span>
+            <span style="font-size: 12px; color: var(--text-sec);">Product repo on your machine</span>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h3>Install the package globally</h3>
+            <p>One command. Installs the <code>claude-pm</code> CLI on your machine.</p>
+            <code class="step-cmd">npm install -g claude-pm</code>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h3>Run init inside your product repo</h3>
+            <p>Installs all PM skills to <code>~/.claude/</code> globally, and scaffolds the policy tree, interview file, and placeholder context files inside the repo.</p>
+            <code class="step-cmd">cd your-product-repo<br>claude-pm init --role pm</code>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h3>Open Claude Code at repo root</h3>
+            <p>Launch Claude Code inside the product repo. Skills and policy files are now discoverable from the session.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h3>Run the PM interview</h3>
+            <p>Type <code>/start-interview</code> to begin. The interview runs in Persian, takes 20–30 minutes, and generates all 13 context files at the end. Each question maps to a specific output file — nothing is collected without purpose.</p>
+            <code class="step-cmd">/start-interview</code>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h3>Review the generated files</h3>
+            <p>13 files appear: <code>CLAUDE.md</code> at repo root, 11 <code>context.md</code> files (one per skill), and <code>product-agent.md</code> in <code>.claude/agents/</code>. Review the key decisions and business rules captured before committing.</p>
+          </div>
+        </div>
+
+        <div class="step-row">
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h3>Commit to the repo</h3>
+            <code class="step-cmd">git add CLAUDE.md .claude/ .gitignore &amp;&amp; git commit -m "feat: add PM workflow context"</code>
+          </div>
+        </div>
+
+        <div class="step-row" style="margin-bottom: 0;">
+          <div class="step-num">7</div>
+          <div class="step-body">
+            <h3>Run your first command</h3>
+            <p>Open Claude Code and describe a feature. The full context is loaded automatically on every session.</p>
+            <code class="step-cmd">/new-feature [describe your feature]</code>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2" style="max-width: 760px;">
+        <div class="callout-teal">
+          <p><strong>Updating policy:</strong> When the supervisor ships new skills or rules, run <code>claude-pm update</code>. Your <code>CLAUDE.md</code> and all context files are never touched.</p>
+        </div>
+        <div class="callout-amber">
+          <p><strong>Personal context:</strong> Create <code>CLAUDE.local.md</code> at repo root for private notes. It's gitignored and loads alongside <code>CLAUDE.md</code> on every session.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 8: Update Flow -->
+    <div class="slide">
+      <div class="slide-label">Process</div>
+      <h2 style="margin-bottom: 8px;">Receiving updates — one command</h2>
+      <p style="color: var(--text-sec); margin-bottom: 40px; font-size: 14px;">The separation of Policy Layer and Dynamic Layer means supervisor updates never touch PM-owned files. No merge conflicts.</p>
+
+      <div class="grid-2" style="gap: 32px; max-width: 880px; align-items: start;">
+        <div>
+          <h3 style="margin-bottom: 16px;">When supervisor updates a skill or rule</h3>
+          <div style="padding: 20px; background: var(--bg-sec); border-radius: var(--radius-lg);">
+            <p style="font-size: 13px; color: var(--text-sec); margin-bottom: 16px;">Supervisor pushes to <span class="mono">product-team-claude-skills</span> repo. PM runs:</p>
+            <code class="step-cmd">cd claude-workflow &amp;&amp; git pull &amp;&amp; cd ..</code>
+            <p style="font-size: 12px; color: var(--text-hint); margin-top: 12px;">That is the entire update process. Nothing else required.</p>
+          </div>
+
+          <div style="margin-top: 20px;">
+            <h3 style="margin-bottom: 12px; font-size: 15px;">What changes</h3>
+            <div class="file-row">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--teal-400); flex-shrink: 0;"></div>
+              <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">claude-workflow/policy/skills/product-manager/*/SKILL.md</div>
+              <span class="pill pill-teal">updated</span>
+            </div>
+            <div class="file-row">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--teal-400); flex-shrink: 0;"></div>
+              <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">claude-workflow/policy/rules/*.md</div>
+              <span class="pill pill-teal">updated</span>
+            </div>
+            <div class="file-row">
+              <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--teal-400); flex-shrink: 0;"></div>
+              <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">claude-workflow/policy/commands/*.md</div>
+              <span class="pill pill-teal">updated</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="margin-bottom: 16px;">What never changes</h3>
+          <div class="file-row">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--amber-400); flex-shrink: 0;"></div>
+            <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">CLAUDE.md</div>
+            <span class="pill pill-amber">untouched</span>
+          </div>
+          <div class="file-row">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--amber-400); flex-shrink: 0;"></div>
+            <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">.claude/skills/product-manager/*/context.md</div>
+            <span class="pill pill-amber">untouched</span>
+          </div>
+          <div class="file-row">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--amber-400); flex-shrink: 0;"></div>
+            <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">.claude/agents/product-agent.md</div>
+            <span class="pill pill-amber">untouched</span>
+          </div>
+          <div class="file-row">
+            <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--gray-400); flex-shrink: 0;"></div>
+            <div class="file-name" style="font-family: var(--sans); font-weight: 400; font-size: 13px;">CLAUDE.local.md</div>
+            <span class="pill pill-gray">private · gitignored</span>
+          </div>
+
+          <div class="callout-teal" style="margin-top: 24px;">
+            <p>Because policy files and PM-owned files live in separate directory trees, <strong>git pull never creates a merge conflict</strong>. The separation is enforced by the repository structure, not by process.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 9: Settings & Output Format -->
+    <div class="slide">
+      <div class="slide-label">Layer 1 · Policy</div>
+      <h2 style="margin-bottom: 8px;">Settings and output format</h2>
+      <p style="color: var(--text-sec); margin-bottom: 36px; font-size: 14px;">Two configuration files define how Claude behaves by default for every PM in the team.</p>
+
+      <div class="grid-2" style="gap: 32px; max-width: 900px; align-items: start;">
+        <div>
+          <h3 style="margin-bottom: 16px;">settings.json — team defaults</h3>
+          <div class="card">
+            <div class="file-row" style="border-color: var(--border);">
+              <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">mode</div>
+              <div><div class="file-name" style="font-family: var(--sans);">defaultMode: plan</div><div class="file-desc">Claude writes a plan and waits for approval before any file change</div></div>
+            </div>
+            <div class="file-row" style="border-color: var(--border);">
+              <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">lvl</div>
+              <div><div class="file-name" style="font-family: var(--sans);">effortLevel: high</div><div class="file-desc">Claude reasons at maximum precision on every task</div></div>
+            </div>
+            <div class="file-row" style="border-color: var(--border);">
+              <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">dir</div>
+              <div><div class="file-name" style="font-family: var(--sans);">additionalDirectories</div><div class="file-desc">["./claude-workflow"] — Claude reads policy files</div></div>
+            </div>
+            <div class="file-row" style="border-bottom: none;">
+              <div class="file-icon" style="background: var(--blue-50); color: var(--blue-800); font-size: 10px;">perm</div>
+              <div><div class="file-name" style="font-family: var(--sans);">permissions</div><div class="file-desc">read + git commands allowed · file edits require approval · no curl/rm</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 style="margin-bottom: 16px;">pm-standard output style — every response</h3>
+          <div class="card">
+            <div style="font-size: 12px; color: var(--text-hint); margin-bottom: 12px;">Required sections in every feature-related output:</div>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--gray-800); flex-shrink: 0;">1</span>
+                <span>Summary — one sentence</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--gray-800); flex-shrink: 0;">2</span>
+                <span>Main content</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--gray-800); flex-shrink: 0;">3</span>
+                <span>Out of scope — explicit list</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--gray-100); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--gray-800); flex-shrink: 0;">4</span>
+                <span>Open questions</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--amber-50); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--amber-800); flex-shrink: 0;">⚠</span>
+                <span>Sign-off required (if applicable)</span>
+              </div>
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                <span style="width: 20px; height: 20px; border-radius: 50%; background: var(--teal-50); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--teal-800); flex-shrink: 0;">✓</span>
+                <span>DOD</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 10: Skills Overview -->
     <div class="slide">
       <div class="slide-label">Overview</div>
       <h2 style="margin-bottom: 8px;">All PM Skills at a Glance</h2>
@@ -207,9 +673,9 @@
       </div>
     </div>
 
-    <!-- ── PM SKILLS ── -->
+    <!-- ── PM SKILL DETAIL SLIDES ── -->
 
-    <!-- Slide 3: problem-framing -->
+    <!-- Slide 11: problem-framing -->
     <div class="slide">
       <div class="slide-label">PM Skill · Discovery</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">problem-framing</h2>
@@ -232,7 +698,7 @@
       <div class="callout-blue"><p>Invoke: <code>/problem-framing [describe the feature]</code> — or runs automatically as Step 1 in <code>/new-feature</code></p></div>
     </div>
 
-    <!-- Slide 4: feature-prioritization -->
+    <!-- Slide 12: feature-prioritization -->
     <div class="slide">
       <div class="slide-label">PM Skill · Strategy</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">feature-prioritization</h2>
@@ -254,7 +720,7 @@
       <div class="callout-amber"><p>Includes automatic handoff to <code>decision-logger</code> — every prioritization decision gets captured before it's forgotten.</p></div>
     </div>
 
-    <!-- Slide 5: feature-dependency -->
+    <!-- Slide 13: feature-dependency -->
     <div class="slide">
       <div class="slide-label">PM Skill · Technical Awareness</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">feature-dependency</h2>
@@ -277,7 +743,7 @@
       <div class="callout-teal"><p>This skill reads the repository directly — it does not ask the PM to describe the code. Requires Claude Code with repository access.</p></div>
     </div>
 
-    <!-- Slide 6: edge-case-finder -->
+    <!-- Slide 14: edge-case-finder -->
     <div class="slide">
       <div class="slide-label">PM Skill · Quality</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">edge-case-finder</h2>
@@ -300,7 +766,7 @@
       <div class="callout-blue"><p>Output feeds directly into <code>wireframe-generator</code> — all states found here must be represented as wireframe states in Step 4.</p></div>
     </div>
 
-    <!-- Slide 7: scope-check -->
+    <!-- Slide 15: scope-check -->
     <div class="slide">
       <div class="slide-label">PM Skill · Scope Control</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">scope-check</h2>
@@ -322,7 +788,7 @@
       <div class="callout-amber"><p>Use when drift has already started. For initial scope definition before implementation, use <code>/problem-framing</code> instead.</p></div>
     </div>
 
-    <!-- Slide 8: feature-spec -->
+    <!-- Slide 16: feature-spec -->
     <div class="slide">
       <div class="slide-label">PM Skill · Documentation</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">feature-spec</h2>
@@ -345,7 +811,7 @@
       <div class="callout-blue"><p>Not the same as <code>requirement-writer</code>: feature-spec is for team alignment; requirement-writer is for engineering precision on error states and validation rules.</p></div>
     </div>
 
-    <!-- Slide 9: requirement-writer -->
+    <!-- Slide 17: requirement-writer -->
     <div class="slide">
       <div class="slide-label">PM Skill · Engineering Handoff</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">requirement-writer</h2>
@@ -367,7 +833,7 @@
       <div class="callout-teal"><p>Use after <code>feature-spec</code> when engineering needs implementation precision. The spec aligns the team; the requirements guide the build.</p></div>
     </div>
 
-    <!-- Slide 10: release-impact -->
+    <!-- Slide 18: release-impact -->
     <div class="slide">
       <div class="slide-label">PM Skill · Release Management</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">release-impact</h2>
@@ -390,7 +856,7 @@
       <div class="callout-blue"><p>Reads git history and the repository directly. Run as part of <code>/release-check</code> to automatically chain into a full test plan.</p></div>
     </div>
 
-    <!-- Slide 11: qa-guide -->
+    <!-- Slide 19: qa-guide -->
     <div class="slide">
       <div class="slide-label">PM Skill · Quality Assurance</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">qa-guide</h2>
@@ -413,7 +879,7 @@
       <div class="callout-teal"><p>Works best after <code>release-impact</code> — uses its output to focus test coverage on the right areas. Also runs standalone for any feature QA.</p></div>
     </div>
 
-    <!-- Slide 12: decision-logger -->
+    <!-- Slide 20: decision-logger -->
     <div class="slide">
       <div class="slide-label">PM Skill · Institutional Memory</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">decision-logger</h2>
@@ -437,7 +903,7 @@
 
     <!-- ── SHARED SKILLS ── -->
 
-    <!-- Slide 13: design-system-check -->
+    <!-- Slide 21: design-system-check -->
     <div class="slide">
       <div class="slide-label">Shared Skill · UI Planning</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">design-system-check</h2>
@@ -459,7 +925,7 @@
       <div class="callout-blue"><p>Invoke: <code>/design-system-check [describe the UI needs]</code></p></div>
     </div>
 
-    <!-- Slide 14: wireframe-generator -->
+    <!-- Slide 22: wireframe-generator -->
     <div class="slide">
       <div class="slide-label">Shared Skill · Visualization</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">wireframe-generator</h2>
@@ -481,7 +947,7 @@
       <div class="callout-blue"><p>Invoke: <code>/wireframe-generator [feature description + states to show]</code></p></div>
     </div>
 
-    <!-- Slide 15: task-writer -->
+    <!-- Slide 23: task-writer -->
     <div class="slide">
       <div class="slide-label">Shared Skill · Linear Integration</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">task-writer</h2>
@@ -503,7 +969,7 @@
       <div class="callout-teal"><p>Invoke: <code>/task-writer [describe what the task is about]</code></p></div>
     </div>
 
-    <!-- Slide 16: meeting-support -->
+    <!-- Slide 24: meeting-support -->
     <div class="slide">
       <div class="slide-label">Shared Skill · Meetings</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">meeting-support</h2>
@@ -525,7 +991,7 @@
       <div class="callout-blue"><p>Invoke: <code>/meeting-support [meeting type + context]</code></p></div>
     </div>
 
-    <!-- Slide 17: presentation-style -->
+    <!-- Slide 25: presentation-style -->
     <div class="slide">
       <div class="slide-label">Shared Skill · Communication</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">presentation-style</h2>
@@ -547,7 +1013,7 @@
       <div class="callout-blue"><p>Invoke: <code>/presentation-style [topic and content description]</code> — saved to <code>docs/</code> for GitHub Pages publishing</p></div>
     </div>
 
-    <!-- Slide 18: prompt-optimizer -->
+    <!-- Slide 26: prompt-optimizer -->
     <div class="slide">
       <div class="slide-label">Shared Skill · Prompt Engineering</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">prompt-optimizer</h2>
@@ -571,7 +1037,7 @@
 
     <!-- ── CHAIN COMMANDS ── -->
 
-    <!-- Slide 19: /new-feature -->
+    <!-- Slide 27: /new-feature -->
     <div class="slide">
       <div class="slide-label">Chain Command · Full Feature Flow</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">/new-feature</h2>
@@ -610,7 +1076,7 @@
       <div class="callout-blue"><p>Invoke: <code>/new-feature [describe the feature]</code> — Claude waits for PM approval between each step before proceeding</p></div>
     </div>
 
-    <!-- Slide 20: /release-check -->
+    <!-- Slide 28: /release-check -->
     <div class="slide">
       <div class="slide-label">Chain Command · Pre-Release</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">/release-check</h2>
@@ -633,7 +1099,7 @@
       <div class="callout-blue"><p>Invoke: <code>/release-check [feature name or branch]</code> — or omit arguments to use the latest <code>git diff</code></p></div>
     </div>
 
-    <!-- Slide 21: /sync-spec -->
+    <!-- Slide 29: /sync-spec -->
     <div class="slide">
       <div class="slide-label">Chain Command · Spec Maintenance</div>
       <h2 style="font-family: 'SF Mono','Fira Code',monospace; font-size: 28px; margin-bottom: 8px;">/sync-spec</h2>
@@ -656,7 +1122,7 @@
       <div class="callout-amber"><p>Never updates any file automatically. Presents proposed changes and waits for PM approval. Invoke: <code>/sync-spec [feature name or spec file path]</code></p></div>
     </div>
 
-    <!-- Slide 22: Summary -->
+    <!-- Slide 30: Summary -->
     <div class="slide" style="background: var(--bg-sec);">
       <div class="slide-label">Summary</div>
       <h2 style="margin-bottom: 8px;">What This System Delivers</h2>
