@@ -25,15 +25,42 @@
         --radius: 8px; --radius-lg: 12px;
         --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
-      body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+      body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; padding-top: 44px; }
 
-      /* Nav */
-      .nav { background: var(--bg-sec); border-bottom: 0.5px solid var(--border-med); padding: 12px 72px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); }
-      .nav-links { display: flex; gap: 24px; align-items: center; }
-      .nav-link { font-size: 12px; font-weight: 500; color: var(--blue-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--blue-50); }
-      .nav-link.active { background: var(--blue-600); color: white; }
-      .nav-link:hover { opacity: 0.8; }
+      /* ── SITE TOP NAV ── */
+      .site-nav { position: fixed; top: 0; left: 0; right: 0; height: 44px; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; padding: 0 24px; gap: 0; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; }
+      .site-nav__brand { font-weight: 600; color: #1a1a18; text-decoration: none; margin-right: 28px; white-space: nowrap; flex-shrink: 0; }
+      .site-nav__links { display: flex; gap: 4px; }
+      .site-nav__link { padding: 5px 12px; border-radius: 6px; text-decoration: none; color: #5f5e5a; font-weight: 500; transition: background 0.12s, color 0.12s; }
+      .site-nav__link:hover { background: #f1efe8; color: #1a1a18; }
+      .site-nav__link--active { background: #1a1a18; color: #fff !important; }
+
+      /* ── REQUEST FLOW SLIDE ── */
+      .flow-slide { min-height: 100vh; padding: 60px 72px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 1px solid var(--border); background: var(--bg-sec); }
+      .flow-slide-label { font-size: 11px; font-weight: 500; color: var(--text-hint); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px; }
+      .flow-slide h2 { font-size: 30px; font-weight: 500; color: var(--text); margin-bottom: 8px; text-align: center; }
+      .flow-slide .lead { font-size: 15px; color: var(--text-sec); margin-bottom: 48px; text-align: center; }
+      .flow-nodes { display: flex; flex-direction: column; align-items: center; width: 100%; max-width: 480px; }
+      .flow-node { width: 100%; background: #fff; border: 1px solid rgba(0,0,0,0.12); border-radius: 10px; padding: 14px 18px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); opacity: 0; transform: translateY(14px); transition: opacity 0.5s ease, transform 0.5s ease; }
+      .flow-node.fn-visible { opacity: 1; transform: translateY(0); }
+      .flow-icon { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+      .flow-node-body { flex: 1; }
+      .flow-node-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 2px; }
+      .flow-node-desc { font-size: 11.5px; color: var(--text-hint); line-height: 1.4; }
+      .flow-node-tag { font-size: 10px; font-weight: 600; font-family: 'SF Mono','Fira Code',monospace; padding: 3px 8px; border-radius: 5px; flex-shrink: 0; }
+      .flow-arrow { width: 1px; height: 22px; background: rgba(0,0,0,0.15); position: relative; margin: 3px 0; opacity: 0; transition: opacity 0.3s ease; }
+      .flow-arrow.fn-visible { opacity: 1; }
+      .flow-arrow::after { content: ''; position: absolute; bottom: -4px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 4px solid transparent; border-right: 4px solid transparent; border-top: 5px solid rgba(0,0,0,0.15); }
+      .fn-skill .flow-icon { background: var(--purple-50); color: var(--purple-800); }
+      .fn-skill .flow-node-tag { background: var(--purple-50); color: var(--purple-800); }
+      .fn-context .flow-icon { background: var(--blue-50); color: var(--blue-800); }
+      .fn-context .flow-node-tag { background: var(--blue-50); color: var(--blue-800); }
+      .fn-claude .flow-icon { background: #fff3e0; color: #bf360c; }
+      .fn-claude .flow-node-tag { background: #fff3e0; color: #bf360c; }
+      .fn-request .flow-icon { background: var(--gray-50); color: var(--gray-800); }
+      .fn-request .flow-node-tag { background: var(--gray-50); color: var(--gray-800); }
+      .fn-output .flow-icon { background: var(--teal-50); color: var(--teal-800); }
+      .fn-output .flow-node-tag { background: var(--teal-50); color: var(--teal-800); }
 
       /* Slides */
       .slide { min-height: 100vh; padding: 60px 72px; display: flex; flex-direction: column; justify-content: center; border-bottom: 1px solid var(--border); }
@@ -129,13 +156,16 @@
   </head>
   <body>
 
-    <nav class="nav">
-      <span class="nav-title">Product Team · Claude Code</span>
-      <div class="nav-links">
-        <a href="pm-presentation.html" class="nav-link active">Product Manager</a>
-        <a href="pd-presentation.html" class="nav-link">Product Designer</a>
-      </div>
-    </nav>
+    <header class="site-nav">
+      <a class="site-nav__brand" href="index.html">Product Team · Claude</a>
+      <nav class="site-nav__links">
+        <a href="index.html" class="site-nav__link">Home</a>
+        <a href="pipeline.html" class="site-nav__link">Context Pipeline</a>
+        <a href="pm-presentation.html" class="site-nav__link site-nav__link--active">For PM</a>
+        <a href="pd-presentation.html" class="site-nav__link">For PD</a>
+        <a href="figma-to-vue.html" class="site-nav__link">Figma → Vue</a>
+      </nav>
+    </header>
 
     <!-- Slide 1: Title -->
     <div class="slide slide-title">
@@ -162,7 +192,60 @@
       </div>
     </div>
 
-    <!-- Slide 2: Context / Problem -->
+    <!-- Slide 2: How a Request Works -->
+    <div class="flow-slide">
+      <div class="flow-slide-label">System</div>
+      <h2>How a request works</h2>
+      <p class="lead">Every command flows through four context layers before Claude responds.</p>
+      <div class="flow-nodes" id="pmFlowNodes">
+        <div class="flow-node fn-skill" data-delay="0">
+          <div class="flow-icon">📄</div>
+          <div class="flow-node-body">
+            <div class="flow-node-title">Skill definition</div>
+            <div class="flow-node-desc">Role-specific rules — what Claude does and doesn't do as a PM partner</div>
+          </div>
+          <div class="flow-node-tag">SKILL.md</div>
+        </div>
+        <div class="flow-arrow" data-delay="150"></div>
+        <div class="flow-node fn-context" data-delay="200">
+          <div class="flow-icon">🗂️</div>
+          <div class="flow-node-body">
+            <div class="flow-node-title">Product context</div>
+            <div class="flow-node-desc">Your product, team, stack, and decisions — captured once from the interview</div>
+          </div>
+          <div class="flow-node-tag">context.md</div>
+        </div>
+        <div class="flow-arrow" data-delay="350"></div>
+        <div class="flow-node fn-claude" data-delay="400">
+          <div class="flow-icon">⚙️</div>
+          <div class="flow-node-body">
+            <div class="flow-node-title">Assembled context</div>
+            <div class="flow-node-desc">All layers merged and prioritized — Claude reads this before every session</div>
+          </div>
+          <div class="flow-node-tag">CLAUDE.md</div>
+        </div>
+        <div class="flow-arrow" data-delay="550"></div>
+        <div class="flow-node fn-request" data-delay="600">
+          <div class="flow-icon">💬</div>
+          <div class="flow-node-body">
+            <div class="flow-node-title">Your request</div>
+            <div class="flow-node-desc">A slash command or a free-form question — already context-aware</div>
+          </div>
+          <div class="flow-node-tag">/new-feature</div>
+        </div>
+        <div class="flow-arrow" data-delay="750"></div>
+        <div class="flow-node fn-output" data-delay="800">
+          <div class="flow-icon">✅</div>
+          <div class="flow-node-body">
+            <div class="flow-node-title">Structured PM output</div>
+            <div class="flow-node-desc">Feature spec with DOD, authority flags, and out-of-scope — every time</div>
+          </div>
+          <div class="flow-node-tag">Output</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Slide 3: Context / Problem -->
     <div class="slide">
       <div class="slide-label">Context</div>
       <h2 style="margin-bottom: 8px;">Why generic AI tools fall short for PMs</h2>
@@ -736,5 +819,18 @@
       </div>
     </div>
 
+  <script>
+    const flowEls = document.querySelectorAll('#pmFlowNodes .flow-node, #pmFlowNodes .flow-arrow');
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          setTimeout(() => el.classList.add('fn-visible'), parseInt(el.dataset.delay || 0));
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.15 });
+    flowEls.forEach(el => obs.observe(el));
+  </script>
   </body>
 </html>
