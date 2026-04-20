@@ -25,17 +25,15 @@
         --radius: 8px; --radius-lg: 12px;
         --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       }
-      body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; }
+      body { font-family: var(--sans); background: var(--bg); color: var(--text); font-size: 15px; line-height: 1.6; padding-top: 44px; }
 
-      /* Nav */
-      .nav { background: var(--bg-sec); border-bottom: 0.5px solid var(--border-med); padding: 12px 72px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
-      .nav-title { font-size: 13px; font-weight: 500; color: var(--text); text-decoration: none; }
-      .nav-links { display: flex; gap: 24px; align-items: center; }
-      .nav-link { font-size: 12px; font-weight: 500; color: var(--blue-600); text-decoration: none; padding: 4px 12px; border-radius: 20px; background: var(--blue-50); }
-      .nav-link.active { background: var(--blue-600); color: white; }
-      .nav-link.purple { background: var(--purple-50); color: var(--purple-600); }
-      .nav-link.gray { background: var(--gray-50); color: var(--gray-800); }
-      .nav-link:hover { opacity: 0.8; }
+      /* ── SITE TOP NAV ── */
+      .site-nav { position: fixed; top: 0; left: 0; right: 0; height: 44px; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.1); display: flex; align-items: center; padding: 0 24px; gap: 0; z-index: 9999; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 13px; }
+      .site-nav__brand { font-weight: 600; color: #1a1a18; text-decoration: none; margin-right: 28px; white-space: nowrap; flex-shrink: 0; }
+      .site-nav__links { display: flex; gap: 4px; }
+      .site-nav__link { padding: 5px 12px; border-radius: 6px; text-decoration: none; color: #5f5e5a; font-weight: 500; transition: background 0.12s, color 0.12s; }
+      .site-nav__link:hover { background: #f1efe8; color: #1a1a18; }
+      .site-nav__link--active { background: #1a1a18; color: #fff !important; }
 
       /* Layout */
       .section { padding: 72px; border-bottom: 0.5px solid var(--border-med); }
@@ -129,16 +127,16 @@
   </head>
   <body>
 
-    <nav class="nav">
-      <a href="index.html" class="nav-title">Product Team · Claude Code</a>
-      <div class="nav-links">
-        <a href="index.html" class="nav-link active">Overview</a>
-        <a href="presentation-pm.html" class="nav-link">Product Manager</a>
-        <a href="presentation-pd.html" class="nav-link purple">Product Designer</a>
-        <a href="presentation.html" class="nav-link gray">Workflow Deck</a>
-        <a href="figma-to-vue.html" class="nav-link gray">Figma → Vue</a>
-      </div>
-    </nav>
+    <header class="site-nav">
+      <a class="site-nav__brand" href="index.html">Product Team · Claude</a>
+      <nav class="site-nav__links">
+        <a href="index.html" class="site-nav__link site-nav__link--active">Home</a>
+        <a href="presentation.html" class="site-nav__link">Context Pipeline</a>
+        <a href="presentation-pm.html" class="site-nav__link">For PM</a>
+        <a href="presentation-pd.html" class="site-nav__link">For PD</a>
+        <a href="figma-to-vue.html" class="site-nav__link">Figma → Vue</a>
+      </nav>
+    </header>
 
     <!-- Hero -->
     <div class="hero">
