@@ -15,7 +15,7 @@ The current repository ships:
 - 19 PM command files
 - 15 Designer command files
 - 2 onboarding interviews in `interview/`
-- 5 documentation pages in `docs/`
+- 8 documentation pages in `docs/`
 
 The published CLI command is still `claude-pm`.
 
@@ -113,52 +113,52 @@ It does not rerun onboarding and does not overwrite generated context files such
 
 ### Global files in `~/.claude/`
 
-| Path | Contents |
-| --- | --- |
-| `~/.claude/skills/shared/` | 6 shared `SKILL.md` files |
-| `~/.claude/skills/product-manager/` | 10 PM `SKILL.md` files |
-| `~/.claude/skills/product-designer/` | 8 Designer `SKILL.md` files |
-| `~/.claude/commands/product-manager/` | 19 PM command files |
-| `~/.claude/commands/product-designer/` | 15 Designer command files |
-| `~/.claude/commands/start-interview.md` | PM onboarding entry command |
+| Path                                             | Contents                          |
+| ------------------------------------------------ | --------------------------------- |
+| `~/.claude/skills/shared/`                       | 6 shared `SKILL.md` files         |
+| `~/.claude/skills/product-manager/`              | 10 PM `SKILL.md` files            |
+| `~/.claude/skills/product-designer/`             | 8 Designer `SKILL.md` files       |
+| `~/.claude/commands/product-manager/`            | 19 PM command files               |
+| `~/.claude/commands/product-designer/`           | 15 Designer command files         |
+| `~/.claude/commands/start-interview.md`          | PM onboarding entry command       |
 | `~/.claude/commands/start-designer-interview.md` | Designer onboarding entry command |
-| `~/.claude/output-styles/pm-standard.md` | PM output style |
-| `~/.claude/output-styles/design-standard.md` | Designer output style |
+| `~/.claude/output-styles/pm-standard.md`         | PM output style                   |
+| `~/.claude/output-styles/design-standard.md`     | Designer output style             |
 
 ### Project scaffold for PM repos
 
-| Path | Contents |
-| --- | --- |
-| `claude-workflow/policy/` | Full policy copy used by the repo |
-| `claude-workflow/interview/` | `pm-interview.md` and `designer-interview.md` |
-| `claude-workflow/.claude-pm-version` | Installed package version marker |
-| `CLAUDE.md` | PM context root file |
-| `.claude/settings.json` | Claude Code repo settings |
-| `.claude/output-styles/pm-standard.md` | PM output style inside the repo |
-| `.claude/agents/product-agent.md` | PM agent placeholder |
-| `.claude/skills/product-manager/*/context.md` | PM context placeholders |
+| Path                                          | Contents                                      |
+| --------------------------------------------- | --------------------------------------------- |
+| `claude-workflow/policy/`                     | Full policy copy used by the repo             |
+| `claude-workflow/interview/`                  | `pm-interview.md` and `designer-interview.md` |
+| `claude-workflow/.claude-pm-version`          | Installed package version marker              |
+| `CLAUDE.md`                                   | PM context root file                          |
+| `.claude/settings.json`                       | Claude Code repo settings                     |
+| `.claude/output-styles/pm-standard.md`        | PM output style inside the repo               |
+| `.claude/agents/product-agent.md`             | PM agent placeholder                          |
+| `.claude/skills/product-manager/*/context.md` | PM context placeholders                       |
 
 ### Project scaffold for Designer repos
 
-| Path | Contents |
-| --- | --- |
-| `claude-workflow/policy/` | Full policy copy used by the repo |
-| `claude-workflow/interview/` | `pm-interview.md` and `designer-interview.md` |
-| `claude-workflow/.claude-pm-version` | Installed package version marker |
-| `CLAUDE.md` | Designer context root file |
-| `.claude/settings.json` | Claude Code repo settings |
-| `.claude/output-styles/design-standard.md` | Designer output style inside the repo |
-| `.claude/agents/design-agent.md` | Designer agent placeholder |
-| `.claude/agents/handoff-agent.md` | Handoff agent placeholder |
-| `.claude/skills/product-designer/*/context.md` | Designer context placeholders |
+| Path                                           | Contents                                      |
+| ---------------------------------------------- | --------------------------------------------- |
+| `claude-workflow/policy/`                      | Full policy copy used by the repo             |
+| `claude-workflow/interview/`                   | `pm-interview.md` and `designer-interview.md` |
+| `claude-workflow/.claude-pm-version`           | Installed package version marker              |
+| `CLAUDE.md`                                    | Designer context root file                    |
+| `.claude/settings.json`                        | Claude Code repo settings                     |
+| `.claude/output-styles/design-standard.md`     | Designer output style inside the repo         |
+| `.claude/agents/design-agent.md`               | Designer agent placeholder                    |
+| `.claude/agents/handoff-agent.md`              | Handoff agent placeholder                     |
+| `.claude/skills/product-designer/*/context.md` | Designer context placeholders                 |
 
 ### Private files
 
 These are added to `.gitignore`:
 
-| Path | Purpose |
-| --- | --- |
-| `CLAUDE.local.md` | Private notes |
+| Path                          | Purpose                  |
+| ----------------------------- | ------------------------ |
+| `CLAUDE.local.md`             | Private notes            |
 | `.claude/settings.local.json` | Personal local overrides |
 
 ---
@@ -233,13 +233,16 @@ Current repo version:
 
 The repository currently includes these HTML docs in [`docs/`](docs/):
 
-| File | Purpose |
-| --- | --- |
-| [docs/index.html](docs/index.html) | Overview page |
-| [docs/presentation.html](docs/presentation.html) | Context Pipeline presentation |
-| [docs/presentation-pm.html](docs/presentation-pm.html) | Product Manager presentation |
-| [docs/presentation-pd.html](docs/presentation-pd.html) | Product Designer presentation |
-| [docs/figma-to-vue.html](docs/figma-to-vue.html) | Figma → Vue / Vuetify reference |
+| File                                                   | Purpose                         |
+| ------------------------------------------------------ | ------------------------------- |
+| [docs/index.html](docs/index.html)                     | Overview / landing page                  |
+| [docs/pipeline.html](docs/pipeline.html)               | Context Pipeline deep-dive               |
+| [docs/presentation.html](docs/presentation.html)       | General team presentation                |
+| [docs/presentation-pm.html](docs/presentation-pm.html) | Product Manager presentation             |
+| [docs/presentation-pd.html](docs/presentation-pd.html) | Product Designer presentation            |
+| [docs/pm-presentation.html](docs/pm-presentation.html) | PM presentation (alternate layout)       |
+| [docs/pd-presentation.html](docs/pd-presentation.html) | Designer presentation (alternate layout) |
+| [docs/figma-to-vue.html](docs/figma-to-vue.html)       | Figma → Vue / Vuetify reference          |
 
 ---
 
@@ -280,9 +283,12 @@ product-team-claude-skills/
 ├── designer-template/
 ├── docs/
 │   ├── index.html
+│   ├── pipeline.html
 │   ├── presentation.html
 │   ├── presentation-pm.html
 │   ├── presentation-pd.html
+│   ├── pm-presentation.html
+│   ├── pd-presentation.html
 │   └── figma-to-vue.html
 └── README.md
 ```
