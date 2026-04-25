@@ -1,3 +1,5 @@
 node_modules/
 .claude/
+!product-manager-template/.claude/
+!designer-template/.claude/
 CLAUDE.local.md
