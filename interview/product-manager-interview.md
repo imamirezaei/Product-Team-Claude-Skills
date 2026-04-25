@@ -18,6 +18,8 @@ The output is **14 files**. The interview has 4 short question batches plus one 
 4. **Use the selected language.** After Step 0, conduct the entire interview in the PM's chosen language. Generate all output files in English only.
 5. **Never re-ask.** If a piece of information was already given, don't ask for it again.
 6. **Tone:** Direct and respectful — like a senior colleague, not a form.
+7. **Use plain text messages, not AskUserQuestion.** All questions in Step 1 onward are open-ended — ask them directly as plain text messages and wait for the PM's typed reply. Use the AskUserQuestion tool only for Step 0 (language selection), where there are exactly two options.
+8. **Read placeholder files before writing.** The 14 output files are pre-created as placeholders by `claude-pm init` and contain the sentinel string `Replace this file with the interview engine output.` Before writing each file in Step 6, Read it first (Claude Code's Write tool requires a prior Read on existing files).
 
 ---
 

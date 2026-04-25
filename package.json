@@ -1,6 +1,6 @@
 {
   "name": "product-team-claude-skills",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Claude Code setup for product teams — skills, commands, and onboarding interviews for Product Managers and Product Designers.",
   "type": "module",
   "repository": {

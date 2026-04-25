@@ -3,3 +3,4 @@ node_modules/
 !product-manager-template/.claude/
 !designer-template/.claude/
 CLAUDE.local.md
+RELEASE.local.md
