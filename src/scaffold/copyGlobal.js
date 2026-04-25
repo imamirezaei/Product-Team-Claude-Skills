@@ -47,27 +47,42 @@ function copyCommandsFrom(policySub, destSubdir) {
   copyDirRecursive(src, dest);
 }
 
+function removeIfExists(p) {
+  if (fs.existsSync(p)) fs.rmSync(p, { recursive: true, force: true });
+}
+
 /**
- * Installs global Claude Code files to ~/.claude/:
- *   - skills/shared/, skills/product-manager/, skills/product-designer/
- *   - commands/product-manager/, commands/product-designer/
- *   - output-styles/product-manager-standard.md, output-styles/design-standard.md
- *   - commands/start-interview.md, commands/start-designer-interview.md
+ * Installs role-specific Claude Code files to ~/.claude/.
+ * Only installs files for the given role; removes the other role's files.
  *
  * Returns array of installed paths for display.
  */
-export function copyGlobal() {
+export function copyGlobal(role = 'pm') {
   const installed = [];
+  const commandsDir = path.join(GLOBAL_CLAUDE_DIR, 'commands');
+  fs.mkdirSync(commandsDir, { recursive: true });
 
-  // ── Skills ─────────────────────────────────────────────────────────────────
+  // ── Shared skills (always) ─────────────────────────────────────────────────
   copySkillsFrom('shared', 'shared');
-  copySkillsFrom('product-manager', 'product-manager');
-  copySkillsFrom('product-designer', 'product-designer');
+
+  // ── Role-specific skills ───────────────────────────────────────────────────
+  if (role === 'pm') {
+    copySkillsFrom('product-manager', 'product-manager');
+    removeIfExists(path.join(GLOBAL_CLAUDE_DIR, 'skills', 'product-designer'));
+  } else {
+    copySkillsFrom('product-designer', 'product-designer');
+    removeIfExists(path.join(GLOBAL_CLAUDE_DIR, 'skills', 'product-manager'));
+  }
   installed.push('~/.claude/skills/');
 
-  // ── Commands ───────────────────────────────────────────────────────────────
-  copyCommandsFrom('product-manager', 'product-manager');
-  copyCommandsFrom('product-designer', 'product-designer');
+  // ── Role-specific commands ─────────────────────────────────────────────────
+  if (role === 'pm') {
+    copyCommandsFrom('product-manager', 'product-manager');
+    removeIfExists(path.join(GLOBAL_CLAUDE_DIR, 'commands', 'product-designer'));
+  } else {
+    copyCommandsFrom('product-designer', 'product-designer');
+    removeIfExists(path.join(GLOBAL_CLAUDE_DIR, 'commands', 'product-manager'));
+  }
   installed.push('~/.claude/commands/');
 
   // ── Output styles ──────────────────────────────────────────────────────────
@@ -75,37 +90,40 @@ export function copyGlobal() {
   const stylesDest = path.join(GLOBAL_CLAUDE_DIR, 'output-styles');
   fs.mkdirSync(stylesDest, { recursive: true });
 
-  const pmStyle = path.join(stylesSrc, 'product-manager', 'output-styles', 'product-manager-standard.md');
-  if (fs.existsSync(pmStyle)) {
-    fs.copyFileSync(pmStyle, path.join(stylesDest, 'product-manager-standard.md'));
-  }
-
-  const designStyle = path.join(stylesSrc, 'product-designer', 'output-styles', 'design-standard.md');
-  if (fs.existsSync(designStyle)) {
-    fs.copyFileSync(designStyle, path.join(stylesDest, 'design-standard.md'));
+  if (role === 'pm') {
+    const pmStyle = path.join(stylesSrc, 'product-manager', 'output-styles', 'product-manager-standard.md');
+    if (fs.existsSync(pmStyle)) {
+      fs.copyFileSync(pmStyle, path.join(stylesDest, 'product-manager-standard.md'));
+    }
+    removeIfExists(path.join(stylesDest, 'design-standard.md'));
+  } else {
+    const designStyle = path.join(stylesSrc, 'product-designer', 'output-styles', 'design-standard.md');
+    if (fs.existsSync(designStyle)) {
+      fs.copyFileSync(designStyle, path.join(stylesDest, 'design-standard.md'));
+    }
+    removeIfExists(path.join(stylesDest, 'product-manager-standard.md'));
   }
   installed.push('~/.claude/output-styles/');
 
-  // ── /start-interview (PM) ──────────────────────────────────────────────────
-  const startInterviewContent = `---
+  // ── Clean up old command names ─────────────────────────────────────────────
+  removeIfExists(path.join(commandsDir, 'start-interview.md'));
+  removeIfExists(path.join(commandsDir, 'start-designer-interview.md'));
+
+  // ── /start-pm-interview ────────────────────────────────────────────────────
+  if (role === 'pm') {
+    const content = `---
 description: Start the PM onboarding interview
 ---
 
-Read the file at \`./claude-workflow/interview/product-manager-interview.md\` and immediately start the interview.
-
-Your first question must ask which language the PM wants: Persian or English.
-Use the selected language for all interview questions and PM-facing guidance during the interview.
-Generate every output file in English only, regardless of the interview language.
-
-After completing all 14 output files, write each file directly to its specified path using your Write/Edit tools. Ask the PM for approval before writing each file.
+Read the file at \`./claude-workflow/interview/product-manager-interview.md\` and immediately follow the instructions in that file. Start with Step 0.
 `;
-  const startInterviewPath = path.join(GLOBAL_CLAUDE_DIR, 'commands', 'start-interview.md');
-  fs.mkdirSync(path.dirname(startInterviewPath), { recursive: true });
-  fs.writeFileSync(startInterviewPath, startInterviewContent, 'utf8');
-  installed.push('~/.claude/commands/start-interview.md');
+    fs.writeFileSync(path.join(commandsDir, 'start-pm-interview.md'), content, 'utf8');
+    removeIfExists(path.join(commandsDir, 'start-pd-interview.md'));
+    installed.push('~/.claude/commands/start-pm-interview.md');
 
-  // ── /start-designer-interview ─────────────────────────────────────────────
-  const startDesignerInterviewContent = `---
+  // ── /start-pd-interview ────────────────────────────────────────────────────
+  } else {
+    const content = `---
 description: Start Product Designer onboarding — connects Figma MCP, reads the Figma file, and generates all 11 context files
 ---
 
@@ -121,9 +139,10 @@ Follow the steps exactly as written:
 Generate every output file in English only, regardless of the selected working language.
 After generating all 11 files, write each file directly to its specified path using your Write/Edit tools. Ask the designer for approval before writing.
 `;
-  const startDesignerInterviewPath = path.join(GLOBAL_CLAUDE_DIR, 'commands', 'start-designer-interview.md');
-  fs.writeFileSync(startDesignerInterviewPath, startDesignerInterviewContent, 'utf8');
-  installed.push('~/.claude/commands/start-designer-interview.md');
+    fs.writeFileSync(path.join(commandsDir, 'start-pd-interview.md'), content, 'utf8');
+    removeIfExists(path.join(commandsDir, 'start-pm-interview.md'));
+    installed.push('~/.claude/commands/start-pd-interview.md');
+  }
 
   return installed;
 }
