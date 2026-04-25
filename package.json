@@ -1,6 +1,6 @@
 {
   "name": "@imamirezaei/product-team-claude-skills",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Claude Code setup for product teams — skills, commands, and onboarding interviews for Product Managers and Product Designers.",
   "type": "module",
   "repository": {
