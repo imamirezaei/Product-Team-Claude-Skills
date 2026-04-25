@@ -13,6 +13,7 @@ Use a short, descriptive kebab-case name based on the feature or topic, followed
 Pattern: `{topic-slug}-{jalali-date}.{ext}`
 
 Examples:
+
 - `payment-gateway-spec-14050131.md`
 - `user-profile-edge-cases-14050215.html`
 - `auth-flow-decision-14050312.md`
@@ -23,21 +24,22 @@ To determine today's Jalali date, read it from the `currentDate` field in the se
 
 Save files to `.claude/outputs/` in the product repo root, routed by format:
 
-| Format | Save path |
-|---|---|
-| `md` | `.claude/outputs/md/` |
+| Format | Save path               |
+| ------ | ----------------------- |
+| `md`   | `.claude/outputs/md/`   |
 | `html` | `.claude/outputs/html/` |
 
 ## Format behavior
 
-| Chosen format | What to write |
-|---|---|
-| `md` | A clean Markdown document following the relevant output style |
-| `html` | A styled single-file HTML document following the `presentation-style` design system |
+| Chosen format | What to write                                                                       |
+| ------------- | ----------------------------------------------------------------------------------- |
+| `md`          | A clean Markdown document following the relevant output style                       |
+| `html`        | A styled single-file HTML document following the `presentation-style` design system |
 
 ## When NOT to ask
 
 Do not ask for format when:
+
 - The output is a mid-chain intermediate step (not the final deliverable)
 - The user is asking a question or having a discussion
 - The user explicitly requests inline output ("just show me", "no need to save")

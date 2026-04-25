@@ -26,8 +26,8 @@ const ROLE_LABELS = {
 };
 
 const INTERVIEW_COMMANDS = {
-  pm: '/start-interview',
-  designer: '/start-designer-interview',
+  pm: '/start-pm-interview',
+  designer: '/start-pd-interview',
 };
 
 export async function runInit({ force = false, role = 'pm' } = {}) {
@@ -76,7 +76,7 @@ export async function runInit({ force = false, role = 'pm' } = {}) {
 
   // ── Step 1: Global files ──────────────────────────────────────────────────
   console.log(chalk.bold('Installing global files...'));
-  const globalInstalled = copyGlobal();
+  const globalInstalled = copyGlobal(role);
   for (const p of globalInstalled) {
     printStep(chalk.green('✓'), p);
   }

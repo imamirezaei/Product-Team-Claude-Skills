@@ -147,7 +147,7 @@ export function runUpdate() {
   // ── Update global ~/.claude/ ──────────────────────────────────────────────
   console.log('');
   console.log(chalk.bold('Updating global files...'));
-  const globalInstalled = copyGlobal();
+  const globalInstalled = copyGlobal(role);
   for (const p of globalInstalled) {
     console.log(`  ${chalk.green('✓')} ${p}`);
   }
