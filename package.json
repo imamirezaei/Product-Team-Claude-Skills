@@ -19,7 +19,8 @@
     "interview/"
   ],
   "scripts": {
-    "test": "node bin/cli.js --help"
+    "test": "node bin/cli.js --help && npm run validate:skills",
+    "validate:skills": "node scripts/validate-skills.js"
   },
   "dependencies": {
     "chalk": "^5.3.0",

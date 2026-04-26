@@ -296,3 +296,15 @@ product-team-claude-skills/
 ├── designer-template/
 └── README.md
 ```
+
+---
+
+## Contributing
+
+Contributions are welcome. See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full process — fork, branch, Conventional Commits, CI, and review.
+
+- Found a bug? [Open a bug report](../../issues/new/choose).
+- Want a new skill, command, or role? [Open a feature/skill request](../../issues/new/choose).
+- Submitting a PR? Use a fork, work on a feature branch, make sure `npm test` passes locally, and follow the PR template. CI runs automatically; only the maintainer can merge to `main`.
+
+This project follows the [Contributor Covenant](CODE_OF_CONDUCT.md). By participating, you agree to abide by its terms.

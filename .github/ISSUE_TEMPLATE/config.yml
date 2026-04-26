@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or Discussion
+    url: https://github.com/imamirezaei/Product-Team-Claude-Skills/discussions
+    about: For open-ended questions, please use Discussions instead of Issues.

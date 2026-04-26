@@ -1,0 +1,74 @@
+name: Feature or skill request
+description: Suggest a new skill, command, role, CLI feature, or docs improvement.
+title: "[Request]: "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for proposing an improvement. Please describe what you would like and why.
+        For larger ideas (new role, big refactor), this issue is the right place to align before any code is written.
+
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of request
+      options:
+        - New skill
+        - New command
+        - New role
+        - CLI feature
+        - Documentation improvement
+        - Translation
+        - Other
+    validations:
+      required: true
+
+  - type: dropdown
+    id: target-role
+    attributes:
+      label: Target role
+      options:
+        - Product Manager
+        - Product Designer
+        - Both
+        - Not applicable
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or need
+      description: What is the user need? What is missing or hard today?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: What would you like the project to do?
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Other approaches you thought about, and why this one is better.
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, links, examples, or any other relevant info.
+
+  - type: checkboxes
+    id: code-of-conduct
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](../blob/main/CODE_OF_CONDUCT.md).
+      options:
+        - label: I agree to follow this project's Code of Conduct.
+          required: true

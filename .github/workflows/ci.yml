@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test (Node ${{ matrix.node }} on ${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        node: [18, 20, 22]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: CLI --help
+        run: node bin/cli.js --help
+
+      - name: Validate skills and commands
+        run: npm run validate:skills
+
+      - name: Stub `claude` binary (CLI prerequisite check)
+        shell: bash
+        run: |
+          set -eux
+          STUB_DIR="$RUNNER_TEMP/stub-bin"
+          mkdir -p "$STUB_DIR"
+          cat > "$STUB_DIR/claude" <<'STUB'
+          #!/usr/bin/env sh
+          echo "claude 0.0.0-ci-stub"
+          exit 0
+          STUB
+          chmod +x "$STUB_DIR/claude"
+          echo "$STUB_DIR" >> "$GITHUB_PATH"
+
+      - name: Smoke test (init in temp repo)
+        shell: bash
+        run: |
+          set -euxo pipefail
+          TMPDIR_TEST="$(mktemp -d)"
+          cd "$TMPDIR_TEST"
+          git init -q
+          git config user.email "ci@example.com"
+          git config user.name "ci"
+          node "$GITHUB_WORKSPACE/bin/cli.js" init --role pm --force
+          test -f CLAUDE.md
+          test -d claude-workflow/policy
+          test -d claude-workflow/interview
+          test -f claude-workflow/.claude-setup
+
+  commitlint:
+    name: Lint commits (Conventional Commits)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install commitlint
+        run: npm install --no-save @commitlint/cli @commitlint/config-conventional
+
+      - name: Lint PR commits
+        run: |
+          echo "module.exports = { extends: ['@commitlint/config-conventional'] };" > commitlint.config.cjs
+          npx commitlint \
+            --config commitlint.config.cjs \
+            --from "${{ github.event.pull_request.base.sha }}" \
+            --to "${{ github.event.pull_request.head.sha }}" \
+            --verbose
