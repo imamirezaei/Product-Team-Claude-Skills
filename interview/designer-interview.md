@@ -1,35 +1,42 @@
-# Designer Onboarding
-**Version:** 2.0
-**Purpose:** Generate a complete personalized context package for a Product Designer by reading their Figma file directly — no manual interview questions.
+# Designer Onboarding (MCP-first)
+**Version:** 3.0
+**Purpose:** Read the designer's Figma file directly via MCP, summarize what was found, then — after the designer confirms — generate 12 context files.
 
 ---
 
 ## Instructions for AI
 
-You are onboarding a Product Designer. Your goal is to read their Figma project and generate a complete context package that powers all designer skills.
+You are onboarding a Product Designer. The flow is **MCP-first**: you read Figma via MCP tools, present a rich summary of what you understood, ask the designer to confirm or correct, then generate the context package.
 
-The output of this onboarding is **11 files**. All context is extracted from Figma — you ask the designer only what Figma cannot tell you.
+The output is **12 files**. The designer interacts at four points only:
+1. Pick the working language (Step 2).
+2. Provide a single Figma file link (Step 3).
+3. Confirm or correct your summary of the file (Step 6).
+4. Pick the repository status (Step 7).
 
 Work step by step. Do not skip steps. Do not ask more than one question at a time.
 
 ---
 
-## Step 1: Check Figma MCP access
+## Behavioral Rules
 
-Before anything else, verify that the Figma MCP is available.
+1. **Use plain text messages for open-ended questions.** Use the `AskUserQuestion` tool only for binary/discrete questions: language (Step 2) and repository status (Step 7). Everything else is a plain message.
+2. **Read placeholder files before writing.** All 12 output files are pre-created as placeholders by `claude-pm init` and contain the sentinel string `Replace this file with the interview engine output.` Before writing each file in Step 8, Read it first (Claude Code's Write tool requires a prior Read on existing files).
+3. **Work silently during MCP analysis.** Do not narrate each tool call to the designer. Show only a single progress message ("Reading your Figma file...") before Step 5, then present the full summary in one message in Step 6.
+4. **Use the selected language.** All designer-facing text after Step 2 uses the selected language. The 12 generated files are always in English regardless of the selected language.
+5. **Never re-ask.** If a piece of information is already known, do not ask again.
+6. **Tone:** Direct and respectful — like a senior design partner, not a form.
 
-Call the `whoami` tool from the Figma MCP:
+---
 
-```
-mcp__figma__whoami()
-```
+## Step 1 — Verify Figma MCP
 
-**If the call succeeds:** The designer is connected. Tell them:
+Call `mcp__figma__whoami()`.
+
+**If it succeeds:** Tell the designer (in English, before language selection):
 > "Figma is connected. Let's get started."
-> Proceed to Step 2.
 
-**If the call fails or the tool is not available:** Tell the designer:
-
+**If it fails or the tool is not available:** Tell the designer:
 > "To generate your design context, Claude needs access to your Figma files via the Figma MCP.
 >
 > **Setup steps:**
@@ -40,106 +47,122 @@ mcp__figma__whoami()
 >
 > Once done, reply with ✓ and we'll continue."
 
-Wait for the designer's confirmation. Then retry `whoami`. Do not proceed until the connection is confirmed.
+Wait for confirmation, retry `whoami`. Do not proceed until connected.
 
 ---
 
-## Step 2: Two quick questions
+## Step 2 — Working language (always ask in English)
 
-Ask these two questions, one at a time.
+Use `AskUserQuestion` with two options:
+- Persian (Farsi)
+- English
 
-**Question 1 — Working language:**
-> Which language do you prefer for skill outputs?
-> - [ ] Persian (Farsi)
-> - [ ] English
-
-Use the selected language for all designer-facing output. Generate all output files in English regardless of the selected language.
-
-**Question 2 — Repository status:**
-> Does this product have a code repository?
-> - [ ] Yes — there is an existing Git repository with the frontend code
-> - [ ] No — design only, no code repository yet
-
-If "no repository": skills that read the codebase (`figma-to-code`, `vuetify-constraint-check`) will work in documentation-only mode — they will ask the designer to describe context instead of reading from code.
+All designer-facing text from Step 3 onward uses the selected language. The 12 generated files in Step 8 are always in English.
 
 ---
 
-## Step 3: Figma file link(s)
+## Step 3 — Figma file link
 
-Ask the designer:
+Ask as a plain text message (in the selected language):
 
-> "Share the Figma file link for your project.
+> Share the Figma file link for your project. One link is enough — I'll discover the design system, components, and screens by reading the file's pages directly.
+
+Accept one link. Extract the `fileKey` and any `node-id` from the URL.
+
+---
+
+## Step 4 — Prepare Figma for analysis
+
+Some Figma MCP tools (notably `get_variable_defs`) require an active layer selection in the designer's running Figma application. Without a selection, those tools error with "nothing selected".
+
+Before running any MCP tool that needs a selection, instruct the designer:
+
+> Open the Figma file in your browser or desktop app. Click any top-level frame to select it. Reply `ready` when done.
+
+Wait for the designer's `ready` reply before proceeding to Step 5.
+
+---
+
+## Step 5 — Read the Figma file silently
+
+Show **one** progress message: "Reading your Figma file...".
+
+Then call all of the following silently (do not narrate each call). For the single file link the designer shared:
+
+- `mcp__figma__get_metadata(fileKey)` — product name, page list, last modified date
+- `mcp__figma__get_libraries(fileKey)` — all published components and categories
+- `mcp__figma__get_variable_defs(fileKey)` — design tokens (colors, typography, spacing, radius, shadows)
+- `mcp__figma__get_design_context(nodeId)` — for each top-level page, run on the page's first frame only (not every frame, to avoid timeouts on large files). Extract: layout patterns, navigation structure, interaction patterns, state coverage, RTL/LTR direction.
+- `mcp__figma__search_design_system` — run for queries: `button`, `input`, `error`, `empty`, `loading`.
+
+**Error handling:** If any tool returns "nothing selected", politely ask the designer to select a frame in their Figma app and retry that one tool. Do not skip — every tool above is needed for the summary.
+
+If a tool returns no data (e.g., `get_variable_defs` returns empty because the file has no variables), note it explicitly in the summary — do not pretend the data exists.
+
+---
+
+## Step 6 — Present the summary
+
+Show the designer a rich summary in the selected language. Use this structure:
+
+> **Here's what I understood from your Figma file:**
 >
-> If you have a separate file for the design system and another for product screens, share both — one at a time."
+> **Product:** [name from metadata]
+> **Last updated:** [date]
+>
+> **Pages found ([N total]):**
+> - [Page name] — [one-line description of what's on this page]
+> - …
+>
+> **Design system:**
+> - **Colors:** [N tokens — list the semantic roles: primary, secondary, error, surface, background, text]
+> - **Typography:** [font family, size scale summary]
+> - **Spacing:** [base unit + scale]
+> - **Border radius:** [values or "not tokenized"]
+> - **Shadows / elevation:** [values or "not tokenized"]
+> - **Token health:** [✓ Fully tokenized / ⚠️ Partially tokenized — what is hardcoded / ⚠️ No tokens found in the file]
+>
+> **Component library ([N components across X categories]):**
+> - [Category] — [count] components
+> - …
+>
+> **Layout direction:** [✓ RTL / LTR / ⚠️ Mixed or unclear]
+>
+> **State coverage observed:**
+> - States consistently designed: [list — e.g., happy path, empty, loading, error-system, error-input]
+> - States missing or inconsistent: [list]
+>
+> **Notable patterns:** [2–3 distinctive design or interaction patterns observed in the file]
+>
+> Does this look right? Anything missing or incorrect — and is there anything specific I should know about how your team uses this file?
 
-Accept one or two links:
-- **Design system file** (if separate) — components, tokens, styles
-- **Product screens file** — actual product screens and flows
-
-If the designer shares only one file, use it for everything.
-
----
-
-## Step 4: Read the Figma file(s)
-
-For each Figma link provided, use the following MCP tools. Work silently — do not narrate each tool call to the designer. Show only a brief progress indicator: "Reading your Figma file..."
-
-### 4A: File metadata
-```
-mcp__figma__get_metadata(fileKey)
-```
-Extract:
-- Product/project name
-- Page names and structure
-- Last modified date
-
-### 4B: Design tokens
-```
-mcp__figma__get_variable_defs(fileKey)
-```
-Extract:
-- Color tokens (name + value + semantic role)
-- Typography tokens (font family, sizes, weights, line heights)
-- Spacing tokens (scale values)
-- Border radius tokens
-- Shadow/elevation tokens
-
-If no variables are defined, note it explicitly — values may be hardcoded.
-
-### 4C: Component library
-```
-mcp__figma__get_libraries(fileKey)
-```
-Extract:
-- All published components and their names
-- Component categories/groups
-- Component variants
-
-### 4D: Design context and patterns
-```
-mcp__figma__get_design_context(nodeId)
-```
-Run on the top-level frame of each main page to understand:
-- Layout patterns (grid, spacing, navigation structure)
-- Recurring interaction patterns
-- State coverage (which states are consistently designed)
-- RTL/LTR layout direction
-
-### 4E: Key pattern search
-```
-mcp__figma__search_design_system(query)
-```
-Search for: "button", "input", "error", "empty", "loading"
+Wait for the designer's confirmation or corrections. If they correct something, incorporate the correction into the data you'll write into the 12 files in Step 8 — do not silently overwrite their input with the original Figma read.
 
 ---
 
-## Step 5: Generate all 11 files
+## Step 7 — Repository status
 
-After reading the Figma file(s), generate all output files one by one, each in a separate code block with its filename as the header.
+Use `AskUserQuestion` with two options:
+- Yes — there is an existing Git repository with the frontend code
+- No — design only, no code repository yet
 
-All files must be in **English only**, regardless of the selected working language.
+If "no": skills that read code (`figma-to-code`, `vuetify-constraint-check`, `implementation-review`) will operate in documentation-only mode — note this in the relevant context files in Step 8.
 
-Use concrete data from Figma — never use placeholder text. Every field must be populated with real information extracted from the file.
+---
+
+## Step 8 — Generate 12 files
+
+Show a brief confirmation message:
+
+> Based on your Figma file and what you confirmed, I'll write 12 context files now: `CLAUDE.md`, 9 skill context files under `.claude/skills/product-designer/`, and 2 agents under `.claude/agents/`.
+>
+> Ready?
+
+After confirmation, write all 12 files directly to their paths. **For each file, Read it first** (the placeholder exists with the sentinel string), then Write the new content. Do not ask for per-file approval.
+
+All 12 files must be in **English only**, regardless of the selected interview language.
+
+Use concrete data from the Figma read and the designer's corrections — never placeholder text. Every field must be populated with real information.
 
 ---
 
@@ -147,7 +170,7 @@ Use concrete data from Figma — never use placeholder text. Every field must be
 
 ```markdown
 # CLAUDE.md — [Product Name]
-> Generated by Designer Onboarding v2.0 from Figma
+> Generated by Designer Onboarding v3.0 from Figma
 
 ## 1. Product Context
 ### Product name
@@ -494,14 +517,15 @@ Before generating any handoff document, confirm:
 
 ## Final step
 
-After generating all 12 files, tell the designer in the selected language:
+After writing all 12 files, tell the designer in the selected language:
 
-> "Your design context is ready. All 12 files have been generated from your Figma file.
+> "Your design context is ready. All 12 files are written to their final paths.
 >
-> **Next steps:**
-> 1. Put `CLAUDE.md` in the project root
-> 2. Put the `context.md` files in `.claude/skills/` following the paths shown
-> 3. Put `design-agent.md` and `handoff-agent.md` in `.claude/agents/`
+> **What's ready now:**
+> All designer skills are active and Figma-aware. Start by running any skill — it will use your context automatically.
 >
-> From now on, all designer skills will use your Figma file as the source of truth.
+> **As you use the skills, you'll refine the context:**
+> Some fields may need updating after first use of each skill — they are noted with `[To be filled — update after first use of this skill]`.
+>
+> From now on, all designer skills use your Figma file as the source of truth.
 > Run `/design-research` before starting any new feature to get an updated component inventory."
