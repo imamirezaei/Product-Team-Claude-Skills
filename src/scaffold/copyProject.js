@@ -24,7 +24,7 @@ function copyDirRecursive(src, dest) {
   }
 }
 
-const ROLE_CONFIG = {
+export const ROLE_CONFIG = {
   pm: {
     templateDir: 'product-manager-template',
     skillsDir: 'product-manager',
