@@ -31,6 +31,20 @@ jobs:
       - name: Validate skills and commands
         run: npm run validate:skills
 
+      - name: Stub `claude` binary (CLI prerequisite check)
+        shell: bash
+        run: |
+          set -eux
+          STUB_DIR="$RUNNER_TEMP/stub-bin"
+          mkdir -p "$STUB_DIR"
+          cat > "$STUB_DIR/claude" <<'STUB'
+          #!/usr/bin/env sh
+          echo "claude 0.0.0-ci-stub"
+          exit 0
+          STUB
+          chmod +x "$STUB_DIR/claude"
+          echo "$STUB_DIR" >> "$GITHUB_PATH"
+
       - name: Smoke test (init in temp repo)
         shell: bash
         run: |
