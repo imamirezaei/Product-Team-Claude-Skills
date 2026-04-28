@@ -347,6 +347,16 @@ Use this to select which patterns to include as variant tabs:
 
 ---
 
+## Save the wireframe
+
+After generating the HTML, save it to:
+
+`.claude/outputs/{session-slug}/[feature-name]-wireframe-[jalali-date].html`
+
+Where `{session-slug}` is the kebab-case slug for the current session (established at the start of `/new-feature`, or derived from the feature name if running standalone). Do not save to `~/.claude/plans/` or any global directory.
+
+---
+
 ## Output format (after the HTML code block)
 
 ```
