@@ -2,6 +2,14 @@
 description: Start a complete feature development process from problem framing to DOD and wireframe
 ---
 
+⚠️ **Plan mode check:** If plan mode is currently active (the system has told you to write to a `~/.claude/plans/` file), STOP immediately. Tell the user: "Plan mode is active — please exit plan mode before running this command. While plan mode is on, deliverables cannot be saved to `.claude/outputs/`." Do not proceed until plan mode is off.
+
+---
+
+**Session folder:** At step 1, derive a kebab-case slug from the feature name (e.g. `media-metrics`, `payment-flow-redesign`). Use this slug as the folder name for ALL deliverables produced in this session: `.claude/outputs/{session-slug}/`. Do not split outputs by format — all files (md, html) go into the same session folder.
+
+---
+
 Start a complete process for defining a new feature. Run each step in order and wait for PM approval before proceeding to the next.
 
 **Step 1 — Problem Framing**

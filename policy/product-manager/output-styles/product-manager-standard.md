@@ -110,14 +110,16 @@ When a skill produces a **final deliverable** (spec, requirement, edge case repo
 
 Then write the file to the output directory:
 
-- Markdown → `.claude/outputs/md/[feature-name]-[skill-name]-[jalali-date].md`
-- HTML → `.claude/outputs/html/[feature-name]-[skill-name]-[jalali-date].html`
+- All formats → `.claude/outputs/{session-slug}/[feature-name]-[skill-name]-[jalali-date].{ext}`
+
+Where `{session-slug}` is derived from the current session's feature name (set at the start of `/new-feature` or derived from the topic being worked on). All deliverables from the same session share the same folder regardless of format.
 
 For HTML output, wrap the content in a clean HTML shell with inline styles — no external dependencies.
 
 **File naming convention:**
 - Use kebab-case
 - Feature name first, then skill name
-- Example: `payment-flow-redesign-feature-spec.md`
+- Example: `payment-flow-redesign-feature-spec-14050312.md`
+- Example: `payment-flow-redesign-wireframe-14050312.html`
 
 This applies to all PM skills. Do not skip this step — outputs that only exist in chat history are lost.

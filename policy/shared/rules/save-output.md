@@ -22,12 +22,16 @@ To determine today's Jalali date, read it from the `currentDate` field in the se
 
 ## Save location
 
-Save files to `.claude/outputs/` in the product repo root, routed by format:
+Save files to `.claude/outputs/{session-slug}/` in the product repo root, where `{session-slug}` is a kebab-case slug derived from the current session topic or feature name.
 
-| Format | Save path               |
-| ------ | ----------------------- |
-| `md`   | `.claude/outputs/md/`   |
-| `html` | `.claude/outputs/html/` |
+All formats go into the same session folder:
+
+| Format | Save path                                    |
+| ------ | -------------------------------------------- |
+| `md`   | `.claude/outputs/{session-slug}/filename.md` |
+| `html` | `.claude/outputs/{session-slug}/filename.html` |
+
+The session slug stays consistent across all outputs produced in the same working session. For `/new-feature`, the slug is derived from the feature name at step 1 and reused for all subsequent deliverables (spec, wireframe, edge cases).
 
 ## Format behavior
 
