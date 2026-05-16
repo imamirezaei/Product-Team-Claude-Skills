@@ -1,8 +1,6 @@
 ---
-description: Write a Linear task with the standard four-part structure
+description: Write a task using Conventional Commits format for the title
 ---
-
-Write a Linear task using the standard four-part structure.
 
 Run the `task-writer` skill.
 
