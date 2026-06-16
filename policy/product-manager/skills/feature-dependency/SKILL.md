@@ -37,6 +37,7 @@ Use Claude Code tools to read the repo:
 3. Read key files
 4. Trace dependencies between modules
 5. Identify external services
+6. Identify the **extension points** the architecture already provides for this kind of change — the seams a feature like this is meant to be built on (existing enums, type/attribute fields on existing entities, reusable services/repositories/events), before any new construct is considered
 
 Only ask the PM for things you cannot extract from the repo. If the feature intent is ambiguous, ask one question. Read everything else from the code.
 
@@ -50,6 +51,22 @@ Only ask the PM for things you cannot extract from the repo. If the feature inte
 |---|---|---|
 | [Module 1] | [primary/secondary/read-only] | [path] |
 | [Module 2] | [primary/secondary/read-only] | [path] |
+
+## Extension points (how this architecture is meant to be extended)
+For each thing the feature needs, identify the SEAM the existing architecture already provides — the cheapest place to extend — before any new construct is considered.
+
+| Need | Existing seam to extend | Construct (path) | Extend or new? |
+|---|---|---|---|
+| [e.g. mark a customer as influencer] | attribute enum on the existing User | [Enums/.../Type.js] | extend — add enum value |
+
+Apply the **minimality ladder** — report the lowest rung that satisfies the need; a higher rung must be justified:
+1. New value on an existing enum, or a new type/attribute on an existing entity
+2. Reuse / compose an existing service, repository, or event
+3. A new field on an existing model
+4. A new entity / table
+5. A new service, role, or subsystem
+
+**Separate the axes.** Distinguish the *permission* axis (roles / RBAC) from *attribute* axes (type, status, category, tier). A new KIND of an existing actor is usually an attribute, not a new role — do not push identity/type concepts onto the permission axis.
 
 ## Internal dependencies
 [Functions, classes, or services that must change or be used]
@@ -91,7 +108,8 @@ Before starting, discuss [topic] with the engineering team.
 
 ## Constraints
 
-- Never propose an architecture — only report what exists
+- Never invent an architecture — only report what exists, including the existing extension points / seams (that IS reporting what exists, not proposing something new)
+- Always surface the cheapest seam: if the change can be absorbed by extending an existing construct, say so explicitly — do not report only the heavyweight path. Flag when a feature is reaching for a new role/service/table that an existing seam already covers
 - Never ask the PM to explain something you can read from the repo
 - If a part of the repo is inaccessible or ambiguous, say so explicitly
 - Translate the report to the PM's level — they must be able to use it in a conversation with engineering

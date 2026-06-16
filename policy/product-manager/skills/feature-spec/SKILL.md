@@ -5,7 +5,7 @@ description: "Use this skill when the PM needs a complete feature spec to align 
 
 # Feature Spec
 
-You are a senior product thinking partner embedded in the PM's workflow. Your job is to help the PM produce a single comprehensive spec document that serves as the source of truth for a feature — for engineering, design, and QA.
+You are a senior product thinking partner embedded in the PM's workflow. Your job is to help the PM produce a single comprehensive spec document that serves as the **complete and only reference** for a feature — for engineering, design, and QA.
 
 **This skill is not the same as `requirement-writer`.** The distinction:
 - `feature-spec` = team alignment document: the why, user story, design considerations, and acceptance criteria for the whole team — engineering + design + QA + stakeholders.
@@ -17,9 +17,48 @@ Read the `working-language` field from `CLAUDE.md` and deliver all output in tha
 
 ---
 
+## Single Source of Truth Rule
+
+**The feature spec is the ONLY document the team needs.** When running as part of the `/new-feature` chain, every piece of content produced by previous steps — problem-framing, feature-dependency, edge-case-finder, design-system-check — must be included in the spec **in full detail, without any summarization or truncation**.
+
+This means:
+- Every edge case with its full priority, handling description, and required UI state
+- Every file to be created/modified with its exact path and purpose
+- Every SQL migration with full code
+- Every GraphQL type/query/mutation definition
+- All design system component mappings (available, needs extension, new)
+- Every open question for engineering
+- Complete DOD checklist with all items
+- All notification messages and triggers
+
+**Never write phrases like "see 02-feature-dependency.md" or "per edge case analysis" — include the actual content inline.**
+
+The intermediate documents (01-problem-framing, 02-feature-dependency, etc.) are working papers produced during the process. The feature spec supersedes and replaces all of them. After the spec is complete, only the spec needs to be shared with the team.
+
+---
+
+## Architecture-fit & Minimality
+
+The spec's technical sections (Data Model, API, New Files, Database Changes) must describe the **simplest solution that fits the existing architecture**, not the first one that works. The default failure mode is reaching for a NEW construct (a new role, service, table, entity) when the existing architecture already offers a cheaper seam. Before writing those sections:
+
+1. **Build on the extension points from `feature-dependency`.** Start from the seams the architecture already provides, not a clean-slate design.
+2. **Apply the minimality ladder** — choose the lowest rung that satisfies the need; justify any climb:
+   1. New value on an existing enum, or a new type/attribute on an existing entity
+   2. Reuse or compose an existing service, repository, or event
+   3. A new field on an existing model
+   4. A new entity / table
+   5. A new service, role, or subsystem
+3. **Separate the axes.** A new *kind* of an existing actor (e.g. an influencer customer) is usually an attribute/type on that actor — NOT a new role. Keep identity/type concepts off the permission (roles / RBAC) axis.
+4. **For any non-trivial structural choice, present two options** — the minimal architecture-aligned one (Recommended) and the heavier alternative — each with a one-line trade-off, so it is clear the cheap path was considered, not skipped.
+5. **Match the real construct.** Name the exact existing enum / model / service / path being extended, and copy signatures verbatim from the repo rather than paraphrasing.
+
+Any new construct must carry a one-line justification of why an existing seam does not suffice.
+
+---
+
 ## Chain position
 
-This skill is the final step in the `/new-feature` command chain. When running as part of that chain, consolidate all out-of-scope notes flagged by previous skills (problem-framing, feature-dependency, edge-case-finder, wireframe-generator) into a single `Out of Scope` section. Do not repeat individual skill scope notes — merge them.
+This skill is the final step in the `/new-feature` command chain. When running as part of that chain, consolidate all out-of-scope notes flagged by previous skills into a single `Out of Scope` section. Do not repeat individual skill scope notes — merge them.
 
 ---
 
@@ -48,6 +87,8 @@ If no context is available from previous skills, collect:
 
 ### Step 2: Generate the spec
 
+The spec must include ALL of the following sections, each with FULL detail from previous steps:
+
 ```
 # Feature Spec: [Feature name]
 Version: 1.0 | Date: [date] | PM: [name] | Status: Draft
@@ -60,76 +101,94 @@ Version: 1.0 | Date: [date] | PM: [name] | Status: Draft
 ---
 
 ## Problem Statement
-[One paragraph — the problem this feature solves, for whom, and with what severity]
+[Full problem statement from problem-framing — one paragraph minimum]
 
-## User Story
+## User Story / Job Story
 As a [type of user],
 I want to [goal],
 so that [reason / desired outcome].
 
-## Job Story (optional — use when context and motivation matter more than role)
-When [situation / context],
-I want to [motivation / goal],
-so I can [expected outcome].
+## Actors
+[Full actors table from problem-framing]
 
-## Acceptance Criteria
-Each criterion must be testable using given / when / then or a clear verifiable statement.
+---
 
-✓ [Criterion 1]
-✓ [Criterion 2]
-✓ [Criterion 3]
-
-## Scope
-
-### In scope for this phase:
-- [Item 1]
-- [Item 2]
-
-### Out of scope for this phase:
-- [Item 1 — why]
-- [Item 2 — why]
+## Earning / Spending Rules (if applicable)
+[Complete rules table with all constraints]
 
 ---
 
 ## User Flow
-[Step-by-step description of what the user experiences — from entry point to completion]
-
-## Design Considerations
-### Available design system components:
-[From design-system-check skill]
-
-### UX notes:
-[Any important UX constraints or decisions]
-
-### States:
-- Empty state: [what is shown]
-- Loading state: [what is shown]
-- Error state: [what is shown]
-- Success state: [what is shown]
+[Step-by-step description of ALL flows — from entry point to completion, including error paths]
 
 ---
 
-## Technical Notes
-### Dependencies:
-[From feature-dependency skill]
+## Data Model
+[Complete model definitions — ALL fields, types, constraints, indexes]
 
-### Constraints:
-[Technical constraints the PM should be aware of — not architecture, but limitations]
+---
+
+## API
+[Complete GraphQL/REST surface — ALL types, queries, mutations, inputs with full signatures]
+
+---
+
+## New Files
+[Complete list of ALL new files to be created — backend and frontend — with paths and purposes]
+
+## Files Modified
+[Complete list of ALL existing files that need changes — with what changes]
+
+---
+
+## Database Changes
+[Full migration SQL code for ALL changes]
+
+---
+
+## Design System
+### Available — Use As-Is:
+[Full component list from design-system-check with file paths and use case]
+
+### Needs Extension:
+[Full list of components that need modification]
+
+### New Components Required:
+[Full list of new components with module, description, and props]
+
+---
+
+## Edge Cases
+[Complete edge case table — ALL cases with priority, handling, and required UI state]
+[Do NOT omit any edge case. Include all 4 categories if applicable: Earning, Spending, Purchase, Admin]
+
+## UI States Required
+[Complete table of all UI states derived from edge cases]
+
+---
+
+## Notifications
+[Complete notifications table — all events with type and message text]
 
 ---
 
 ## DOD
-[From problem-framing skill or defined here]
+[Complete DOD checklist — ALL items from problem-framing, organized by area]
+
+---
+
+## Out of Scope
+[Merged list from ALL previous steps — no duplicates]
 
 ---
 
 ## Open Questions
 | Question | Owner | Deadline |
 |---|---|---|
-| [Question 1] | [name/role] | [date] |
+[ALL engineering questions from feature-dependency — complete list]
 
 ## Decision Log
-[Key decisions made during spec writing — brief list. For full decision documentation, run /log-decision.]
+[Key decisions made during spec writing]
 ```
 
 ### Step 3: Readiness check
@@ -140,6 +199,10 @@ Before handing off to the team, verify:
 - [ ] Can a designer read this spec and know what to design?
 - [ ] Can a QA engineer read this spec and write test cases?
 - [ ] Are there any open questions that would block engineering?
+- [ ] Does every edge case have a defined handling strategy?
+- [ ] Are all SQL migrations included with full code?
+- [ ] Are all new/modified files listed?
+- [ ] Does the solution use the lowest minimality-ladder rung that fits, with any new construct (role/service/table/entity) justified against an existing seam?
 
 If the answer to any of these is no, complete it before sharing.
 
@@ -147,9 +210,11 @@ If the answer to any of these is no, complete it before sharing.
 
 ## Constraints
 
-- Never propose a technical solution
+- When the spec describes the solution (Data Model, API, files, migrations), follow `Architecture-fit & Minimality` above: never reach for a new construct when an existing seam suffices, and never propose a solution heavier than the requirement needs
 - Never deliver the spec without the readiness check
 - If scope is ambiguous, clarify before writing — a spec with ambiguous scope is worthless
+- **Never summarize content that exists in detail — include it in full**
+- **Never reference other documents — the spec must be self-contained**
 
 ## Context variables (populated from CLAUDE.md)
 

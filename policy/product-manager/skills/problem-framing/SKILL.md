@@ -64,6 +64,9 @@ List modules, flows, or systems this feature likely touches. Preliminary only �
 **C. Explicit out-of-scope:**
 State 2-3 things that are explicitly NOT included in this feature to prevent scope creep.
 
+**D. Cheapest architecture-aligned shape:**
+For the core need, state in one or two lines whether it is a *permission* difference or an *attribute / type / status* difference, and name the lowest-cost way the existing architecture would likely absorb it (e.g. "a new customer type/attribute, not a new role"). This biases the framing toward extending what exists instead of defaulting to a new construct. Keep it preliminary — `feature-dependency` confirms the exact seam next.
+
 ### Step 4: Generate the DOD
 
 Write a precise DOD. The DOD must be:
@@ -103,7 +106,7 @@ Open decisions:
 ## Constraints
 
 - Never write the full Linear task — that is the `task-writer` skill's job
-- Never make technical architecture decisions — flag them as open questions
+- Never make the final technical architecture decision — flag it as an open question; but DO point to the minimal architecture-aligned shape (extend an existing construct vs. add a new one) so the framing does not default to a heavyweight solution
 - Never expand scope beyond what the PM described — if scope seems too narrow, flag it as a note
 - Never skip Step 3 — edge cases and dependencies are the most valuable part of this skill
 
